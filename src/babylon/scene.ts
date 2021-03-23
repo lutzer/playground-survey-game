@@ -1,10 +1,17 @@
 import * as BABYLON from '@babylonjs/core'
 import SimplexNoise from 'simplex-noise'
 
+import '@babylonjs/loaders'
+
 import { setupCamera } from './camera'
 import { setupLights } from './light'
-import { Tile } from './tile'
+import { TileManager } from './tile'
 import { createGrid } from './grid'
+import { loadAssets } from './assets'
+import { Mesh, Node } from '@babylonjs/core'
+
+// import '@babylonjs/core/Debug/debugLayer'
+// import '@babylonjs/inspector'
 
 const settings = {
   gridSize: 10,
@@ -12,43 +19,63 @@ const settings = {
   height: 10
 }
 
-const createScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) : BABYLON.Scene {
+const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) : BABYLON.Scene {
 
   const scene = new BABYLON.Scene(engine,{})
-    
-  const startTime = Date.now()
   const simplex = new SimplexNoise()
 
   setupCamera(scene, canvas)
   setupLights(scene)
 
   const grid = createGrid(settings.gridSize)
-  const tiles = grid.map(([x,y], i) => {
-    const tile = new Tile(`box${i}`, scene)
-    tile.pos = new BABYLON.Vector3(
-      x * settings.width - settings.width/2, 
-      0,
-      y * settings.height - settings.height/2)
-    tile.show()
-    return tile
+
+  // setup tiles
+  const tileManager = new TileManager(scene, grid)
+
+  loadAssets(scene, (task) => {
+    const meshes = task.loadedMeshes.map((m) => <Mesh>m )
+    const tileMesh = BABYLON.Mesh.MergeMeshes(meshes)
+    if (tileMesh)
+      tileManager.setup(settings.width, settings.height, tileMesh)
+    // // node.
+    // console.log('loaded', tile)
   })
 
-  // const ground = BABYLON.MeshBuilder.CreateGround('ground', {width: settings.width, height: settings.height})
-  // scene.addMesh(ground)
-  // ground.receiveShadows = true
+  // load meshes
+  // BABYLON.SceneLoader.ImportMesh('','assets/meshes/','tile_grass.obj', undefined, (meshes) => {
+  //   console.log(meshes)
+  // })
 
-  scene.onBeforeRenderObservable.add((t) => {
-    const time = Date.now()-startTime
-    tiles.forEach((tile,i) => {
-      tile.mesh.position.y = simplex.noise2D(i,time * 0.001) * 0.1
-    })
+  // call loop function
+  const startTime = Date.now()
+  scene.onBeforeRenderObservable.add(() => {
+    loop(Date.now() - startTime)
   })
 
+  // mouse and touch events
+  scene.onPointerObservable.add((pointerInfo) => {      		
+    switch (pointerInfo.type) {
+    case BABYLON.PointerEventTypes.POINTERDOWN:
+      if (pointerInfo.pickInfo?.hit)
+        tileManager.selectTile(pointerInfo.pickInfo.pickedMesh?.name)
+    }
+  })
+
+  // start render loop
   engine.runRenderLoop(function () {
     scene.render()
   })
 
+  // gets called before every render
+  function loop(time: number) {
+    tileManager.tiles.forEach((tile,i) => {
+      tile.mesh.position.y = simplex.noise2D(i,time * 0.0005) * 0.1
+    })
+  }
+
+  // scene.debugLayer.show()
+
   return scene
 }
 
-export { createScene }
+export { setupScene }

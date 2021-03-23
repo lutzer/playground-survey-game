@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { Engine } from '@babylonjs/core'
+import { setupScene } from './babylon/scene'
+
 import './App.scss'
-import _ from 'lodash'
-import { Engine, Scene } from '@babylonjs/core'
-import { createScene } from './babylon/scene'
 
 // import '@babylonjs/inspector'
 
-function App() {
+const App = function() : React.ReactElement {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [engine, setEngine] = useState<Engine>()
 
@@ -14,10 +14,11 @@ function App() {
     if (!canvasRef || canvasRef.current == null)
       return
     const engine = new Engine(canvasRef.current, true)
-    const scene = createScene(engine, canvasRef.current)
+    const scene = setupScene(engine, canvasRef.current)
     setEngine(engine)
     return () => {
       scene?.dispose()
+      engine?.dispose()
     }
   },[canvasRef])
 
@@ -26,7 +27,6 @@ function App() {
     function onResize() {
       engine?.resize()
     }
-
     window.addEventListener('resize', onResize)
     return () => {
       window.removeEventListener('resize', onResize)
