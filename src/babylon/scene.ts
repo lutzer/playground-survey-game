@@ -8,7 +8,6 @@ import { setupLights } from './light'
 import { TileManager } from './tile'
 import { createGrid } from './grid'
 import { loadAssets } from './assets'
-import { Mesh, Node } from '@babylonjs/core'
 
 // import '@babylonjs/core/Debug/debugLayer'
 // import '@babylonjs/inspector'
@@ -32,13 +31,18 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
   // setup tiles
   const tileManager = new TileManager(scene, grid)
 
-  loadAssets(scene, (task) => {
-    const meshes = task.loadedMeshes.map((m) => <Mesh>m )
+  loadAssets(scene, (container) => {
+    const meshes = container.meshes.map((m) => <BABYLON.Mesh>m )
     const tileMesh = BABYLON.Mesh.MergeMeshes(meshes)
-    if (tileMesh)
+    // container.add
+    if (tileMesh) {
+      // shift pivot
+      const center = tileMesh.getBoundingInfo().boundingSphere.center
+      tileMesh.setPivotPoint(center.scale(-1))
+
+      tileMesh.setEnabled(false)
       tileManager.setup(settings.width, settings.height, tileMesh)
-    // // node.
-    // console.log('loaded', tile)
+    }
   })
 
   // load meshes
@@ -60,6 +64,9 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
         tileManager.selectTile(pointerInfo.pickInfo.pickedMesh?.name)
     }
   })
+
+  // show ground plane
+  // BABYLON.MeshBuilder.CreateGround('ground', {width:10, height:10})
 
   // start render loop
   engine.runRenderLoop(function () {
