@@ -1,5 +1,11 @@
 import _ from 'lodash'
 
+type Grid = {
+  cells: number[][],
+  sizeX: number,
+  sizeY: number
+}
+
 const createGrid = function(sizeX: number, sizeY = 0) : number[][] {
   sizeY = sizeY == 0 ? sizeX : sizeY
   const points = []
