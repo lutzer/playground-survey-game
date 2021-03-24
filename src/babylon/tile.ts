@@ -17,7 +17,7 @@ class TileManager {
     this.tiles = []
 
     this.selectLayer = new UtilityLayerRenderer(scene)
-    this.selectMarker = MeshBuilder.CreateBox('marker-mesh', { size: 1.2, height: 0.01 }, this.selectLayer.utilityLayerScene)
+    this.selectMarker = MeshBuilder.CreateBox('marker-mesh', { size: 1.1 }, this.selectLayer.utilityLayerScene)
     this._initUtilLayer()
   }
 
@@ -27,20 +27,10 @@ class TileManager {
     material.diffuseColor = new Color3(1,0,0)
     material.alpha = 0.6
     this.selectMarker.material = material
-    this.selectMarker.position.y = 0.3
-
     this.selectMarker.setEnabled(false)
   }
 
   setup(width: number, height: number, mesh: Mesh) : void {
-
-    // const material1 = 
-    // material1.diffuseColor = new Color3(1,1,1)
-    // material1.alpha = 1
-
-    // const material2 = new StandardMaterial('tileMaterial', this.scene)
-    // material2.diffuseColor = new Color3(1,0,0)
-    // material2.alpha = 1
 
     this.tiles = this.grid.cells.map(([x,y], i) => {
       const tile = new Tile(`box${i}`, mesh, this.scene)
@@ -58,8 +48,7 @@ class TileManager {
       return t.mesh.name == tileName
     })
     if (tile) {
-      this.selectMarker.position.x = tile.mesh.position.x
-      this.selectMarker.position.z = tile.mesh.position.z
+      this.selectMarker.parent = tile.mesh
       this.selectMarker.setEnabled(true)
     } else {
       this.selectMarker.setEnabled(false)
@@ -76,10 +65,10 @@ class Tile {
 
     this.mesh = mesh.createInstance(name)
     this.mesh.setEnabled(true)
-    this.mesh.scaling = new Vector3(0.5, 0.5, 0.5)
     
-    // const rotate = <number>_.sample([Math.PI, 0, Math.PI / 2, Math.PI * 1.5])
-    // this.mesh.rotateAround(this.mesh.getPivotPoint().scale(0.5), new Vector3(0,1,0), rotate)
+    // randomly rotate
+    const rotate = <number>_.sample([Math.PI, 0, Math.PI / 2, Math.PI * 1.5])
+    this.mesh.rotateAround(this.mesh.getPivotPoint().scale(0.5), new Vector3(0,1,0), rotate)
   }
 
   show() : void {

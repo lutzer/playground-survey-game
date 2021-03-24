@@ -8,6 +8,8 @@ import { setupLights } from './light'
 import { TileManager } from './tile'
 import { createGrid } from './grid'
 import { loadAssets } from './assets'
+import { showAxis } from './helpers'
+import { Matrix, Mesh, Node, Vector3 } from '@babylonjs/core'
 
 // import '@babylonjs/core/Debug/debugLayer'
 // import '@babylonjs/inspector'
@@ -34,21 +36,18 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
   loadAssets(scene, (container) => {
     const meshes = container.meshes.map((m) => <BABYLON.Mesh>m )
     const tileMesh = BABYLON.Mesh.MergeMeshes(meshes)
-    // container.add
     if (tileMesh) {
-      // shift pivot
-      const center = tileMesh.getBoundingInfo().boundingSphere.center
-      tileMesh.setPivotPoint(center.scale(-1))
 
-      tileMesh.setEnabled(false)
+      // center and scale tile
+      tileMesh.scaling = Vector3.One().scale(0.5)
+      const center = tileMesh.getBoundingInfo().boundingSphere.center.scale(0.5)
+      tileMesh.position = center.scale(-1)
+      tileMesh.bakeCurrentTransformIntoVertices()
+      //tileMesh.setEnabled(false)
+
       tileManager.setup(settings.width, settings.height, tileMesh)
     }
   })
-
-  // load meshes
-  // BABYLON.SceneLoader.ImportMesh('','assets/meshes/','tile_grass.obj', undefined, (meshes) => {
-  //   console.log(meshes)
-  // })
 
   // call loop function
   const startTime = Date.now()
@@ -66,7 +65,10 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
   })
 
   // show ground plane
-  // BABYLON.MeshBuilder.CreateGround('ground', {width:10, height:10})
+  // const ground = BABYLON.MeshBuilder.CreateGround('ground', {width:10, height:10})
+
+  //show axis
+  showAxis(10,scene)
 
   // start render loop
   engine.runRenderLoop(function () {
