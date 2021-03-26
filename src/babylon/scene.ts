@@ -9,10 +9,6 @@ import { TileManager } from './tile'
 import { createGrid } from './grid'
 import { loadAssets } from './assets'
 import { showAxis } from './helpers'
-import { Matrix, Mesh, Node, Vector3 } from '@babylonjs/core'
-
-// import '@babylonjs/core/Debug/debugLayer'
-// import '@babylonjs/inspector'
 
 const settings = {
   gridSize: 10,
@@ -34,19 +30,12 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
   const tileManager = new TileManager(scene, grid)
 
   loadAssets(scene, (container) => {
-    const meshes = container.meshes.map((m) => <BABYLON.Mesh>m )
-    const tileMesh = BABYLON.Mesh.MergeMeshes(meshes)
-    if (tileMesh) {
+    const meshes = container.loadedMeshes.map((m) => <BABYLON.Mesh>m )
+    
+    const tree = meshes[0].clone()
+    tree.setEnabled(false)
 
-      // center and scale tile
-      tileMesh.scaling = Vector3.One().scale(0.5)
-      const center = tileMesh.getBoundingInfo().boundingSphere.center.scale(0.5)
-      tileMesh.position = center.scale(-1)
-      tileMesh.bakeCurrentTransformIntoVertices()
-      //tileMesh.setEnabled(false)
-
-      tileManager.setup(settings.width, settings.height, tileMesh)
-    }
+    tileManager.setup(settings.width, settings.height, tree)
   })
 
   // call loop function
@@ -78,10 +67,12 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
   // gets called before every render
   function loop(time: number) {
     tileManager.tiles.forEach((tile,i) => {
-      tile.mesh.position.y = simplex.noise2D(i,time * 0.0005) * 0.1
+      if (tile.node)
+        tile.node.position.y = simplex.noise2D(i,time * 0.0005) * 0.1
     })
   }
 
+  
   // scene.debugLayer.show()
 
   return scene

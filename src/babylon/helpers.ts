@@ -1,6 +1,6 @@
-import { Color3, DynamicTexture, Mesh, PlaneRotationGizmo, Scene, StandardMaterial, Vector3 } from '@babylonjs/core'
+import { Color3, DynamicTexture, Mesh, Scene, StandardMaterial, Vector3 } from '@babylonjs/core'
 
-const showAxis = function(size : number, scene : Scene) {
+const showAxis = function(size : number, scene : Scene) : void {
 
   const makeTextPlane = function(text : string, color : string, size : number) {
     const dynamicTexture = new DynamicTexture('DynamicTexture', 50, scene, true)
