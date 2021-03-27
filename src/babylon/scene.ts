@@ -5,10 +5,12 @@ import '@babylonjs/loaders'
 
 import { setupCamera } from './camera'
 import { setupLights } from './light'
-import { TileManager } from './tile'
+import { TileManager, TileMeshArray } from './tile'
 import { createGrid } from './grid'
 import { loadAssets } from './assets'
 import { showAxis } from './helpers'
+
+// import '@babylonjs/inspector'
 
 const settings = {
   gridSize: 6,
@@ -20,7 +22,7 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
 
   const scene = new BABYLON.Scene(engine,{})
 
-  scene.clearColor = BABYLON.Color4.FromHexString('#000000FF')
+  // scene.clearColor = BABYLON.Color4.FromHexString('#000000FF')
 
   setupCamera(scene, canvas)
   setupLights(scene)
@@ -33,18 +35,15 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
   loadAssets(scene, (containers) => {
     const meshes = containers[1].loadedMeshes.map((m) => <BABYLON.Mesh>m )
     
-    const tileMeshes = containers.map((c) => {
+    const tileMeshes = containers.reduce<TileMeshArray>((acc, c) => {
       const mesh = c.loadedMeshes[0].clone(c.meshesNames, null)
       mesh?.setEnabled(false)
-      return <BABYLON.Mesh>mesh
-    })
+      acc[c.meshesNames] = <BABYLON.Mesh>mesh
+      // return <BABYLON.Mesh>mesh
+      return acc
+    }, {})
 
     tileManager.meshes = tileMeshes
-
-    // console.log(tileMeshes)
-
-    // const tree = meshes[0].clone()
-    // tree.setEnabled(false)
 
     tileManager.setup(settings.width, settings.height)
   })
@@ -53,15 +52,6 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
   const startTime = Date.now()
   scene.onBeforeRenderObservable.add(() => {
     loop(Date.now() - startTime)
-  })
-
-  // mouse and touch events
-  scene.onPointerObservable.add((pointerInfo) => {      		
-    switch (pointerInfo.type) {
-    case BABYLON.PointerEventTypes.POINTERDOWN:
-      if (pointerInfo.pickInfo?.hit)
-        tileManager.selectTile(pointerInfo.pickInfo.pickedMesh?.name)
-    }
   })
 
   // show ground plane
@@ -80,14 +70,12 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
   function loop(time: number) {
     tileManager.tiles.forEach((tile,i) => {
       if (tile.node)
-        tile.node.position.y = simplex.noise2D(i,time * 0.0005) * 0.1
+        tile.node.position.y = simplex.noise2D(i,time * 0.0005) * 0.05
     })
   }
 
   
   // scene.debugLayer.show()
-
-
   return scene
 }
 
