@@ -36,15 +36,10 @@ class TileManager {
     this.selectMarker.setEnabled(false)
   }
 
-  onTileLoaded(mesh: Mesh, type: TileType) {
-    this.meshes.push(mesh)
-  }
-
-  setup(width: number, height: number, mesh: Mesh) : void {
-
-    // const clone = mesh.clone('root')
+  setup(width: number, height: number) : void {
 
     this.tiles = this.grid.cells.map(([x,y], i) => {
+      const mesh = _.sample(this.meshes)
       const tile = new Tile(`box${i}`, 'grass', mesh, this.scene)
       if (tile.node)
         tile.node.position = new Vector3(
@@ -57,6 +52,7 @@ class TileManager {
   }
 
   selectTile(tileName: string|undefined) : void {
+    console.log(tileName)
     const tile = this.tiles.find((t) => {
       return t.node?.name == tileName
     })
@@ -71,18 +67,19 @@ class TileManager {
 
 class Tile {
   node: TransformNode | null
-  _scene: Scene
 
-  constructor(name: string, type: TileType, mesh: Mesh, scene: Scene) {
-    this._scene = scene
-
-    this.node = mesh.instantiateHierarchy()
+  constructor(name: string, type: TileType, mesh: Mesh | undefined, scene: Scene) {
+    if (mesh) {
+      this.node = mesh.instantiateHierarchy()
+    } else {
+      this.node = new TransformNode(name, scene)
+    }
     this.node?.name == name
     this.node?.setEnabled(true)
     
     // randomly rotate
     const rotate = <number>_.sample([Math.PI, 0, Math.PI / 2, Math.PI * 1.5])
-    this.node?.rotateAround(this.node.getPivotPoint().scale(0.5), new Vector3(0,1,0), rotate)
+    this.node?.rotate(new Vector3(0,1,0), rotate)
   }
 
   show() : void {

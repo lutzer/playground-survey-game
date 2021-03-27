@@ -11,15 +11,16 @@ import { loadAssets } from './assets'
 import { showAxis } from './helpers'
 
 const settings = {
-  gridSize: 10,
-  width: 10,
-  height: 10
+  gridSize: 6,
+  width: 6,
+  height: 6
 }
 
 const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) : BABYLON.Scene {
 
   const scene = new BABYLON.Scene(engine,{})
-  const simplex = new SimplexNoise()
+
+  scene.clearColor = BABYLON.Color4.FromHexString('#000000FF')
 
   setupCamera(scene, canvas)
   setupLights(scene)
@@ -29,13 +30,23 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
   // setup tiles
   const tileManager = new TileManager(scene, grid)
 
-  loadAssets(scene, (container) => {
-    const meshes = container.loadedMeshes.map((m) => <BABYLON.Mesh>m )
+  loadAssets(scene, (containers) => {
+    const meshes = containers[1].loadedMeshes.map((m) => <BABYLON.Mesh>m )
     
-    const tree = meshes[0].clone()
-    tree.setEnabled(false)
+    const tileMeshes = containers.map((c) => {
+      const mesh = c.loadedMeshes[0].clone(c.meshesNames, null)
+      mesh?.setEnabled(false)
+      return <BABYLON.Mesh>mesh
+    })
 
-    tileManager.setup(settings.width, settings.height, tree)
+    tileManager.meshes = tileMeshes
+
+    // console.log(tileMeshes)
+
+    // const tree = meshes[0].clone()
+    // tree.setEnabled(false)
+
+    tileManager.setup(settings.width, settings.height)
   })
 
   // call loop function
@@ -65,6 +76,7 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
   })
 
   // gets called before every render
+  const simplex = new SimplexNoise()
   function loop(time: number) {
     tileManager.tiles.forEach((tile,i) => {
       if (tile.node)
@@ -74,6 +86,7 @@ const setupScene = function(engine: BABYLON.Engine, canvas: HTMLCanvasElement) :
 
   
   // scene.debugLayer.show()
+
 
   return scene
 }

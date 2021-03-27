@@ -5,6 +5,7 @@ const setupLights = function(scene : Scene) : Light[] {
   light.intensity = 0.4
   const dirLight = new DirectionalLight('dir', new Vector3(0, -1, 0), scene)
   dirLight.position.y = 10
+  dirLight.intensity = 5
   scene.addLight(light)
   scene.addLight(dirLight)
   // const shadowGenerator = new BABYLON.ShadowGenerator(1024, dirLight)
