@@ -1,4 +1,5 @@
 import { Mesh, Scene, MeshBuilder, Vector3, StandardMaterial, Color3, UtilityLayerRenderer, HemisphericLight, TransformNode, HighlightLayer, PointerEventTypes } from '@babylonjs/core'
+import EventEmitter from 'events'
 import _ from 'lodash'
 import { Grid } from './grid'
 
@@ -6,7 +7,7 @@ type TileType = 'grass'|'tree'|'swings'
 
 type TileMeshArray = { [name : string] : Mesh }
 
-class TileManager {
+class TileManager extends EventEmitter {
 
   tiles: Tile[]
   scene: Scene
@@ -24,6 +25,7 @@ class TileManager {
   enablePointerEvents: boolean
 
   constructor(scene: Scene, grid: Grid) {
+    super()
     this.grid = grid
     this.scene = scene
     this.tiles = []
@@ -96,18 +98,24 @@ class TileManager {
       )
       box.visibility = 0
     })
+
+    // create ground plane as hitbox
+    // const ground = MeshBuilder.CreateGround('ground', {width:10, height:10})
+    // ground.position.y = -10
+    // this._selectLayer.utilityLayerScene.addMesh(ground)
   }
 
   selectTile(hitBoxMetadata?: any) : void {
-    if (hitBoxMetadata && hitBoxMetadata.tileIndex) {
+    if (hitBoxMetadata && hitBoxMetadata.tileIndex != undefined) {
       this._selectMarker.position = this.tiles[hitBoxMetadata.tileIndex].position
       this._selectMarker.setEnabled(true)
       this._selectedTile = this.tiles[hitBoxMetadata.tileIndex]
-      this._selectedTile.type = 'tree'
+      // this._selectedTile.type = 'tree'
     } else {
       this._selectMarker.setEnabled(false)
       this._selectedTile = undefined
     }
+    this.emit('tile-selected', this._selectedTile)
   }
 }
 
@@ -132,26 +140,24 @@ class Tile {
   }
 
   set type(type : TileType) {
+    if (this._type == type)
+      return
+     
+    // remove old mesh  
     if (this.node) {
       this.node.dispose()
     }
 
     this._type = type
     const mesh = this._meshes[type]
-    if (mesh) {
-      this.node = mesh.instantiateHierarchy()
-    } else {
-      this.node = new TransformNode(this.name, this._scene)
-    }
-
-    if (this.node) {
-      this.node.position = this.position
-      this.node.setEnabled(true)
+    this.node = mesh.instantiateHierarchy() || new TransformNode(this.name, this._scene)
+   
+    this.node.position = this.position
+    this.node.setEnabled(true)
   
-      // randomly rotate
-      const rotate = <number>_.sample([Math.PI, 0, Math.PI / 2, Math.PI * 1.5])
-      this.node.rotate(new Vector3(0,1,0), rotate)
-    }
+    // randomly rotate
+    const rotate = <number>_.sample([Math.PI, 0, Math.PI / 2, Math.PI * 1.5])
+    this.node.rotate(new Vector3(0,1,0), rotate)
   }
 
   show() : void {
@@ -164,4 +170,4 @@ class Tile {
 }
 
 export { Tile, TileManager }
-export type { TileMeshArray }
+export type { TileMeshArray, TileType }

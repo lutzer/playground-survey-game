@@ -1,4 +1,4 @@
-import { Color3, DynamicTexture, Mesh, Scene, StandardMaterial, Vector3 } from '@babylonjs/core'
+import { Color3, DynamicTexture, Mesh, MeshBuilder, Scene, StandardMaterial, Vector3 } from '@babylonjs/core'
 
 const showAxis = function(size : number, scene : Scene) : void {
 
@@ -42,4 +42,9 @@ const showAxis = function(size : number, scene : Scene) : void {
   zChar.position = new Vector3(0, 0.05 * size, 0.9 * size)
 }
 
-export { showAxis }
+const showGroundPlane = function(size: number, scene : Scene) : void {
+  const ground = MeshBuilder.CreateGround('ground', {width:10, height:10})
+  scene.addMesh(ground)
+}
+
+export { showAxis, showGroundPlane }
