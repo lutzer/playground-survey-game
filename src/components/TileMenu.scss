@@ -3,10 +3,10 @@
 .TileMenu {
   position: fixed;
   bottom: $standard-spacing;
-  left: $standard-spacing;
-  right: $standard-spacing;
+  left: 50%;
+  transform: translate(-50%, 0);
   border-radius: 10px;
-  background-color: white;
+  background-color: orange;
 
   ul {
     display: flex;
@@ -29,6 +29,16 @@
       line-height: 50px;
       margin: 5px;
       border-radius: 5px;
+      border: 2px solid black;
+
+      &.selected {
+        background-color: red;
+      }
+
+      &.close {
+        background-color: white;
+        color: black;
+      }
     }
   }
 

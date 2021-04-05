@@ -119,6 +119,7 @@ class TileManager extends EventEmitter {
   setSelectMarker(tileIndex: number | undefined) : void {
     if (tileIndex != undefined) {
       this._selectMarker.position = this.tiles[tileIndex].position
+      // this._selectMarker.parent = this.tiles[tileIndex].node
       this._selectMarker.setEnabled(true)
     } else {
       this._selectMarker.setEnabled(false)

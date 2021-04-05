@@ -6,16 +6,17 @@ import { Actions, Statemachine } from './state'
 
 import './App.scss'
 import { TileType } from './babylon/tile'
+import { merge, of } from 'rxjs'
 
 const SETTINGS : PlaygroundSettings = {
   gridSize: 10,
   width: 10,
   height: 10,
   camera: {
-    isometric: true,
+    isometric: false,
     zoom: 10
   },
-  version: '0.9'
+  version: '0.10'
 }
 
 const App = function() : React.ReactElement {
@@ -57,8 +58,10 @@ const App = function() : React.ReactElement {
 
   // subscribe to state changes
   useEffect(() => {
-    setSelectedTile(stateMachine?.state.selectedTile)
-    const sub = stateMachine?.subscribe( (state) => {
+    if (!stateMachine)
+      return
+    const sub = merge(of(stateMachine?.state),stateMachine).subscribe( (state) => {
+      setSelectedTile(undefined)
       setSelectedTile(state.selectedTile)
     })
     return () => sub?.unsubscribe()
@@ -67,7 +70,8 @@ const App = function() : React.ReactElement {
   function onSelectTyleType(type: TileType | undefined) {
     if (type)
       stateMachine?.trigger(Actions.setTileType, { type: type })
-    stateMachine?.trigger(Actions.selectTile, { id: undefined })
+    else
+      stateMachine?.trigger(Actions.selectTile, { id: undefined })
   }
 
   return (
@@ -75,6 +79,7 @@ const App = function() : React.ReactElement {
       <canvas ref={canvasRef} id='renderCanvas' touch-action='none'></canvas>
       { selectedTile != undefined && 
         <TileMenu
+          tileState={stateMachine?.state.tiles[selectedTile]}
           onSelect={onSelectTyleType} 
         /> 
       }
