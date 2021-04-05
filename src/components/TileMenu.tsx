@@ -1,23 +1,21 @@
 import React from 'react'
+import { TileState, TileType } from '../babylon/tile'
 
 import './TileMenu.scss'
-import { Tile, TileType } from '../babylon/tile'
 
 
-const TileMenu = function({tile, onClose} : {tile?: Tile, onClose : () => void}) : React.ReactElement {
+const TileMenu = function({tileState, onSelect} : {tileState?: TileState, onSelect : (t: TileType | undefined) => void}) : React.ReactElement {
 
-  function onClickedHandler(tileType: TileType) {
-    if (tile)
-      tile.type = tileType
-  }
 
   return (
     <div className='TileMenu'>
       <ul>
-        <li onClick={() => onClickedHandler('grass')}>Grass</li>
-        <li onClick={() => onClickedHandler('tree')}>Tree</li>
-        <li onClick={() => onClickedHandler('swings')} >Swing</li>
-        <li onClick={() => onClose()} >Close</li>
+        <li onClick={() => onSelect('grass')}>Grass</li>
+        <li onClick={() => onSelect('tree')}>Tree</li>
+        <li onClick={() => onSelect('swings')} >Swing</li>
+        <li onClick={() => onSelect('trampolin')} >Trampolin</li>
+        <li onClick={() => onSelect('slide')} >Slide</li>
+        <li onClick={() => onSelect(undefined)} >Close</li>
       </ul>
     </div>
   )

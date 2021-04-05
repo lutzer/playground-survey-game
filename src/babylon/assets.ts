@@ -13,7 +13,8 @@ const loadAssets = function(scene : Scene, callback : (tasks : ContainerAssetTas
     onTaskCompleted(assetsManager.addContainerTask('task1', 'tree', 'assets/meshes/' ,'tile_tree.gltf')), 
     onTaskCompleted(assetsManager.addContainerTask('task2', 'grass', 'assets/meshes/' ,'tile_grass.gltf')),
     onTaskCompleted(assetsManager.addContainerTask('task3', 'trampolin', 'assets/meshes/' ,'tile_trampolin.gltf')),
-    onTaskCompleted(assetsManager.addContainerTask('task4', 'swings', 'assets/meshes/' ,'tile_swings.gltf'))
+    onTaskCompleted(assetsManager.addContainerTask('task4', 'swings', 'assets/meshes/' ,'tile_swings.gltf')),
+    onTaskCompleted(assetsManager.addContainerTask('task5', 'slide', 'assets/meshes/' ,'tile_slide.gltf'))
   ]).then((tasks) => {
     callback(tasks)
   })

@@ -1,38 +1,44 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Engine, Scene } from '@babylonjs/core'
-import { Playground } from './babylon/scene'
+import { Playground, PlaygroundSettings } from './babylon/playground'
 
 import { TileMenu } from './components/TileMenu'
+import { Actions, Statemachine } from './state'
 
 import './App.scss'
-import { Tile } from './babylon/tile'
+import { TileType } from './babylon/tile'
+
+const SETTINGS : PlaygroundSettings = {
+  gridSize: 6,
+  width: 6,
+  height: 6,
+  version: '0.8'
+}
 
 const App = function() : React.ReactElement {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [playground, setPlayground] = useState<Playground>()
 
-  const [selectedTile, setSelectedTile] = useState<Tile>()
+  const [stateMachine, setStateMachine] = useState<Statemachine>()
+  const [selectedTile, setSelectedTile] = useState<number>()
+
+  // setup statemachine
+  useEffect(() => {
+    setStateMachine(new Statemachine(SETTINGS))
+  },[])
 
   // setup scene
   useEffect(() => {
-    if (!canvasRef || canvasRef.current == null)
+    if (!canvasRef || canvasRef.current == null || !stateMachine)
       return
 
-    const playground = new Playground({ canvas: canvasRef.current })
+    const playground = new Playground({ canvas: canvasRef.current, settings: SETTINGS, stateMachine: stateMachine })
     playground.init()
-    playground.on('tile-selected', (t) => setSelectedTile(t) )
     setPlayground(playground)
     return () => {
       playground.dispose()
       setPlayground(undefined)
     }
-  },[canvasRef])
-
-  // handle tile unselect
-  useEffect(() => {
-    if (!selectedTile)
-      playground?.unselectTile()
-  },[selectedTile])
+  },[canvasRef, stateMachine])
 
   //handle resize
   useEffect(() => {
@@ -45,10 +51,29 @@ const App = function() : React.ReactElement {
     }
   },[playground])
 
+  // subscribe to state changes
+  useEffect(() => {
+    setSelectedTile(stateMachine?.state.selectedTile)
+    const sub = stateMachine?.subscribe( (state) => {
+      setSelectedTile(state.selectedTile)
+    })
+    return () => sub?.unsubscribe()
+  },[stateMachine])
+
+  function onSelectTyleType(type: TileType | undefined) {
+    if (type)
+      stateMachine?.trigger(Actions.setTileType, { type: type })
+    stateMachine?.trigger(Actions.selectTile, { id: undefined })
+  }
+
   return (
     <div className='App'>
       <canvas ref={canvasRef} id='renderCanvas' touch-action='none'></canvas>
-      { selectedTile && <TileMenu tile={selectedTile} onClose={() => setSelectedTile(undefined) } /> }
+      { selectedTile != undefined && 
+        <TileMenu
+          onSelect={onSelectTyleType} 
+        /> 
+      }
     </div>
   )
 }
