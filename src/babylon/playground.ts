@@ -13,6 +13,7 @@ import { createGrid } from './grid'
 import { loadAssets } from './assets'
 import { showAxis } from './helpers'
 import { Actions, Statemachine } from '../state'
+import { Camera } from '@babylonjs/core'
 
 // import '@babylonjs/inspector'
 
@@ -20,6 +21,10 @@ type PlaygroundSettings = {
   gridSize: number
   width: number
   height: number
+  camera: {
+    isometric: boolean
+    zoom: number
+  },
   version: string
 }
 
@@ -29,6 +34,7 @@ class Playground {
   engine: BABYLON.Engine 
   scene: BABYLON.Scene
   settings : PlaygroundSettings
+  camera: BABYLON.Camera | undefined
 
   stateMachine: Statemachine
   subscriptions : Subscription[] = []
@@ -58,7 +64,7 @@ class Playground {
   
     // scene.clearColor = BABYLON.Color4.FromHexString('#000000FF')
   
-    setupCamera(this.scene, this.canvas)
+    this.camera = setupCamera(this.scene, this.canvas, this.settings.camera.isometric, this.settings.camera.zoom)
     setupLights(this.scene)
   
     const grid = createGrid(this.settings.gridSize)
@@ -105,7 +111,7 @@ class Playground {
     })
   
     //show axis
-    showAxis(10,this.scene)
+    //showAxis(10,this.scene)
   
     // start render loop
     this.engine.runRenderLoop(() => {
@@ -119,6 +125,15 @@ class Playground {
         tile.position.y = simplex.noise2D(i,time * 0.0005) * 0.05
       })
     }
+  }
+
+  resize() : void {
+    if (this.camera?.mode == Camera.ORTHOGRAPHIC_CAMERA) {
+      const aspectRatio = this.engine.getAspectRatio(this.camera)
+      this.camera.orthoLeft = -this.settings.camera.zoom * aspectRatio
+      this.camera.orthoRight = this.settings.camera.zoom * aspectRatio
+    }
+    this.engine.resize()
   }
 }
 

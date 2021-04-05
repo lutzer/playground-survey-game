@@ -46,7 +46,7 @@ class TileManager extends EventEmitter {
 
     this.highlightLayer = new HighlightLayer('highlight-tile', scene)
 
-    this._selectMarker = MeshBuilder.CreateBox('marker-mesh', { size: 1.1 }, this._selectLayer.utilityLayerScene)
+    this._selectMarker = MeshBuilder.CreateBox('marker-mesh', { width: 1.1, height: 0.1, depth: 1.1 }, this._selectLayer.utilityLayerScene)
     this._initUtilLayer()
 
     this.enablePointerEvents = true
@@ -56,26 +56,25 @@ class TileManager extends EventEmitter {
     new HemisphericLight('light1', new Vector3(0, 0, 1), this._selectLayer.utilityLayerScene)
     const material = new StandardMaterial('tileMaterial', this._selectLayer.utilityLayerScene)
     material.diffuseColor = new Color3(1,0,0)
-    material.alpha = 0.6
+    material.alpha = 0.5
     this._selectMarker.material = material
     this._selectLayer.shouldRender = true
 
     this._selectMarker.setEnabled(false)
-    this._selectMarker.translate(new Vector3(0,1,0), 0.3)
+    this._selectMarker.isPickable = false
+    this._selectMarker.translate(new Vector3(0,1,0), 0.6)
     this._selectMarker.bakeCurrentTransformIntoVertices()
 
     // disables pointer events if necessary
     this._selectLayer.utilityLayerScene.onPrePointerObservable.add((pointerInfo) => {
       pointerInfo.skipOnPointerObservable = 
-        pointerInfo.type != PointerEventTypes.POINTERDOWN ||
-        !this.enablePointerEvents
+        pointerInfo.type != PointerEventTypes.POINTERDOWN
+        || !this.enablePointerEvents
     })
 
     // mouse and touch events
     this._selectLayer.utilityLayerScene.onPointerObservable.add((pointerInfo) => {
-      this.emit('tile-selected', pointerInfo.pickInfo?.hit ? 
-        pointerInfo.pickInfo.pickedMesh?.metadata.tileIndex : undefined 
-      )
+      this.emit('tile-selected', pointerInfo.pickInfo?.pickedMesh?.metadata?.tileIndex)
     })
   }
 

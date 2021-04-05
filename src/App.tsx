@@ -8,10 +8,14 @@ import './App.scss'
 import { TileType } from './babylon/tile'
 
 const SETTINGS : PlaygroundSettings = {
-  gridSize: 6,
-  width: 6,
-  height: 6,
-  version: '0.8'
+  gridSize: 10,
+  width: 10,
+  height: 10,
+  camera: {
+    isometric: true,
+    zoom: 10
+  },
+  version: '0.9'
 }
 
 const App = function() : React.ReactElement {
@@ -42,8 +46,8 @@ const App = function() : React.ReactElement {
 
   //handle resize
   useEffect(() => {
-    function onResize() {
-      playground?.engine.resize()
+    function onResize(e: any) {
+      playground?.resize()
     }
     window.addEventListener('resize', onResize)
     return () => {
