@@ -102,6 +102,7 @@ class TileManager extends EventEmitter {
         y * height - height/2
       )
       box.visibility = 0
+      box.isPickable = true
     })
 
     this.setSelectMarker(this._state.selectedTile)

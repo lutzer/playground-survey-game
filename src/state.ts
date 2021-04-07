@@ -45,7 +45,6 @@ class Statemachine extends Subject<State> {
     const item = storage.getItem(Statemachine.STORAGE_KEY) || ''
     try {
       const data = JSON.parse(item)
-      console.log(data)
       // only use data if the version is same
       if (data.version == this._state.version)
         this._state = { ...this._state, ...data,}
