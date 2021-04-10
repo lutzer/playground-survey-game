@@ -6,6 +6,8 @@ import { map, switchMap, takeUntil, timeInterval, withLatestFrom } from 'rxjs/op
 import { State } from '../state'
 import { Grid } from './grid'
 
+const TILE_PICK_CLICK_TIMEOUT = 400
+
 type TileType = 'grass'|'tree'|'swings'|'trampolin'|'slide'
 
 type TileState = {
@@ -97,7 +99,7 @@ class TileManager extends EventEmitter {
 
     // test if tile on down event is the same than on up event
     $onUpPicked.pipe(withLatestFrom($onDownPicked), takeUntil(this.$disposeObservable)).subscribe( ([up, down]) => {
-      if (up.pick?.hit && up.pick?.pickedMesh?.name == down.pick?.pickedMesh?.name && up.time - down.time < 500) {
+      if (up.pick?.hit && up.pick?.pickedMesh?.name == down.pick?.pickedMesh?.name && up.time - down.time < TILE_PICK_CLICK_TIMEOUT) {
         this.emit('tile-selected', up.pick.pickedMesh?.metadata?.tileIndex)
       }
     })
