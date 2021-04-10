@@ -9,9 +9,9 @@ import '@babylonjs/loaders'
 import { setupCamera } from './camera'
 import { setupLights } from './light'
 import { TileManager, TileMeshArray } from './tile'
-import { createGrid } from './grid'
+import { createGrid, createPlanscheGrid } from './grid'
 import { loadAssets } from './assets'
-import { showAxis } from './helpers'
+import { showAxis, showGroundPlane } from './helpers'
 import { Actions, Statemachine } from '../state'
 import { Camera } from '@babylonjs/core'
 
@@ -39,35 +39,30 @@ class Playground {
   stateMachine: Statemachine
   subscriptions : Subscription[] = []
 
+  enablePointerEvents: boolean
+
   constructor({ canvas, settings, stateMachine } : { canvas: HTMLCanvasElement, settings: PlaygroundSettings, stateMachine: Statemachine } ) {
     this.canvas = canvas
     this.engine = new BABYLON.Engine(canvas, true)
     this.scene = new BABYLON.Scene(this.engine,{})
     this.stateMachine = stateMachine
     this.settings = settings
+    this.enablePointerEvents = true
   }
 
   dispose() : void {
-    console.log('dispose playground')
     this.scene.dispose()
     this.engine.dispose()
     this.subscriptions.map((s) => s.unsubscribe())
   }
 
-  // unselectTile() {
-  //   this.tileManager?.selectTile(undefined)
-  // } 
-
   init() : void {
-
-    console.log('init playground')
-  
-    // scene.clearColor = BABYLON.Color4.FromHexString('#000000FF')
+    this.scene.clearColor = BABYLON.Color4.FromHexString('#638C59FF')
   
     this.camera = setupCamera(this.scene, this.canvas, this.settings.camera.isometric, this.settings.camera.zoom)
     setupLights(this.scene)
   
-    const grid = createGrid(this.settings.gridSize)
+    const grid = createPlanscheGrid(this.settings.gridSize)
   
     // setup tiles
     const tileManager = new TileManager(this.scene, grid, this.stateMachine.state)
@@ -112,6 +107,7 @@ class Playground {
   
     //show axis
     //showAxis(10,this.scene)
+    // showGroundPlane(20, this.scene,)
   
     // start render loop
     this.engine.runRenderLoop(() => {
@@ -126,10 +122,23 @@ class Playground {
       })
     }
 
+    this.scene.onPrePointerObservable.add((pointerInfo) => {
+      pointerInfo.skipOnPointerObservable = !this.enablePointerEvents
+    })
+
     // cleanup when scene is disposes
     this.scene.onDisposeObservable.add(() => {
       tileManager.dispose()
     })
+  }
+
+  resetCamera() : void {
+    this.camera?.restoreState()
+  }
+
+  takeScreenshot() : void {
+    if (this.camera)
+      BABYLON.Tools.CreateScreenshot(this.engine, this.camera, 1280)
   }
 
   resize() : void {

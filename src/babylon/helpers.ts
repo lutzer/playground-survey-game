@@ -42,8 +42,9 @@ const showAxis = function(size : number, scene : Scene) : void {
   zChar.position = new Vector3(0, 0.05 * size, 0.9 * size)
 }
 
-const showGroundPlane = function(size: number, scene : Scene) : void {
-  const ground = MeshBuilder.CreateGround('ground', {width:10, height:10})
+const showGroundPlane = function(size: number, scene : Scene) {
+  const ground = MeshBuilder.CreateGround('ground', {width:size, height:size})
+  ground.position.y = 0
   scene.addMesh(ground)
 }
 

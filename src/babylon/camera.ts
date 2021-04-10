@@ -19,6 +19,7 @@ const setupCamera = function(scene: Scene, canvas: HTMLCanvasElement, orthograph
     camera.panningDistanceLimit = 0.001
     camera.attachControl(canvas, true)
   }
+  camera.storeState()
   return camera
 }
 

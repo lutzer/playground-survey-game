@@ -1,9 +1,17 @@
+@import "../_vars.scss";
+
 .PlaygroundView {
   height: 100%;
 
   canvas {
     width: 100%;
     height: 100%;
+  }
+
+  .finish-button, .screenshot-button {
+    position: fixed;
+    top: 0;
+    margin: $standard-spacing;
   }
 
 }

@@ -1,14 +1,13 @@
 import { Mesh, Scene, MeshBuilder, Vector3, StandardMaterial, Color3, UtilityLayerRenderer, HemisphericLight, TransformNode, PointerEventTypes, PointerInfo } from '@babylonjs/core'
 import EventEmitter from 'events'
 import _ from 'lodash'
-import { concat, of, Subject } from 'rxjs'
-import { map, switchMap, takeUntil, timeInterval, withLatestFrom } from 'rxjs/operators'
+import { Subject } from 'rxjs'
+import { map, takeUntil, withLatestFrom } from 'rxjs/operators'
 import { State } from '../state'
+import { TileType } from './assets'
 import { Grid } from './grid'
 
 const TILE_PICK_CLICK_TIMEOUT = 400
-
-type TileType = 'grass'|'tree'|'swings'|'trampolin'|'slide'
 
 type TileState = {
   type: TileType,
@@ -31,8 +30,6 @@ class TileManager extends EventEmitter {
 
   meshes: TileMeshArray
 
-  enablePointerEvents: boolean
-
   //Observables
   $pointerDownObservable : Subject<PointerInfo>
   $pointerUpObservable : Subject<PointerInfo>
@@ -48,16 +45,12 @@ class TileManager extends EventEmitter {
 
     this.meshes = {}
 
-    this.enablePointerEvents = true
-
     this.$pointerDownObservable = new Subject()
     this.$pointerUpObservable = new Subject()
     this.$disposeObservable = new Subject()
 
     // add pointer observables for tile picking
     this.scene.onPointerObservable.add( (pInfo) => {
-      if (!this.enablePointerEvents)
-        return
       if (pInfo.type == PointerEventTypes.POINTERDOWN)
         this.$pointerDownObservable.next(pInfo)
       else if (pInfo.type == PointerEventTypes.POINTERUP)
@@ -107,26 +100,27 @@ class TileManager extends EventEmitter {
 
   setup(width: number, height: number) : void {
     // create tiles
-    this.tiles = this.grid.cells.map(([x,y], i) => {
+    this.tiles = this.grid.cells.map(({position, fixedTile}, i) => {
       const tile = new Tile(`box${i}`, this.meshes, this.scene)
       tile.position = new Vector3(
-        x * width - width/2, 
+        position[0] * width - width/2, 
         0,
-        y * height - height/2)
-      tile.type = this._state.tiles[i].type
-      tile.rotation = this._state.tiles[i].rotation
+        position[1] * height - height/2)
+      tile.type = fixedTile || this._state.tiles[i].type
+      tile.rotation = fixedTile ? 0 : this._state.tiles[i].rotation
+      tile.fixed = fixedTile != null
       tile.show()
       return tile
     })
 
     // create hitboxes to select tiles
-    this.grid.cells.map(([x,y], i) => {
+    this.grid.cells.map(({position, fixedTile}, i) => {
       const box = MeshBuilder.CreateBox(`select_tile_${i}`, { size: 1 }, this._selectLayer.utilityLayerScene)
-      box.metadata = { tileIndex : i }
+      box.metadata = { tileIndex : i, selectable: fixedTile == null }
       box.position = new Vector3(
-        x * width - width/2, 
+        position[0] * width - width/2, 
         0,
-        y * height - height/2
+        position[1] * height - height/2
       )
       box.visibility = 0
       box.isPickable = true
@@ -147,7 +141,6 @@ class TileManager extends EventEmitter {
   setSelectMarker(tileIndex: number | undefined) : void {
     if (tileIndex != undefined) {
       this._selectMarker.position = this.tiles[tileIndex].position
-      // this._selectMarker.parent = this.tiles[tileIndex].node
       this._selectMarker.setEnabled(true)
     } else {
       this._selectMarker.setEnabled(false)
@@ -156,11 +149,14 @@ class TileManager extends EventEmitter {
 }
 
 class Tile {
-  node: TransformNode | null = null
+  node: TransformNode
   name: string
+
+  fixed: boolean //indicates if tile cant be change
   
   private _position: Vector3
-  private _rotation: number
+
+  private _mesh : TransformNode | undefined
 
   private _type: TileType | undefined
   private _meshes : TileMeshArray
@@ -172,21 +168,24 @@ class Tile {
     this._scene = scene
 
     this._position = new Vector3(0,0,0)
-    this._rotation = 0
+
+    this.node = new TransformNode(name, scene, true)
+
+    this.fixed = false
   }
 
   set type(type : TileType) {
-    if (this._type == type)
+    if (this._type == type || this.fixed)
       return
+    this._type = type
      
     // remove old mesh  
     if (this.node) {
       this.node.dispose()
     }
 
-    this._type = type
-    const mesh = this._meshes[type]
-    this.node = mesh.instantiateHierarchy() || new TransformNode(this.name, this._scene)
+    // instanciate new mesh
+    this.node = this._meshes[type].instantiateHierarchy() || new TransformNode(this.name, this._scene)
    
     this.node.position = this._position
     this.node.setEnabled(true)
@@ -207,11 +206,11 @@ class Tile {
   }
 
   show() : void {
-    this.node?.setEnabled(true)
+    this.node.setEnabled(true)
   }
 
   hide() : void {
-    this.node?.setEnabled(false)
+    this.node.setEnabled(false)
   }
 }
 

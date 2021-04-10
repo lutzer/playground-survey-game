@@ -12,6 +12,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
   const [playground, setPlayground] = useState<Playground>()
 
   const [selectedTile, setSelectedTile] = useState<number>()
+  const [finished, setFinished] = useState(false)
 
   // setup scene
   useEffect(() => {
@@ -47,6 +48,15 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
     return () => sub.unsubscribe()
   },[])
 
+  // change stuff when playground is set to finished
+  useEffect(() => {
+    if (!finished || !playground)
+      return
+    stateMachine?.trigger(Actions.selectTile, { id: undefined })
+    playground.enablePointerEvents = false
+    playground.resetCamera()
+  }, [finished])
+
   //tile type selection handler
   function onSelectTyleType(type: TileType | undefined) {
     if (type)
@@ -54,6 +64,12 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
     else
       stateMachine?.trigger(Actions.selectTile, { id: undefined })
   }
+
+  function onScreenShotButtonClicked() {
+    console.log('screenshot')
+    playground?.takeScreenshot() 
+  }
+  
 
   return (
     <div className='PlaygroundView'>
@@ -63,6 +79,15 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
           tileState={stateMachine?.state.tiles[selectedTile]}
           onSelect={onSelectTyleType} 
         /> 
+      }
+      { !finished ?
+        <div className="finish-button">
+          <button onClick={() => setFinished(true)}>Finished</button>
+        </div>
+        :
+        <div className="screenshot-button">
+          <button onClick={() => onScreenShotButtonClicked()}>Take Image</button>
+        </div>
       }
     </div>
   )
