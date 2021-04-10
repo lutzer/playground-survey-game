@@ -1,6 +1,8 @@
-import { Mesh, Scene, MeshBuilder, Vector3, StandardMaterial, Color3, UtilityLayerRenderer, HemisphericLight, TransformNode, HighlightLayer, PointerEventTypes, TrajectoryClassifier } from '@babylonjs/core'
+import { Mesh, Scene, MeshBuilder, Vector3, StandardMaterial, Color3, UtilityLayerRenderer, HemisphericLight, TransformNode, PointerEventTypes, PointerInfo } from '@babylonjs/core'
 import EventEmitter from 'events'
 import _ from 'lodash'
+import { concat, of, Subject } from 'rxjs'
+import { map, switchMap, takeUntil, timeInterval, withLatestFrom } from 'rxjs/operators'
 import { State } from '../state'
 import { Grid } from './grid'
 
@@ -17,13 +19,10 @@ type TileMeshArray = { [name : string] : Mesh }
 class TileManager extends EventEmitter {
 
   tiles: Tile[]
-  
-  private _state: State
-
   scene: Scene
   grid: Grid
-
-  highlightLayer: HighlightLayer
+  
+  private _state: State
 
   private _selectLayer : UtilityLayerRenderer
   private _selectMarker : Mesh
@@ -31,6 +30,11 @@ class TileManager extends EventEmitter {
   meshes: TileMeshArray
 
   enablePointerEvents: boolean
+
+  //Observables
+  $pointerDownObservable : Subject<PointerInfo>
+  $pointerUpObservable : Subject<PointerInfo>
+  $disposeObservable: Subject<void>
 
   constructor(scene: Scene, grid: Grid, state: State) {
     super()
@@ -42,14 +46,30 @@ class TileManager extends EventEmitter {
 
     this.meshes = {}
 
-    this._selectLayer = new UtilityLayerRenderer(scene)
+    this.enablePointerEvents = true
 
-    this.highlightLayer = new HighlightLayer('highlight-tile', scene)
+    this.$pointerDownObservable = new Subject()
+    this.$pointerUpObservable = new Subject()
+    this.$disposeObservable = new Subject()
 
+    // add pointer observables for tile picking
+    this.scene.onPointerObservable.add( (pInfo) => {
+      if (!this.enablePointerEvents)
+        return
+      if (pInfo.type == PointerEventTypes.POINTERDOWN)
+        this.$pointerDownObservable.next(pInfo)
+      else if (pInfo.type == PointerEventTypes.POINTERUP)
+        this.$pointerUpObservable.next(pInfo)
+    })
+
+    this._selectLayer = new UtilityLayerRenderer(scene, false)
     this._selectMarker = MeshBuilder.CreateBox('marker-mesh', { width: 1.1, height: 0.1, depth: 1.1 }, this._selectLayer.utilityLayerScene)
     this._initUtilLayer()
 
-    this.enablePointerEvents = true
+  }
+
+  dispose() {
+    this.$disposeObservable.next()
   }
 
   _initUtilLayer() : void {
@@ -65,16 +85,21 @@ class TileManager extends EventEmitter {
     this._selectMarker.translate(new Vector3(0,1,0), 0.6)
     this._selectMarker.bakeCurrentTransformIntoVertices()
 
-    // disables pointer events if necessary
-    this._selectLayer.utilityLayerScene.onPrePointerObservable.add((pointerInfo) => {
-      pointerInfo.skipOnPointerObservable = 
-        pointerInfo.type != PointerEventTypes.POINTERDOWN
-        || !this.enablePointerEvents
-    })
+    const $onDownPicked = this.$pointerDownObservable.pipe(map((pInfo) => {
+      const pick = this._selectLayer.utilityLayerScene.pick(pInfo.event.offsetX, pInfo.event.offsetY)
+      return ({ pick: pick, time: Date.now()})
+    }))
 
-    // mouse and touch events
-    this._selectLayer.utilityLayerScene.onPointerObservable.add((pointerInfo) => {
-      this.emit('tile-selected', pointerInfo.pickInfo?.pickedMesh?.metadata?.tileIndex)
+    const $onUpPicked = this.$pointerUpObservable.pipe(map((pInfo) => {
+      const pick = this._selectLayer.utilityLayerScene.pick(pInfo.event.offsetX, pInfo.event.offsetY)
+      return ({ pick: pick, time: Date.now()})
+    }))
+
+    // test if tile on down event is the same than on up event
+    $onUpPicked.pipe(withLatestFrom($onDownPicked), takeUntil(this.$disposeObservable)).subscribe( ([up, down]) => {
+      if (up.pick?.hit && up.pick?.pickedMesh?.name == down.pick?.pickedMesh?.name && up.time - down.time < 500) {
+        this.emit('tile-selected', up.pick.pickedMesh?.metadata?.tileIndex)
+      }
     })
   }
 

@@ -1,14 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
-import { Playground, PlaygroundSettings } from './babylon/playground'
-
-import { TileMenu } from './components/TileMenu'
-import { Actions, Statemachine } from './state'
+import { PlaygroundSettings } from './babylon/playground'
+import { Statemachine } from './state'
 
 import './App.scss'
-import { TileType } from './babylon/tile'
-import { merge, of } from 'rxjs'
 import { StartView } from './components/StartView'
 import { PlaygroundView } from './components/PlaygroundView'
 
@@ -18,7 +14,7 @@ const SETTINGS : PlaygroundSettings = {
   height: 6.7,
   camera: {
     isometric: false,
-    zoom: 8
+    zoom: 10
   },
   version: '0.12'
 }

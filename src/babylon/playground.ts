@@ -125,6 +125,11 @@ class Playground {
         tile.position.y = simplex.noise2D(i,time * 0.0005) * 0.05
       })
     }
+
+    // cleanup when scene is disposes
+    this.scene.onDisposeObservable.add(() => {
+      tileManager.dispose()
+    })
   }
 
   resize() : void {
