@@ -1,19 +1,18 @@
 import * as BABYLON from '@babylonjs/core'
 import SimplexNoise from 'simplex-noise'
-import { distinctUntilChanged, map, pairwise } from 'rxjs/operators'
+import { distinctUntilChanged, map, pairwise, takeUntil } from 'rxjs/operators'
 import _ from 'lodash'
-import { Subscription } from 'rxjs'
+import { Subject } from 'rxjs'
 
 import '@babylonjs/loaders'
 
 import { setupCamera } from './camera'
 import { setupLights } from './light'
-import { TileManager, TileMeshArray } from './tile'
+import { TextureArray, TileManager, TileMeshArray } from './tile'
 import { createGrid, createPlanscheGrid } from './grid'
 import { loadAssets } from './assets'
-import { showAxis, showGroundPlane } from './helpers'
+import { createSkyBox, showAxis, showGroundPlane } from './helpers'
 import { Actions, Statemachine } from '../state'
-import { Camera } from '@babylonjs/core'
 
 // import '@babylonjs/inspector'
 
@@ -36,10 +35,13 @@ class Playground {
   settings : PlaygroundSettings
   camera: BABYLON.Camera | undefined
 
+  textures : BABYLON.Texture[]
+
   stateMachine: Statemachine
-  subscriptions : Subscription[] = []
 
   enablePointerEvents: boolean
+
+  $disposeObservable : Subject<void>
 
   constructor({ canvas, settings, stateMachine } : { canvas: HTMLCanvasElement, settings: PlaygroundSettings, stateMachine: Statemachine } ) {
     this.canvas = canvas
@@ -48,16 +50,20 @@ class Playground {
     this.stateMachine = stateMachine
     this.settings = settings
     this.enablePointerEvents = true
+
+    this.$disposeObservable = new Subject()
+
+    this.textures = []
   }
 
   dispose() : void {
+    this.$disposeObservable.next()
     this.scene.dispose()
     this.engine.dispose()
-    this.subscriptions.map((s) => s.unsubscribe())
   }
 
   init() : void {
-    this.scene.clearColor = BABYLON.Color4.FromHexString('#638C59FF')
+    // this.scene.clearColor = BABYLON.Color4.FromHexString('#638C59FF')
   
     this.camera = setupCamera(this.scene, this.canvas, this.settings.camera.isometric, this.settings.camera.zoom)
     setupLights(this.scene)
@@ -65,38 +71,59 @@ class Playground {
     const grid = createPlanscheGrid(this.settings.gridSize)
   
     // setup tiles
-    const tileManager = new TileManager(this.scene, grid, this.stateMachine.state)
+    const tileManager = new TileManager(this.scene, grid)
+
+    // register select events
+    tileManager.on('tile-selected', (id) => this.stateMachine.trigger(Actions.selectTile, { id: id }) )
 
     // sync change in tiles states with meshes
-    this.subscriptions.push(this.stateMachine
-      .pipe(distinctUntilChanged((curr, prev) => _.isEqual(curr.tiles, prev.tiles)))
-      .subscribe((state) => {
-        tileManager.handleTileChange(state.tiles)
+    this.stateMachine
+      .pipe(pairwise(), takeUntil(this.$disposeObservable))
+      .subscribe(([curr, prev]) => {
+        tileManager.handleTileChange(curr.tiles, prev.tiles)
       })
-    )
     
     // set select cursor for tiles
-    this.subscriptions.push(this.stateMachine
-      .pipe(map((state) => state.selectedTile), distinctUntilChanged())
+    this.stateMachine
+      .pipe(map((state) => state.selectedTile), distinctUntilChanged(), takeUntil(this.$disposeObservable))
       .subscribe((selectedTile) => {
         tileManager.setSelectMarker(selectedTile)
       })
-    )
-  
+
     // load assets
-    loadAssets(this.scene, (containers) => {
-      
-      const tileMeshes = containers.reduce<TileMeshArray>((acc, c) => {
-        const mesh = c.loadedMeshes[0].clone(c.meshesNames, null)
-        mesh?.setEnabled(false)
-        acc[c.meshesNames] = <BABYLON.Mesh>mesh
-        return acc
-      }, {})
-  
+    loadAssets(this.scene, (tasks) => {
+
+      // load tile meshes
+      const tileMeshes = tasks
+        .filter((task) => {
+          return task instanceof BABYLON.ContainerAssetTask && task.name.startsWith('tile')
+        })
+        .map((task) => (task as BABYLON.ContainerAssetTask))
+        .reduce<TileMeshArray>((acc, task) => {
+          const mesh = task.loadedContainer.instantiateModelsToScene(() => task.meshesNames).rootNodes[0]
+          mesh?.setEnabled(false)
+          acc[task.meshesNames] = <BABYLON.Mesh>mesh
+          return acc
+        }, {})
       tileManager.meshes = tileMeshes
-  
+
+      // load textures
+      const textures = tasks
+        .filter((task) => {
+          return task instanceof BABYLON.TextureAssetTask
+        })
+        .map((task) => (task as BABYLON.TextureAssetTask))
+        .reduce<TextureArray>((acc, task) => {
+          acc[task.name] = task.texture
+          return acc
+        },{})
+      tileManager.textures = textures
+
+      // setup tiles
       tileManager.setup(this.settings.width, this.settings.height)
-      tileManager.on('tile-selected', (id) => this.stateMachine.trigger(Actions.selectTile, { id: id }) )
+
+      // update tiles from current state
+      tileManager.handleTileChange(this.stateMachine.state.tiles)
     })
   
     // call loop function
@@ -105,9 +132,11 @@ class Playground {
       loop(Date.now() - startTime)
     })
   
-    //show axis
-    //showAxis(10,this.scene)
+    // show axis
+    showAxis(10,this.scene)
     // showGroundPlane(20, this.scene,)
+
+    createSkyBox(this.scene)
   
     // start render loop
     this.engine.runRenderLoop(() => {
@@ -118,7 +147,7 @@ class Playground {
     const simplex = new SimplexNoise()
     function loop(time: number) {
       tileManager.tiles.forEach((tile,i) => {
-        tile.position.y = simplex.noise2D(i,time * 0.0005) * 0.05
+        tile.position.y = simplex.noise2D(i,time * 0.0005) * 0.01
       })
     }
 
@@ -130,6 +159,8 @@ class Playground {
     this.scene.onDisposeObservable.add(() => {
       tileManager.dispose()
     })
+
+    // this.scene.debugLayer.show()
   }
 
   resetCamera() : void {
@@ -142,7 +173,7 @@ class Playground {
   }
 
   resize() : void {
-    if (this.camera?.mode == Camera.ORTHOGRAPHIC_CAMERA) {
+    if (this.camera?.mode == BABYLON.Camera.ORTHOGRAPHIC_CAMERA) {
       const aspectRatio = this.engine.getAspectRatio(this.camera)
       this.camera.orthoLeft = -this.settings.camera.zoom * aspectRatio
       this.camera.orthoRight = this.settings.camera.zoom * aspectRatio

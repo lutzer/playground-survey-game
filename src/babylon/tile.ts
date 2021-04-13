@@ -1,11 +1,12 @@
-import { Mesh, Scene, MeshBuilder, Vector3, StandardMaterial, Color3, UtilityLayerRenderer, HemisphericLight, TransformNode, PointerEventTypes, PointerInfo } from '@babylonjs/core'
+import { Mesh, Scene, MeshBuilder, Vector3, StandardMaterial, Color3, UtilityLayerRenderer, HemisphericLight, TransformNode, PointerEventTypes, PointerInfo, Texture } from '@babylonjs/core'
 import EventEmitter from 'events'
 import _ from 'lodash'
 import { Subject } from 'rxjs'
 import { map, takeUntil, withLatestFrom } from 'rxjs/operators'
-import { State } from '../state'
 import { TileType } from './assets'
+import { Fountain, PlaygroundEffect } from './effects'
 import { Grid } from './grid'
+import { getNodeChildren } from './helpers'
 
 const TILE_PICK_CLICK_TIMEOUT = 400
 
@@ -16,34 +17,33 @@ type TileState = {
 }
 
 type TileMeshArray = { [name : string] : Mesh }
+type TextureArray = { [name : string] : Texture }
 
 class TileManager extends EventEmitter {
 
   tiles: Tile[]
   scene: Scene
   grid: Grid
-  
-  private _state: State
 
   private _selectLayer : UtilityLayerRenderer
   private _selectMarker : Mesh
 
-  meshes: TileMeshArray
+  private _meshes: TileMeshArray
+  private _textures : TextureArray
 
   //Observables
   $pointerDownObservable : Subject<PointerInfo>
   $pointerUpObservable : Subject<PointerInfo>
   $disposeObservable: Subject<void>
 
-  constructor(scene: Scene, grid: Grid, state: State) {
+  constructor(scene: Scene, grid: Grid) {
     super()
     this.grid = grid
     this.scene = scene
     this.tiles = []
 
-    this._state = state
-
-    this.meshes = {}
+    this._meshes = {}
+    this._textures = {}
 
     this.$pointerDownObservable = new Subject()
     this.$pointerUpObservable = new Subject()
@@ -65,6 +65,14 @@ class TileManager extends EventEmitter {
 
   dispose() {
     this.$disposeObservable.next()
+  }
+
+  set meshes(meshes: TileMeshArray ) {
+    this._meshes = meshes
+  }
+
+  set textures(textures: TextureArray) {
+    this._textures = textures
   }
 
   _initUtilLayer() : void {
@@ -101,13 +109,13 @@ class TileManager extends EventEmitter {
   setup(width: number, height: number) : void {
     // create tiles
     this.tiles = this.grid.cells.map(({position, fixedTile}, i) => {
-      const tile = new Tile(`box${i}`, this.meshes, this.scene)
+      const tile = new Tile(`tile${i}`, this._meshes, this._textures, this.scene)
       tile.position = new Vector3(
         position[0] * width - width/2, 
         0,
         position[1] * height - height/2)
-      tile.type = fixedTile || this._state.tiles[i].type
-      tile.rotation = fixedTile ? 0 : this._state.tiles[i].rotation
+      tile.type = fixedTile || 'grass'
+      tile.rotation = 0
       tile.fixed = fixedTile != null
       tile.show()
       return tile
@@ -125,21 +133,20 @@ class TileManager extends EventEmitter {
       box.visibility = 0
       box.isPickable = true
     })
-
-    this.setSelectMarker(this._state.selectedTile)
   }
 
-  handleTileChange(updatedtileStates : TileState[]) : void {
-    const updatedTiles = _.differenceWith(updatedtileStates, this._state.tiles, _.isEqual)
+  handleTileChange(currState: TileState[], prevState? : TileState[]) : void {
+    const updatedTiles = prevState ? _.differenceWith(prevState, currState, _.isEqual) : currState
     updatedTiles.forEach((tileState) => {
-      this.tiles[tileState.index].type = tileState.type
-      this.tiles[tileState.index].rotation = tileState.rotation
+      if (!this.tiles[tileState.index].fixed) {
+        this.tiles[tileState.index].type = tileState.type
+        this.tiles[tileState.index].rotation = tileState.rotation
+      }
     })
-    this._state.tiles = updatedtileStates
   }
 
   setSelectMarker(tileIndex: number | undefined) : void {
-    if (tileIndex != undefined) {
+    if (tileIndex != undefined && !this.tiles[tileIndex].fixed) {
       this._selectMarker.position = this.tiles[tileIndex].position
       this._selectMarker.setEnabled(true)
     } else {
@@ -159,12 +166,18 @@ class Tile {
   private _mesh : TransformNode | undefined
 
   private _type: TileType | undefined
+
   private _meshes : TileMeshArray
+  private _textures : TextureArray
+
   private _scene : Scene
 
-  constructor(name: string, meshes: TileMeshArray, scene: Scene) {
+  private _effects : PlaygroundEffect[] = []
+
+  constructor(name: string, meshes: TileMeshArray, textures: TextureArray, scene: Scene) {
     this.name = name
     this._meshes = meshes
+    this._textures = textures
     this._scene = scene
 
     this._position = new Vector3(0,0,0)
@@ -174,18 +187,27 @@ class Tile {
     this.fixed = false
   }
 
+  dispose() : void {
+    this.node?.dispose()
+    this._effects.forEach((e) => e.dispose())
+    this._effects = []
+  }
+
   set type(type : TileType) {
-    if (this._type == type || this.fixed)
+    if (this._type == type)
       return
     this._type = type
      
-    // remove old mesh  
-    if (this.node) {
-      this.node.dispose()
+    // remove old mesh and effects
+    this.dispose()
+
+    if (type == 'pool5') {
+      this._effects.push(new Fountain(this.node.absolutePosition.add(new Vector3(0.135,0.8,0.02)), this._textures['texture-fountain'], this._scene))
     }
 
     // instanciate new mesh
-    this.node = this._meshes[type].instantiateHierarchy() || new TransformNode(this.name, this._scene)
+    this.node = this._meshes[type]?.instantiateHierarchy() || new TransformNode(this.name, this._scene)
+    this.node.name = this.name
    
     this.node.position = this._position
     this.node.setEnabled(true)
@@ -215,4 +237,4 @@ class Tile {
 }
 
 export { Tile, TileManager }
-export type { TileMeshArray, TileType, TileState }
+export type { TileMeshArray, TileType, TileState, TextureArray }

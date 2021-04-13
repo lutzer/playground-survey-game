@@ -1,0 +1,57 @@
+import { Color4, Scene, Texture, Vector3 } from '@babylonjs/core'
+import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem'
+
+interface PlaygroundEffect {
+  dispose() : void
+}
+
+class Fountain implements PlaygroundEffect {
+
+  // parent : Node
+  particleSystem : ParticleSystem
+
+  constructor(position: Vector3, texture: Texture, scene: Scene) {
+    // this.parent = parent
+
+    this.particleSystem = new ParticleSystem('fountain', 500, scene)
+
+    this.particleSystem.particleTexture = texture
+
+    this.particleSystem.emitter = position
+    this.particleSystem.createPointEmitter(new Vector3(-1, 10, -1), new Vector3(1, 10, 1))
+
+    this.particleSystem.color1 = new Color4(0.7, 0.8, 1.0, 1.0)
+    this.particleSystem.color2 = new Color4(0.2, 0.5, 1.0, 1.0)
+    this.particleSystem.colorDead = new Color4(1, 1, 1, 0.0)
+
+    this.particleSystem.minSize = 0.01
+    this.particleSystem.maxSize = 0.1
+
+    // Life time of each particle (random between...
+    this.particleSystem.minLifeTime = 0.5
+    this.particleSystem.maxLifeTime = 0.9
+
+    // Emission rate
+    this.particleSystem.emitRate = 300
+    this.particleSystem.gravity = new Vector3(0, -9.81, 0)
+
+    this.particleSystem.minAngularSpeed = 0
+    this.particleSystem.maxAngularSpeed = Math.PI * 0.2
+
+    // Speed
+    this.particleSystem.minEmitPower = 0.1
+    this.particleSystem.maxEmitPower = 0.5
+    this.particleSystem.updateSpeed = 0.005
+
+    // Start the particle system
+    this.particleSystem.start()
+  }
+
+  dispose() : void {
+    console.log('system dispose')
+    this.particleSystem.dispose()
+  }
+}
+
+export { Fountain }
+export type { PlaygroundEffect }

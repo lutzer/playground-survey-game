@@ -1,4 +1,6 @@
-import { Color3, DynamicTexture, Mesh, MeshBuilder, Scene, StandardMaterial, Vector3 } from '@babylonjs/core'
+import { Color3, CubeTexture, DynamicTexture, Mesh, MeshBuilder, Node, Scene, StandardMaterial, Vector3 } from '@babylonjs/core'
+import { Texture } from '@babylonjs/core/Materials/Textures/texture'
+import { SkyMaterial } from '@babylonjs/materials/sky/skyMaterial'
 
 const showAxis = function(size : number, scene : Scene) : void {
 
@@ -48,4 +50,27 @@ const showGroundPlane = function(size: number, scene : Scene) {
   scene.addMesh(ground)
 }
 
-export { showAxis, showGroundPlane }
+const createSkyBox = function(scene : Scene) {
+  const skybox = MeshBuilder.CreateBox('skyBox', { size : 1000.0 }, scene)
+  const skyboxMaterial = new StandardMaterial('skyBox', scene)
+  skyboxMaterial.backFaceCulling = false
+  skyboxMaterial.reflectionTexture = new CubeTexture('assets/textures/sky/skybox', scene)
+  skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE
+  skyboxMaterial.diffuseColor = new Color3(0, 0, 0)
+  skyboxMaterial.specularColor = new Color3(0, 0, 0)
+  skybox.material = skyboxMaterial
+}
+
+const getNodeChildren = function(node: Node) : string[] {
+  const children = node.getChildren()
+  if (!children)
+    return []
+  
+  return children.reduce<string[]>((acc, child) => {
+    acc.push(child.name)
+    getNodeChildren(child).forEach((c) => acc.push(c))
+    return acc
+  },[])
+}
+
+export { showAxis, showGroundPlane, getNodeChildren, createSkyBox }
