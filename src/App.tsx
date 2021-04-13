@@ -10,8 +10,8 @@ import { PlaygroundView } from './components/PlaygroundView'
 
 const SETTINGS : PlaygroundSettings = {
   gridSize: 7,
-  width: 6.5,
-  height: 6.5,
+  width: 6.4,
+  height: 6.4,
   camera: {
     isometric: false,
     zoom: 8

@@ -146,9 +146,9 @@ class Playground {
     // gets called before every render
     const simplex = new SimplexNoise()
     function loop(time: number) {
-      tileManager.tiles.forEach((tile,i) => {
-        tile.position.y = simplex.noise2D(i,time * 0.0005) * 0.01
-      })
+      // tileManager.tiles.forEach((tile,i) => {
+      //   tile.position.y = simplex.noise2D(i,time * 0.0005) * 0.01
+      // })
     }
 
     this.scene.onPrePointerObservable.add((pointerInfo) => {

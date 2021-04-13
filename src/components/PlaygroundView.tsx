@@ -30,7 +30,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
 
   //handle resize
   useEffect(() => {
-    function onResize(e: any) {
+    function onResize() {
       playground?.resize()
     }
     window.addEventListener('resize', onResize)

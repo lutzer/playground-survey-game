@@ -1,4 +1,4 @@
-import { AbstractAssetTask, AssetsManager, ContainerAssetTask, Scene, TextureAssetTask } from '@babylonjs/core'
+import { AbstractAssetTask, AssetsManager, Scene } from '@babylonjs/core'
 
 //standard exchangable tiles
 type StandardTileTypes = 'grass'|'tree'|'swings'|'trampolin'|'slide'|'sandbox'

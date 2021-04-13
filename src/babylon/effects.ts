@@ -1,4 +1,4 @@
-import { Color4, Scene, Texture, Vector3 } from '@babylonjs/core'
+import { BaseParticleSystem, Color4, GPUParticleSystem, Scene, Texture, Vector3 } from '@babylonjs/core'
 import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem'
 
 interface PlaygroundEffect {
@@ -8,12 +8,22 @@ interface PlaygroundEffect {
 class Fountain implements PlaygroundEffect {
 
   // parent : Node
-  particleSystem : ParticleSystem
+  particleSystem : BaseParticleSystem
 
   constructor(position: Vector3, texture: Texture, scene: Scene) {
-    // this.parent = parent
+    
+    const isGpuSystem = GPUParticleSystem.IsSupported
 
-    this.particleSystem = new ParticleSystem('fountain', 500, scene)
+    if (isGpuSystem) {
+      const gpuSystem = new GPUParticleSystem('particles', { capacity: 1000 }, scene)
+      gpuSystem.activeParticleCount = 1000
+      gpuSystem.start()
+      this.particleSystem = gpuSystem
+    } else {
+      const cpuSystem = new ParticleSystem('fountain', 500, scene)
+      cpuSystem.start()
+      this.particleSystem = cpuSystem
+    }
 
     this.particleSystem.particleTexture = texture
 
@@ -25,14 +35,14 @@ class Fountain implements PlaygroundEffect {
     this.particleSystem.colorDead = new Color4(1, 1, 1, 0.0)
 
     this.particleSystem.minSize = 0.01
-    this.particleSystem.maxSize = 0.1
+    this.particleSystem.maxSize = isGpuSystem ? 0.05 : 0.1
 
     // Life time of each particle (random between...
     this.particleSystem.minLifeTime = 0.5
     this.particleSystem.maxLifeTime = 0.9
 
     // Emission rate
-    this.particleSystem.emitRate = 300
+    this.particleSystem.emitRate = isGpuSystem ? 500 : 200
     this.particleSystem.gravity = new Vector3(0, -9.81, 0)
 
     this.particleSystem.minAngularSpeed = 0
@@ -44,12 +54,15 @@ class Fountain implements PlaygroundEffect {
     this.particleSystem.updateSpeed = 0.005
 
     // Start the particle system
-    this.particleSystem.start()
+    // this.particleSystem.start()
   }
 
   dispose() : void {
     console.log('system dispose')
-    this.particleSystem.dispose()
+    if (this.particleSystem instanceof ParticleSystem)
+      this.particleSystem.dispose()
+    else if (this.particleSystem instanceof GPUParticleSystem)
+      this.particleSystem.dispose()
   }
 }
 
