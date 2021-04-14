@@ -1,4 +1,5 @@
 import { Color3, CubeTexture, DynamicTexture, Mesh, MeshBuilder, Node, Scene, StandardMaterial, Vector3 } from '@babylonjs/core'
+import { Engine } from '@babylonjs/core/Engines/engine'
 import { Texture } from '@babylonjs/core/Materials/Textures/texture'
 import { SkyMaterial } from '@babylonjs/materials/sky/skyMaterial'
 

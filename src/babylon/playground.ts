@@ -13,6 +13,7 @@ import { createGrid, createPlanscheGrid } from './grid'
 import { loadAssets } from './assets'
 import { createSkyBox, showAxis, showGroundPlane } from './helpers'
 import { Actions, Statemachine } from '../state'
+import { applyPostProccesing } from './postprocessing'
 
 // import '@babylonjs/inspector'
 
@@ -100,9 +101,9 @@ class Playground {
         })
         .map((task) => (task as BABYLON.ContainerAssetTask))
         .reduce<TileMeshArray>((acc, task) => {
-          const mesh = task.loadedContainer.instantiateModelsToScene(() => task.meshesNames).rootNodes[0]
+          const mesh = task.loadedContainer.instantiateModelsToScene(() => task.meshesNames).rootNodes[0] as BABYLON.Mesh
           mesh?.setEnabled(false)
-          acc[task.meshesNames] = <BABYLON.Mesh>mesh
+          acc[task.meshesNames] =  mesh
           return acc
         }, {})
       tileManager.meshes = tileMeshes
@@ -161,6 +162,8 @@ class Playground {
     })
 
     // this.scene.debugLayer.show()
+
+    applyPostProccesing(this.scene, this.engine, this.camera)
   }
 
   resetCamera() : void {
