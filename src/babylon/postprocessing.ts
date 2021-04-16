@@ -10,7 +10,7 @@ import { PostProcessRenderEffect } from '@babylonjs/core/PostProcesses/RenderPip
 import { PostProcessRenderPipeline } from '@babylonjs/core/PostProcesses/RenderPipeline/postProcessRenderPipeline'
 import { Scene } from '@babylonjs/core/scene'
 
-const applyPostProccesing = function(scene: Scene, engine: Engine, camera: Camera) : void {
+const applyPixelShader = function(scene: Scene, engine: Engine, camera: Camera) : PostProcess {
   // Create a standard pipeline
   const pipeline = new DefaultRenderingPipeline('defaultPipeline', undefined, scene, [camera])
   pipeline.imageProcessingEnabled = true
@@ -21,7 +21,7 @@ const applyPostProccesing = function(scene: Scene, engine: Engine, camera: Camer
   // pipeline.grainEnabled = true
   // pipeline.grain.animated = true
   // pipeline.grain.adaptScaleToCurrentViewport = true
-  // pipeline.grain.intensity = 20
+  // pipeline.grain.intensity = 10
 
 
   // pipeline.imageProcessingEnabled = true
@@ -59,12 +59,13 @@ const applyPostProccesing = function(scene: Scene, engine: Engine, camera: Camer
   // scene.postProcessRenderPipelineManager.attachCamerasToRenderPipeline('standardPipeline', camera)
   scene.postProcessRenderPipelineManager.addPipeline(pipeline)
 
-  const shader = new PostProcess('pixelate','./shaders/pixelate', ['screenSize', 'highlightThreshold'], null, 1.0, camera)
-  shader.onApply = function (effect) {
-    effect.setFloat2('screenSize', 500, 500)
-    effect.setFloat('highlightThreshold', 0.90)
+  const startTime = Date.now()
+  const shader = new PostProcess('pixelate','./shaders/pixelate', ['time'], null, 1.0, camera)
+  shader.onBeforeRender = function (effect) {
+    const time = Date.now() - startTime 
+    effect.setFloat('time', time)
   }
-  // scene.postProcessRenderPipelineManager.addPipeline(shader)
+  return shader
 }
 
-export { applyPostProccesing }
+export { applyPixelShader }

@@ -58,7 +58,7 @@ class TileManager extends EventEmitter {
     })
 
     this._selectLayer = new UtilityLayerRenderer(scene, false)
-    this._selectMarker = MeshBuilder.CreateBox('marker-mesh', { width: 1.1, height: 0.1, depth: 1.1 }, this._selectLayer.utilityLayerScene)
+    this._selectMarker = MeshBuilder.CreateBox('marker-mesh', { width: 1.1, height: 0.01, depth: 1.1 }, this._selectLayer.utilityLayerScene)
     this._initUtilLayer()
 
   }
