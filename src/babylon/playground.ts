@@ -13,7 +13,7 @@ import { createGrid, createPlanscheGrid } from './grid'
 import { loadAssets } from './assets'
 import { createSkyBox, showAxis, showGroundPlane } from './helpers'
 import { Actions, Statemachine } from '../state'
-import { applyPostProccesing } from './postprocessing'
+import { applyPixelShader } from './postprocessing'
 
 // import '@babylonjs/inspector'
 
@@ -163,7 +163,7 @@ class Playground {
 
     // this.scene.debugLayer.show()
 
-    applyPostProccesing(this.scene, this.engine, this.camera)
+    applyPixelShader(this.scene, this.engine, this.camera)
   }
 
   resetCamera() : void {
