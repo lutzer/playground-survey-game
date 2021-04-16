@@ -134,7 +134,7 @@ class Playground {
     })
   
     // show axis
-    showAxis(10,this.scene)
+    // showAxis(10,this.scene)
     // showGroundPlane(20, this.scene,)
 
     createSkyBox(this.scene)

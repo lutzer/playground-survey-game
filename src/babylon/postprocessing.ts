@@ -12,7 +12,10 @@ import { Scene } from '@babylonjs/core/scene'
 
 const applyPostProccesing = function(scene: Scene, engine: Engine, camera: Camera) : void {
   // Create a standard pipeline
-  // const pipeline = new DefaultRenderingPipeline('defaultPipeline', undefined, scene, [camera])
+  const pipeline = new DefaultRenderingPipeline('defaultPipeline', undefined, scene, [camera])
+  pipeline.imageProcessingEnabled = true
+  pipeline.imageProcessing.contrast = 0.8
+  pipeline.imageProcessing.exposure = 1.0
   // pipeline.bloomEnabled = true
  
   // pipeline.grainEnabled = true
@@ -29,9 +32,9 @@ const applyPostProccesing = function(scene: Scene, engine: Engine, camera: Camer
   // pipeline.depthOfField.focusDistance = 4000
   // pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low
 
-  // pipeline.imageProcessing.vignetteEnabled = true
-  // pipeline.imageProcessing.vignetteWeight = 5
-  // pipeline.imageProcessing.vignetteColor = new Color4(0,0,0,0.5)
+  pipeline.imageProcessing.vignetteEnabled = true
+  pipeline.imageProcessing.vignetteWeight = 10
+  pipeline.imageProcessing.vignetteColor = new Color4(0,0,0,0.5)
 
   // pipeline.samples = 2
 
@@ -54,7 +57,7 @@ const applyPostProccesing = function(scene: Scene, engine: Engine, camera: Camer
   // // Add pipeline to the scene's manager and attach to the camera
   // scene.postProcessRenderPipelineManager.addPipeline(standardPipeline)
   // scene.postProcessRenderPipelineManager.attachCamerasToRenderPipeline('standardPipeline', camera)
-  // scene.postProcessRenderPipelineManager.addPipeline(pipeline)
+  scene.postProcessRenderPipelineManager.addPipeline(pipeline)
 
   const shader = new PostProcess('pixelate','./shaders/pixelate', ['screenSize', 'highlightThreshold'], null, 1.0, camera)
   shader.onApply = function (effect) {
