@@ -1,15 +1,27 @@
-import { DirectionalLight, HemisphericLight, Light, Scene, Vector3 } from '@babylonjs/core'
+import { Color3, DirectionalLight, HemisphericLight, Light, PointLight, Scene, SpotLight, Vector3 } from '@babylonjs/core'
 
-const setupLights = function(scene : Scene) : Light[] {
-  const light = new HemisphericLight('light', new Vector3(0, 1, 0),scene)
-  light.intensity = 0.4
+const setupLights = function(scene : Scene) : { sun : DirectionalLight } {
+  const light = new HemisphericLight('light', new Vector3(0, -1, 0),scene)
+  light.intensity = 3
+  light.groundColor = new Color3(148/255, 41/255, 60/255)
+  // light.setEnabled(false)
+
   const dirLight = new DirectionalLight('dir', new Vector3(0, -1, 0), scene)
-  dirLight.position.y = 10
-  dirLight.intensity = 5
-  scene.addLight(light)
-  scene.addLight(dirLight)
+  dirLight.position = new Vector3(0,5,0)
+  dirLight.setDirectionToTarget(new Vector3(0,0,0))
+  dirLight.intensity = 10
+  dirLight.diffuse = new Color3(255/255, 255/255, 153/255)
+  // dirLight.setEnabled(false)
+  // dirLight.specular = new Color3(255/255, 102/255, 255/255)
   // const shadowGenerator = new BABYLON.ShadowGenerator(1024, dirLight)
-  return [light, dirLight]
+
+  const waterLight = new PointLight('pointLight', new Vector3(0, 2, 0), scene)
+  waterLight.intensity = 10
+  waterLight.range = 30
+  // waterLight.setEnabled(false)
+  waterLight.diffuse = new Color3(0,1.0,1.0)
+
+  return { sun : dirLight }
 }
 
 export { setupLights }

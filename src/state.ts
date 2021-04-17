@@ -3,9 +3,13 @@ import { Subject } from 'rxjs'
 import { PlaygroundSettings } from './babylon/playground'
 import { TileState } from './babylon/tile'
 
+type Avatar = 'flower-girl'|'explorer'|'social'
+
 type State = {
   tiles : TileState[]
-  selectedTile : number | undefined
+  selectedTile?: number
+  avatar?: Avatar
+  
   version: string
 }
 
@@ -29,10 +33,9 @@ class Statemachine extends Subject<State> {
         return { 
           type: 'grass', 
           rotation: <number>_.sample([Math.PI, 0, Math.PI / 2, Math.PI * 1.5]), 
-          index: i 
+          index: i
         }
       }),
-      selectedTile: undefined,
       version: settings.version
     }
     // load state from storage

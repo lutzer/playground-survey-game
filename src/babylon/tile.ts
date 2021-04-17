@@ -1,4 +1,5 @@
 import { Mesh, Scene, MeshBuilder, Vector3, StandardMaterial, Color3, UtilityLayerRenderer, HemisphericLight, TransformNode, PointerEventTypes, PointerInfo, Texture } from '@babylonjs/core'
+import { Engine } from '@babylonjs/core/Engines/engine'
 import EventEmitter from 'events'
 import _ from 'lodash'
 import { Subject } from 'rxjs'
@@ -78,8 +79,9 @@ class TileManager extends EventEmitter {
   _initUtilLayer() : void {
     new HemisphericLight('light1', new Vector3(0, 0, 1), this._selectLayer.utilityLayerScene)
     const material = new StandardMaterial('tileMaterial', this._selectLayer.utilityLayerScene)
-    material.diffuseColor = new Color3(1,0,0)
+    material.diffuseColor = new Color3(255/255, 153/255, 0)
     material.alpha = 0.5
+    material.alphaMode = Engine.ALPHA_MAXIMIZED
     this._selectMarker.material = material
     this._selectLayer.shouldRender = true
 

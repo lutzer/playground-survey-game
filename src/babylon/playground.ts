@@ -11,9 +11,10 @@ import { setupLights } from './light'
 import { TextureArray, TileManager, TileMeshArray } from './tile'
 import { createGrid, createPlanscheGrid } from './grid'
 import { loadAssets } from './assets'
-import { createSkyBox, showAxis, showGroundPlane } from './helpers'
+import { createFog, createSkyDome, showAxis, showGroundPlane } from './helpers'
 import { Actions, Statemachine } from '../state'
-import { applyPixelShader } from './postprocessing'
+import { applyPostProccessing } from './postprocessing'
+import { Vector3 } from '@babylonjs/core/Maths/math'
 
 // import '@babylonjs/inspector'
 
@@ -55,6 +56,12 @@ class Playground {
     this.$disposeObservable = new Subject()
 
     this.textures = []
+
+    // ignore pointer events when disabled
+    this.scene.onPrePointerObservable.add((pointerInfo) => {
+      pointerInfo.skipOnPointerObservable = !this.enablePointerEvents
+    })
+
   }
 
   dispose() : void {
@@ -64,10 +71,8 @@ class Playground {
   }
 
   init() : void {
-    // this.scene.clearColor = BABYLON.Color4.FromHexString('#638C59FF')
   
     this.camera = setupCamera(this.scene, this.canvas, this.settings.camera.isometric, this.settings.camera.zoom)
-    setupLights(this.scene)
   
     const grid = createPlanscheGrid(this.settings.gridSize)
   
@@ -126,44 +131,49 @@ class Playground {
       // update tiles from current state
       tileManager.handleTileChange(this.stateMachine.state.tiles)
     })
-  
-    // call loop function
-    const startTime = Date.now()
-    this.scene.onBeforeRenderObservable.add(() => {
-      loop(Date.now() - startTime)
-    })
+
   
     // show axis
     // showAxis(10,this.scene)
-    // showGroundPlane(20, this.scene,)
 
-    createSkyBox(this.scene)
-  
-    // start render loop
-    this.engine.runRenderLoop(() => {
-      this.scene.render()
-    })
-  
-    // gets called before every render
+    const {sun} = setupLights(this.scene)
+
+    const skyMaterial = createSkyDome(this.scene)
+
+    applyPostProccessing(this.scene, this.engine, this.camera)
+
+    // call loop function
+    const startTime = Date.now()
+    this.scene.onBeforeRenderObservable.add(() => { loop(Date.now() - startTime) })
+
     const simplex = new SimplexNoise()
     function loop(time: number) {
+
+      // animate sun position
+      const freq = 0.0001
+      const sinCurve = Math.sin(time * freq)
+      const cosCurve = Math.sin(time * freq)
+      sun.intensity = (sinCurve + 1.0) * 8
+      sun.position = new Vector3(10 * sinCurve, 4 * (cosCurve + 1.1), 0)
+      sun.setDirectionToTarget(new Vector3(0,0,0))
+
+      //animate sky material
+      skyMaterial.smoothness = (sinCurve + 1.0) * 0.45
+
       // tileManager.tiles.forEach((tile,i) => {
       //   tile.position.y = simplex.noise2D(i,time * 0.0005) * 0.01
       // })
     }
 
-    this.scene.onPrePointerObservable.add((pointerInfo) => {
-      pointerInfo.skipOnPointerObservable = !this.enablePointerEvents
+    // start render loop
+    this.engine.runRenderLoop(() => {
+      this.scene.render()
     })
 
     // cleanup when scene is disposes
     this.scene.onDisposeObservable.add(() => {
       tileManager.dispose()
     })
-
-    // this.scene.debugLayer.show()
-
-    applyPixelShader(this.scene, this.engine, this.camera)
   }
 
   resetCamera() : void {

@@ -1,6 +1,7 @@
-import { Color3, CubeTexture, DynamicTexture, Mesh, MeshBuilder, Node, Scene, StandardMaterial, Vector3 } from '@babylonjs/core'
+import { Color3, Color4, CubeTexture, DynamicTexture, Material, Mesh, MeshBuilder, Node, Scene, StandardMaterial, Vector3 } from '@babylonjs/core'
 import { Engine } from '@babylonjs/core/Engines/engine'
 import { Texture } from '@babylonjs/core/Materials/Textures/texture'
+import { GradientMaterial } from '@babylonjs/materials/gradient/gradientMaterial'
 import { SkyMaterial } from '@babylonjs/materials/sky/skyMaterial'
 
 const showAxis = function(size : number, scene : Scene) : void {
@@ -47,11 +48,14 @@ const showAxis = function(size : number, scene : Scene) : void {
 
 const showGroundPlane = function(size: number, scene : Scene) {
   const ground = MeshBuilder.CreateGround('ground', {width:size, height:size})
+  const material = new StandardMaterial('ground',scene)
+  // material.diffuseColor = new Color3(0,1,0)
+  ground.material = material
   ground.position.y = 0
   scene.addMesh(ground)
 }
 
-const createSkyBox = function(scene : Scene) {
+const createSkyBox = function(scene : Scene) : void  {  
   const skybox = MeshBuilder.CreateBox('skyBox', { size : 1000.0 }, scene)
   const skyboxMaterial = new StandardMaterial('skyBox', scene)
   skyboxMaterial.backFaceCulling = false
@@ -60,6 +64,28 @@ const createSkyBox = function(scene : Scene) {
   skyboxMaterial.diffuseColor = new Color3(0, 0, 0)
   skyboxMaterial.specularColor = new Color3(0, 0, 0)
   skybox.material = skyboxMaterial
+}
+
+const createSkyDome = function(scene: Scene) : GradientMaterial {
+  // const sphere = MeshBuilder.CreateBox('skyBox', { size : 1000.0 }, scene)
+  const sphere = MeshBuilder.CreateSphere('sphere', { segments: 32, diameter: 100 }, scene)
+  const gradientMaterial = new GradientMaterial('grad', scene)
+  gradientMaterial.backFaceCulling = false
+  // gradientMaterial.topColor = new Color3(0.3,0.3,0.3) // Set the gradient top color
+  // gradientMaterial.bottomColor = new Color3(0,0,0) // Set the gradient bottom color
+  gradientMaterial.topColor = new Color3(204/255, 102/255, 153/255)
+  gradientMaterial.bottomColor = new Color3(77/255, 25/255, 51/255)
+  gradientMaterial.offset = 0.5
+  gradientMaterial.smoothness = 0.01
+  sphere.material = gradientMaterial
+  return gradientMaterial
+}
+
+const createFog = function(scene: Scene) {
+  //enable fog mode
+  scene.fogMode = Scene.FOGMODE_EXP
+  scene.fogColor = new Color3(102/255, 130/255, 93/255)
+  scene.fogDensity = 0.005
 }
 
 const getNodeChildren = function(node: Node) : string[] {
@@ -74,4 +100,4 @@ const getNodeChildren = function(node: Node) : string[] {
   },[])
 }
 
-export { showAxis, showGroundPlane, getNodeChildren, createSkyBox }
+export { showAxis, showGroundPlane, getNodeChildren, createSkyBox, createSkyDome, createFog }

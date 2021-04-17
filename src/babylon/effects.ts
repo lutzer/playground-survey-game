@@ -35,10 +35,10 @@ class Fountain implements PlaygroundEffect {
     this.particleSystem.colorDead = new Color4(1, 1, 1, 0.0)
 
     this.particleSystem.minSize = 0.01
-    this.particleSystem.maxSize = isGpuSystem ? 0.05 : 0.1
+    this.particleSystem.maxSize = isGpuSystem ? 0.1 : 0.2
 
     // Life time of each particle (random between...
-    this.particleSystem.minLifeTime = 0.5
+    this.particleSystem.minLifeTime = 0.6
     this.particleSystem.maxLifeTime = 0.9
 
     // Emission rate
@@ -49,7 +49,7 @@ class Fountain implements PlaygroundEffect {
     this.particleSystem.maxAngularSpeed = Math.PI * 0.2
 
     // Speed
-    this.particleSystem.minEmitPower = 0.1
+    this.particleSystem.minEmitPower = 0.2
     this.particleSystem.maxEmitPower = 0.5
     this.particleSystem.updateSpeed = 0.005
 

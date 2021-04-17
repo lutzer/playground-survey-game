@@ -14,9 +14,9 @@ const SETTINGS : PlaygroundSettings = {
   height: 6.4,
   camera: {
     isometric: false,
-    zoom: 8
+    zoom: 6
   },
-  version: '0.20'
+  version: '0.22'
 }
 
 const App = function() : React.ReactElement {

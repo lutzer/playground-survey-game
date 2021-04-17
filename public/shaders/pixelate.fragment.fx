@@ -1,4 +1,7 @@
-precision highp float;
+#ifdef GL_ES
+    precision highp float;
+#endif
+
 
 //	Simplex 3D Noise 
 //	by Ian McEwan, Ashima Arts
@@ -78,7 +81,7 @@ float snoise(vec3 v){
 
 varying vec2 vUV;
 
-#define COLOR_STEPS 16.0f
+#define COLOR_STEPS 32.0f
 
 uniform sampler2D textureSampler;
 uniform float time;
@@ -86,8 +89,8 @@ uniform float time;
 void main(void) {
     vec4 basecolor = texture2D(textureSampler, vUV);
     // float ns = snoise(vec3(vUV.x * 2.0,vUV.y * 2.0, time/1000.0));
-    // basecolor.x = floor(basecolor.x*COLOR_STEPS)/COLOR_STEPS;
-    // basecolor.y = floor(basecolor.y*COLOR_STEPS)/COLOR_STEPS;
-    // basecolor.z = floor(basecolor.z*COLOR_STEPS)/COLOR_STEPS;
+    basecolor.x = floor(basecolor.x*COLOR_STEPS)/COLOR_STEPS;
+    basecolor.y = floor(basecolor.y*COLOR_STEPS)/COLOR_STEPS;
+    basecolor.z = floor(basecolor.z*COLOR_STEPS)/COLOR_STEPS;
     gl_FragColor = basecolor;
 }
