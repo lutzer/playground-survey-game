@@ -4,12 +4,14 @@ import { PlaygroundSettings } from './babylon/playground'
 import { TileState } from './babylon/tile'
 
 type Avatar = 'flower-girl'|'explorer'|'social'
+type PlayGroundType = 'pool'|'river'
 
 type State = {
   tiles : TileState[]
   selectedTile?: number
   avatar?: Avatar
-  
+  playgroundType: PlayGroundType
+
   version: string
 }
 
@@ -36,6 +38,7 @@ class Statemachine extends Subject<State> {
           index: i
         }
       }),
+      playgroundType: 'pool',
       version: settings.version
     }
     // load state from storage
@@ -78,4 +81,4 @@ class Statemachine extends Subject<State> {
 }
 
 export { Statemachine, Actions }
-export type { State }
+export type { State, PlayGroundType, Avatar }

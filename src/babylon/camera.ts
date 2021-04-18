@@ -1,7 +1,7 @@
 import { ArcRotateCamera, Camera, Scene, Vector3 } from '@babylonjs/core'
 
 const MAX_DISTANCE = 20
-const MIN_DISTANCE = 6
+const MIN_DISTANCE = 5
 
 const setupCamera = function(scene: Scene, canvas: HTMLCanvasElement, orthographic: boolean, zoom : number) : Camera {
   const camera = new ArcRotateCamera('camera', -Math.PI * 1.25, Math.PI / 4, zoom * 2.5, new Vector3(0, 0, 0), scene)

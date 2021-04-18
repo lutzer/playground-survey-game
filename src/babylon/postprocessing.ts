@@ -14,7 +14,7 @@ const applyPostProccessing = function(scene: Scene, engine: Engine, camera: Came
   pipeline.imageProcessing.exposure = 1.0
   
   pipeline.bloomEnabled = true
-  pipeline.bloomThreshold = 0.1
+  pipeline.bloomThreshold = 0.2
 
   pipeline.imageProcessing.vignetteEnabled = true
   pipeline.imageProcessing.vignetteWeight = 10

@@ -9,10 +9,10 @@ import '@babylonjs/loaders'
 import { setupCamera } from './camera'
 import { setupLights } from './light'
 import { TextureArray, TileManager, TileMeshArray } from './tile'
-import { createGrid, createPlanscheGrid } from './grid'
+import { createGrid, createPlanscheGrid, createRiverGrid } from './grid'
 import { loadAssets } from './assets'
-import { createFog, createSkyDome, showAxis, showGroundPlane } from './helpers'
-import { Actions, Statemachine } from '../state'
+import { createFog, createSkyDome, optimizePerformance, setupFpsDisplay, showAxis, showGroundPlane } from './helpers'
+import { Actions, PlayGroundType, Statemachine } from '../state'
 import { applyPostProccessing } from './postprocessing'
 import { Vector3 } from '@babylonjs/core/Maths/math'
 
@@ -47,7 +47,7 @@ class Playground {
 
   constructor({ canvas, settings, stateMachine } : { canvas: HTMLCanvasElement, settings: PlaygroundSettings, stateMachine: Statemachine } ) {
     this.canvas = canvas
-    this.engine = new BABYLON.Engine(canvas, true)
+    this.engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true })
     this.scene = new BABYLON.Scene(this.engine,{})
     this.stateMachine = stateMachine
     this.settings = settings
@@ -70,11 +70,11 @@ class Playground {
     this.engine.dispose()
   }
 
-  init() : void {
+  init(playGroundType: PlayGroundType) : void {
   
     this.camera = setupCamera(this.scene, this.canvas, this.settings.camera.isometric, this.settings.camera.zoom)
-  
-    const grid = createPlanscheGrid(this.settings.gridSize)
+    
+    const grid = (playGroundType == 'pool') ? createPlanscheGrid(this.settings.gridSize) : createRiverGrid(this.settings.gridSize)
   
     // setup tiles
     const tileManager = new TileManager(this.scene, grid)
@@ -130,15 +130,19 @@ class Playground {
 
       // update tiles from current state
       tileManager.handleTileChange(this.stateMachine.state.tiles)
+
+      optimizePerformance(this.scene)
     })
 
   
     // show axis
     // showAxis(10,this.scene)
 
-    const {sun} = setupLights(this.scene)
+    const {sunLight, hemisphericLight} = setupLights(this.scene)
 
     const skyMaterial = createSkyDome(this.scene)
+
+    const fpsText = setupFpsDisplay(this.scene)
 
     applyPostProccessing(this.scene, this.engine, this.camera)
 
@@ -147,22 +151,34 @@ class Playground {
     this.scene.onBeforeRenderObservable.add(() => { loop(Date.now() - startTime) })
 
     const simplex = new SimplexNoise()
-    function loop(time: number) {
+    let lastUpdate = 0
+    const loop = (time: number) => {
 
-      // animate sun position
-      const freq = 0.0001
-      const sinCurve = Math.sin(time * freq)
-      const cosCurve = Math.sin(time * freq)
-      sun.intensity = (sinCurve + 1.0) * 8
-      sun.position = new Vector3(10 * sinCurve, 4 * (cosCurve + 1.1), 0)
-      sun.setDirectionToTarget(new Vector3(0,0,0))
+      // only update every 200 ms
+      if (time - lastUpdate > 100) {
 
-      //animate sky material
-      skyMaterial.smoothness = (sinCurve + 1.0) * 0.45
+        // animate light by time
+        const freq = 0.0001
+        const sinCurve = Math.sin(time * freq)
+        const cosCurve = Math.sin(time * freq)
+        sunLight.intensity = (sinCurve + 1.0) * 8
+        sunLight.position = new Vector3(9 * sinCurve, 4 * (cosCurve + 1.1), 0)
+        sunLight.setDirectionToTarget(new Vector3(0,0,0))
+        hemisphericLight.intensity = (sinCurve + 1.1)
+      
 
-      // tileManager.tiles.forEach((tile,i) => {
-      //   tile.position.y = simplex.noise2D(i,time * 0.0005) * 0.01
-      // })
+        // animate sky material
+        skyMaterial.smoothness = (sinCurve + 1.0) * 0.45
+
+        fpsText.text = 'fps: ' + Math.floor(this.engine.getFps())
+        lastUpdate = time
+      }
+      
+
+      // animate tile movement
+      tileManager.tiles.forEach((tile,i) => {
+        tile.position.y = simplex.noise2D(i,time * 0.0004) * 0.02
+      })
     }
 
     // start render loop
@@ -181,8 +197,10 @@ class Playground {
   }
 
   takeScreenshot() : void {
-    if (this.camera)
-      BABYLON.Tools.CreateScreenshot(this.engine, this.camera, 1280)
+    if (this.camera) {
+      this.scene.render()
+      BABYLON.Tools.CreateScreenshotUsingRenderTarget(this.engine, this.camera, 1280)
+    }
   }
 
   resize() : void {

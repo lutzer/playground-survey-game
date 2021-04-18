@@ -20,7 +20,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
       return
 
     const playground = new Playground({ canvas: canvasRef.current, settings: settings, stateMachine: stateMachine })
-    playground.init()
+    playground.init(stateMachine.state.playgroundType)
     setPlayground(playground)
     return () => {
       playground.dispose()

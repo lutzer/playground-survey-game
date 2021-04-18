@@ -204,11 +204,14 @@ class Tile {
     this.dispose()
 
     if (type == 'pool5') {
-      this._effects.push(new Fountain(this.node.absolutePosition.add(new Vector3(0.135,0.8,0.02)), this._textures['texture-fountain'], this._scene))
+      this._effects.push(new Fountain(this.node.absolutePosition.add(new Vector3(0.135,1.1,0.02)), this._textures['texture-fountain'], this._scene))
     }
 
     // instanciate new mesh
-    this.node = this._meshes[type]?.instantiateHierarchy() || new TransformNode(this.name, this._scene)
+    const mesh = <Mesh>this._meshes[type]?.instantiateHierarchy()
+    if (mesh) mesh.doNotSyncBoundingInfo = true
+    this.node = mesh || new TransformNode(this.name, this._scene)
+    
     this.node.name = this.name
    
     this.node.position = this._position

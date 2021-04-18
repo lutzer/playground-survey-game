@@ -1,6 +1,10 @@
 import { Color3, Color4, CubeTexture, DynamicTexture, Material, Mesh, MeshBuilder, Node, Scene, StandardMaterial, Vector3 } from '@babylonjs/core'
 import { Engine } from '@babylonjs/core/Engines/engine'
 import { Texture } from '@babylonjs/core/Materials/Textures/texture'
+import { AdvancedDynamicTexture } from '@babylonjs/gui/2D/advancedDynamicTexture'
+import { Control } from '@babylonjs/gui/2D/controls/control'
+import { StackPanel } from '@babylonjs/gui/2D/controls/stackPanel'
+import { TextBlock } from '@babylonjs/gui/2D/controls/textBlock'
 import { GradientMaterial } from '@babylonjs/materials/gradient/gradientMaterial'
 import { SkyMaterial } from '@babylonjs/materials/sky/skyMaterial'
 
@@ -100,4 +104,27 @@ const getNodeChildren = function(node: Node) : string[] {
   },[])
 }
 
-export { showAxis, showGroundPlane, getNodeChildren, createSkyBox, createSkyDome, createFog }
+const setupFpsDisplay = function(scene : Scene) {
+  const advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI('UI')
+  const stackPanel = new StackPanel()
+  stackPanel.verticalAlignment = Control.VERTICAL_ALIGNMENT_TOP
+  stackPanel.isVertical = true
+  advancedTexture.addControl(stackPanel)  
+
+  const text = new TextBlock()
+  text.text = '<fps>'
+  text.color = 'white'
+  text.fontSize = 16
+  text.height = '30px'
+  stackPanel.addControl(text)
+  return text
+}
+
+const optimizePerformance = function(scene: Scene) {
+  scene.autoClear = false // Color buffer
+  scene.autoClearDepthAndStencil = false
+  scene.freeActiveMeshes()
+  scene.blockMaterialDirtyMechanism = true
+}
+
+export { showAxis, showGroundPlane, getNodeChildren, createSkyBox, createSkyDome, createFog, optimizePerformance, setupFpsDisplay }

@@ -3,7 +3,7 @@ import { TileState, TileType } from '../babylon/tile'
 
 import './TileMenu.scss'
 
-const TYPES : TileType[] = ['grass', 'tree', 'swings', 'trampolin', 'slide', 'sandbox']
+const TYPES : TileType[] = ['grass', 'tree', 'swings', 'trampolin', 'slide', 'sandbox', 'house']
 
 const TileMenu = function({tileState, onSelect} : {tileState?: TileState, onSelect : (t: TileType | undefined) => void}) : React.ReactElement {
   const [type, setType] = useState(tileState?.type)

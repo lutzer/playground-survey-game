@@ -16,7 +16,7 @@ const SETTINGS : PlaygroundSettings = {
     isometric: false,
     zoom: 6
   },
-  version: '0.22'
+  version: '0.23'
 }
 
 const App = function() : React.ReactElement {
