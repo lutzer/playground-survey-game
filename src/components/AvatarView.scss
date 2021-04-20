@@ -1,0 +1,14 @@
+@import "../_vars.scss";
+
+.avatar-view {
+    @include content;
+
+    .avatar-list {
+
+        .avatar {
+            .icon {
+                @include big-icon;
+            }
+        }
+    }
+}

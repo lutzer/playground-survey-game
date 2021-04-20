@@ -70,7 +70,7 @@ class Playground {
     this.engine.dispose()
   }
 
-  init(playGroundType: PlayGroundType) : void {
+  init(playGroundType: PlayGroundType, onLoaded: () => void) : void {
   
     this.camera = setupCamera(this.scene, this.canvas, this.settings.camera.isometric, this.settings.camera.zoom)
     
@@ -132,6 +132,8 @@ class Playground {
       tileManager.handleTileChange(this.stateMachine.state.tiles)
 
       optimizePerformance(this.scene)
+
+      onLoaded()
     })
 
   
@@ -155,7 +157,7 @@ class Playground {
     const loop = (time: number) => {
 
       // only update every 200 ms
-      if (time - lastUpdate > 100) {
+      if (time - lastUpdate > 50) {
 
         // animate light by time
         const freq = 0.0001

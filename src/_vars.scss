@@ -1,1 +1,28 @@
-$standard-spacing: 10px;
+$standard-spacing: 15px;
+$big-spacing: 20px;
+
+$content-size: 600px;
+
+$color-light: #cc6699;
+$color-dark: #4d1933;
+$font-color: #f7d9d9;
+$accent-color: #5cd671;
+
+@mixin content {
+    max-width: $content-size;
+    margin: 0 auto;
+    padding: $standard-spacing;
+}
+
+@mixin big-icon {
+    height: 100px;
+    width: 100px;
+    background-color: $accent-color;
+    border-radius: 50%;
+    margin: $big-spacing auto;
+}
+
+@mixin border {
+    border:1px solid $accent-color;
+    border-radius: 7px;
+}

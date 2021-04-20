@@ -1,6 +1,6 @@
 @import "../_vars.scss";
 
-.PlaygroundView {
+.playground-view {
   height: 100%;
 
   canvas {
@@ -8,7 +8,7 @@
     height: 100%;
   }
 
-  .finish-button, .screenshot-button {
+  .buttons {
     position: fixed;
     top: 0;
     margin: $standard-spacing;

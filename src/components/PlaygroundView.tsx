@@ -6,13 +6,16 @@ import { Actions, Statemachine } from '../state'
 import { TileMenu } from './TileMenu'
 
 import './PlaygroundView.scss'
+import { useHistory } from 'react-router'
 
 const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Statemachine, settings: PlaygroundSettings }) : React.ReactElement {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [playground, setPlayground] = useState<Playground>()
+  const [loaded, setLoaded] = useState(false)
 
   const [selectedTile, setSelectedTile] = useState<number>()
-  const [finished, setFinished] = useState(false)
+
+  const history = useHistory()
 
   // setup scene
   useEffect(() => {
@@ -20,7 +23,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
       return
 
     const playground = new Playground({ canvas: canvasRef.current, settings: settings, stateMachine: stateMachine })
-    playground.init(stateMachine.state.playgroundType)
+    playground.init(stateMachine.state.playgroundType, () => setLoaded(true))
     setPlayground(playground)
     return () => {
       playground.dispose()
@@ -48,31 +51,27 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
     return () => sub.unsubscribe()
   },[])
 
-  // change stuff when playground is set to finished
-  useEffect(() => {
-    if (!finished || !playground)
-      return
-    stateMachine?.trigger(Actions.selectTile, { id: undefined })
-    playground.enablePointerEvents = false
-    playground.resetCamera()
-  }, [finished])
-
   //tile type selection handler
   function onSelectTyleType(type: TileType | undefined) {
     if (type)
       stateMachine?.trigger(Actions.setTileType, { type: type })
-    else
-      stateMachine?.trigger(Actions.selectTile, { id: undefined })
+    stateMachine?.trigger(Actions.selectTile, { id: undefined })
   }
 
   function onScreenShotButtonClicked() {
-    console.log('screenshot')
     playground?.takeScreenshot() 
+  }
+
+  function onFinishedClicked() {
+    stateMachine?.trigger(Actions.selectTile, { id: undefined })
+    if (playground)
+      playground.enablePointerEvents = false
+    history.push('/missing-tile')
   }
   
 
   return (
-    <div className='PlaygroundView'>
+    <div className='playground-view'>
       <canvas ref={canvasRef} id='renderCanvas' touch-action='none'></canvas>
       { selectedTile != undefined && 
         <TileMenu
@@ -80,13 +79,10 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
           onSelect={onSelectTyleType} 
         /> 
       }
-      { !finished ?
-        <div className="finish-button">
-          <button onClick={() => setFinished(true)}>Finished</button>
-        </div>
-        :
-        <div className="screenshot-button">
+      { loaded && 
+        <div className="buttons">
           <button onClick={() => onScreenShotButtonClicked()}>Take Image</button>
+          <button onClick={() => onFinishedClicked()}>Finished</button>
         </div>
       }
     </div>

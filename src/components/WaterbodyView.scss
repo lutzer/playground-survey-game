@@ -1,0 +1,15 @@
+@import "../_vars.scss";
+
+.waterbody-view {
+    @include content;
+
+    .waterbody-list {
+
+        .waterbody {
+
+            .icon {
+                @include big-icon;
+            }
+        }
+    }
+}

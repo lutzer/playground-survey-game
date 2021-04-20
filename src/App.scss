@@ -1,4 +1,24 @@
+@import "_vars.scss";
+
 html, body, #root, .App {
   height: 100%;
   margin: 0;
+  background-image: linear-gradient(180deg, $color-light, $color-dark);
+  color: $font-color;
+}
+
+p.caption {
+  text-align: center;
+  display: block;
+  margin-top: -$big-spacing;
+}
+
+button {
+  margin: 5px;;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: $accent-color;
+  border: none;
+  outline: none;
+  font-size: 100%;
 }
