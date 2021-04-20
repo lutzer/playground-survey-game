@@ -4,10 +4,11 @@ import { PlayGroundType } from '../state'
 
 import './WaterbodyView.scss'
 
-const WaterbodyView = function() : React.ReactElement {
+const WaterbodyView = function({ onSelect } : { onSelect: (type: PlayGroundType) => void}) : React.ReactElement {
   const history = useHistory()
 
   function onWaterbodySelect(type: PlayGroundType) {
+    onSelect(type)
     history.push('playground')
   }
 

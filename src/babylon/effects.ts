@@ -1,4 +1,4 @@
-import { BaseParticleSystem, Color4, GPUParticleSystem, Scene, Texture, Vector3 } from '@babylonjs/core'
+import { BaseParticleSystem, Color3, Color4, GPUParticleSystem, PointLight, Scene, Texture, Vector3 } from '@babylonjs/core'
 import { ParticleSystem } from '@babylonjs/core/Particles/particleSystem'
 
 interface PlaygroundEffect {
@@ -66,5 +66,21 @@ class Fountain implements PlaygroundEffect {
   }
 }
 
-export { Fountain }
+class WaterLight implements PlaygroundEffect {
+
+  light: PointLight
+
+  constructor(position: Vector3, scene: Scene) {
+    this.light = new PointLight('pointLight', new Vector3(0, 2, 0), scene)
+    this.light.intensity = 20
+    this.light.range = 30
+    this.light.diffuse = new Color3(0,1.0,1.0)
+  }
+
+  dispose() : void {
+    this.light.dispose()
+  }
+}
+
+export { Fountain, WaterLight }
 export type { PlaygroundEffect }

@@ -11,13 +11,16 @@ type State = {
   selectedTile?: number
   avatar?: Avatar
   playgroundType: PlayGroundType
-
+  missing? : string
   version: string
 }
 
 enum Actions {
   selectTile,
-  setTileType
+  setTileType,
+  setAvatar,
+  setPlaygroundType,
+  setMissingText
 }
 
 class Statemachine extends Subject<State> {
@@ -74,6 +77,12 @@ class Statemachine extends Subject<State> {
       this._state.selectedTile = args.id
     } else if (action == Actions.setTileType && this._state.selectedTile != undefined ) {
       this._state.tiles[this._state.selectedTile].type = args.type
+    } else if (action == Actions.setAvatar && args.avatar ) {
+      this._state.avatar = args.avatar
+    } else if (action == Actions.setPlaygroundType && args.type ) {
+      this._state.playgroundType = args.type
+    } else if (action == Actions.setMissingText && args.text ) {
+      this._state.missing = args.text
     }
     this.next(this.state)
     this.save()

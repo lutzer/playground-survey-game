@@ -4,10 +4,11 @@ import { Avatar } from '../state'
 
 import './AvatarView.scss'
 
-const AvatarView = function() : React.ReactElement {
+const AvatarView = function({ onSelect } : { onSelect: (avatar: Avatar) => void}) : React.ReactElement {
   const history = useHistory()
 
   function onAvatarSelect(avatar: Avatar) {
+    onSelect(avatar)
     history.push('/waterbody')
   }
 

@@ -5,9 +5,8 @@ import _ from 'lodash'
 import { Subject } from 'rxjs'
 import { map, takeUntil, withLatestFrom } from 'rxjs/operators'
 import { TileType } from './assets'
-import { Fountain, PlaygroundEffect } from './effects'
+import { Fountain, PlaygroundEffect, WaterLight } from './effects'
 import { Grid } from './grid'
-import { getNodeChildren } from './helpers'
 
 const TILE_PICK_CLICK_TIMEOUT = 400
 
@@ -205,6 +204,7 @@ class Tile {
 
     if (type == 'pool5') {
       this._effects.push(new Fountain(this.node.absolutePosition.add(new Vector3(0.135,1.1,0.02)), this._textures['texture-fountain'], this._scene))
+      this._effects.push(new WaterLight(this.node.absolutePosition.add(new Vector3(0, 2, 0)), this._scene))
     }
 
     // instanciate new mesh

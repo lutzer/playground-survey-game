@@ -12,15 +12,7 @@ const setupLights = function(scene : Scene) : { sunLight : DirectionalLight, hem
   dirLight.intensity = 10
   dirLight.diffuse = new Color3(255/255, 255/255, 153/255)
   // dirLight.setEnabled(false)
-  // dirLight.specular = new Color3(255/255, 102/255, 255/255)
-  // const shadowGenerator = new BABYLON.ShadowGenerator(1024, dirLight)
-
-  const waterLight = new PointLight('pointLight', new Vector3(0, 2, 0), scene)
-  waterLight.intensity = 20
-  waterLight.range = 30
-  // waterLight.setEnabled(false)
-  waterLight.diffuse = new Color3(0,1.0,1.0)
-
+ 
   return { sunLight : dirLight, hemisphericLight: light }
 }
 
