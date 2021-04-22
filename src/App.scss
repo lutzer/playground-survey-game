@@ -3,8 +3,8 @@
 html, body, #root, .App {
   height: 100%;
   margin: 0;
-  background-image: linear-gradient(180deg, $color-light, $color-dark);
   color: $font-color;
+  background-image: linear-gradient(180deg, $color-light, $color-dark);
 }
 
 p.caption {

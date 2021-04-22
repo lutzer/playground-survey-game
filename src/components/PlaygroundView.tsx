@@ -7,6 +7,7 @@ import { TileMenu } from './TileMenu'
 
 import './PlaygroundView.scss'
 import { useHistory } from 'react-router'
+import { delay } from 'rxjs/internal/operators/delay'
 
 const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Statemachine, settings: PlaygroundSettings }) : React.ReactElement {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -44,7 +45,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
 
   // subscribe to state changes
   useEffect(() => {
-    const sub = merge(of(stateMachine.state),stateMachine).subscribe( (state) => {
+    const sub = merge(of(stateMachine.state),stateMachine).pipe(delay(50)).subscribe( (state) => {
       setSelectedTile(undefined)
       setSelectedTile(state.selectedTile)
     })
@@ -82,7 +83,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
       { loaded && 
         <div className="buttons">
           <button onClick={() => onScreenShotButtonClicked()}>Take Image</button>
-          <button onClick={() => onFinishedClicked()}>Finished</button>
+          <button className="right" onClick={() => onFinishedClicked()}>Finished</button>
         </div>
       }
     </div>

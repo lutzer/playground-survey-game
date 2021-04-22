@@ -2,16 +2,19 @@
 
 .TileMenu {
   position: fixed;
-  bottom: $standard-spacing;
+  bottom: 15px;
   left: 50%;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 0%);
   border-radius: 10px;
-  background-color: $accent-color;
+  background-color: #5cd671;
+  // height: 50%;
+  width: 80%;
+  max-width: 500px;
 
   ul {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: space-evenly;
 
     width: 100%;
@@ -29,7 +32,7 @@
       line-height: 50px;
       margin: 5px;
       border-radius: 5px;
-      border: 2px solid black;
+      overflow: hidden;
 
       &.selected {
         background-color: red;

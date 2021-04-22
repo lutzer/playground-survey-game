@@ -3,9 +3,9 @@ import {  useHistory } from 'react-router-dom'
 
 import './MissingTileView.scss'
 
-const MissingTileView = function({ onSubmit } : { onSubmit: (text: string) => void}) : React.ReactElement {
+const MissingTileView = function({ onSubmit, initial } : { onSubmit: (text: string) => void, initial: string }) : React.ReactElement {
   const history = useHistory()
-  const [text, setText] = useState('')
+  const [text, setText] = useState(initial)
 
 
   function onFinishedClicked() {

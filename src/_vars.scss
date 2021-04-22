@@ -3,15 +3,17 @@ $big-spacing: 20px;
 
 $content-size: 600px;
 
-$color-light: #cc6699;
+$color-light: #22a2bf;
 $color-dark: #4d1933;
-$font-color: #f7d9d9;
-$accent-color: #5cd671;
+$font-color: #f9f7e5;
+$accent-color: #ea034e;
 
 @mixin content {
     max-width: $content-size;
     margin: 0 auto;
     padding: $standard-spacing;
+    background-image: linear-gradient(180deg, $color-light, $color-dark);
+    min-height: 100%;
 }
 
 @mixin big-icon {

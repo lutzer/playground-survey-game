@@ -31,7 +31,6 @@ class Statemachine extends Subject<State> {
 
   constructor(settings: PlaygroundSettings) {
     super()
-    console.log('init statemachine')
     // set initial state
     this._state = {
       tiles: Array(settings.gridSize * settings.gridSize).fill(null).map( (v,i) => { 

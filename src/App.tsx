@@ -44,7 +44,9 @@ const App = function() : React.ReactElement {
             { stateMachine && <PlaygroundView stateMachine={stateMachine} settings={SETTINGS}/> }
           </Route>
           <Route path="/missing-tile">
-            <MissingTileView onSubmit={(t) => stateMachine?.trigger(Actions.setMissingText, { text: t})}/>
+            <MissingTileView 
+              initial={stateMachine?.state.missing || ''}
+              onSubmit={(t) => stateMachine?.trigger(Actions.setMissingText, { text: t})}/>
           </Route>
           <Route path="/finished">
             <FinishedView/>

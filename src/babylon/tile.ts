@@ -202,7 +202,7 @@ class Tile {
     // remove old mesh and effects
     this.dispose()
 
-    if (type == 'pool5') {
+    if (type == 'pool') {
       this._effects.push(new Fountain(this.node.absolutePosition.add(new Vector3(0.135,1.1,0.02)), this._textures['texture-fountain'], this._scene))
       this._effects.push(new WaterLight(this.node.absolutePosition.add(new Vector3(0, 2, 0)), this._scene))
     }
