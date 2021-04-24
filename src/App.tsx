@@ -13,13 +13,13 @@ import { FinishedView } from './components/FinishedView'
 
 const SETTINGS : PlaygroundSettings = {
   gridSize: 7,
-  width: 6.4,
-  height: 6.4,
+  width: 6.2,
+  height: 6.2,
   camera: {
     isometric: false,
     zoom: 6
   },
-  version: '0.25'
+  version: '0.27'
 }
 
 const App = function() : React.ReactElement {

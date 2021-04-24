@@ -43,15 +43,15 @@ const createPlanscheGrid = function(sizeX: number, sizeY = 0) : Grid {
   const grid = createGrid(sizeX, sizeY)
   const ox = Math.floor(sizeX/2) - 1
   const oy = Math.floor(sizeY || sizeX /2) - 1
-  grid.cells[(ox + 0) * sizeX + oy + 0].fixedTile = 'grass'
-  grid.cells[(ox + 0) * sizeX + oy + 1].fixedTile = 'grass'
-  grid.cells[(ox + 0) * sizeX + oy + 2].fixedTile = 'grass'
-  grid.cells[(ox + 1) * sizeX + oy + 0].fixedTile = 'grass'
+  grid.cells[(ox + 0) * sizeX + oy + 0].fixedTile = 'none'
+  grid.cells[(ox + 0) * sizeX + oy + 1].fixedTile = 'none'
+  grid.cells[(ox + 0) * sizeX + oy + 2].fixedTile = 'none'
+  grid.cells[(ox + 1) * sizeX + oy + 0].fixedTile = 'none'
   grid.cells[(ox + 1) * sizeX + oy + 1].fixedTile = 'pool'
-  grid.cells[(ox + 1) * sizeX + oy + 2].fixedTile = 'grass'
-  grid.cells[(ox + 2) * sizeX + oy + 0].fixedTile = 'grass'
-  grid.cells[(ox + 2) * sizeX + oy + 1].fixedTile = 'grass'
-  grid.cells[(ox + 2) * sizeX + oy + 2].fixedTile = 'grass'
+  grid.cells[(ox + 1) * sizeX + oy + 2].fixedTile = 'none'
+  grid.cells[(ox + 2) * sizeX + oy + 0].fixedTile = 'none'
+  grid.cells[(ox + 2) * sizeX + oy + 1].fixedTile = 'none'
+  grid.cells[(ox + 2) * sizeX + oy + 2].fixedTile = 'none'
   return grid
 }
 

@@ -78,15 +78,16 @@ class TileManager extends EventEmitter {
   _initUtilLayer() : void {
     new HemisphericLight('light1', new Vector3(0, 0, 1), this._selectLayer.utilityLayerScene)
     const material = new StandardMaterial('tileMaterial', this._selectLayer.utilityLayerScene)
-    material.diffuseColor = new Color3(255/255, 153/255, 0)
-    material.alpha = 0.5
+    material.diffuseColor = new Color3(234/255, 3/255, 1)
+    material.specularColor = new Color3(234/255, 3/255, 1)
+    material.alpha = 0.99
     material.alphaMode = Engine.ALPHA_MAXIMIZED
     this._selectMarker.material = material
     this._selectLayer.shouldRender = true
 
     this._selectMarker.setEnabled(false)
     this._selectMarker.isPickable = false
-    this._selectMarker.translate(new Vector3(0,1,0), 0.6)
+    this._selectMarker.translate(new Vector3(0,1,0), 0.73)
     this._selectMarker.bakeCurrentTransformIntoVertices()
 
     const $onDownPicked = this.$pointerDownObservable.pipe(map((pInfo) => {
@@ -203,7 +204,7 @@ class Tile {
     this.dispose()
 
     if (type == 'pool') {
-      this._effects.push(new Fountain(this.node.absolutePosition.add(new Vector3(0.135,1.1,0.02)), this._textures['texture-fountain'], this._scene))
+      this._effects.push(new Fountain(this.node.absolutePosition.add(new Vector3(0.01, 1.1, 0.01)), this._textures['texture-fountain'], this._scene))
       this._effects.push(new WaterLight(this.node.absolutePosition.add(new Vector3(0, 2, 0)), this._scene))
     }
 

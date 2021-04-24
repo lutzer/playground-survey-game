@@ -1,7 +1,7 @@
 import { AbstractAssetTask, AssetsManager, Scene } from '@babylonjs/core'
 
 //standard exchangable tiles
-type StandardTileTypes = 'grass'|'tree'|'swings'|'trampolin'|'slide'|'sandbox'|'house'|'boulders'
+type StandardTileTypes = 'grass'|'tree'|'swings'|'trampolin'|'slide'|'sandbox'|'house'|'boulders'|'none'
 
 //tiles for plansche
 type WaterbodyTiles = 'pool1'|'pool2'|'pool3'|'pool4'|'pool5'|'pool6'|'pool7'|'pool8'|'pool9'|'pool'
