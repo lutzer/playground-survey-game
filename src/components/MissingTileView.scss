@@ -5,7 +5,9 @@
 
     .text-field {
         padding: $standard-spacing;
-        @include border;
+        background-color: #ffffff78;
+        margin: $standard-spacing 0;
+        border-radius: $border-radius;
 
         textarea {
             resize: none;
@@ -16,7 +18,8 @@
             outline: none;
             border: none;
             background: none;
-            color: $accent-color;
+            color: $font-color;
+            font-size: 120%;
         }
     }
 }

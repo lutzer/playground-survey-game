@@ -1,30 +1,31 @@
 $standard-spacing: 15px;
 $big-spacing: 20px;
+$border-radius: 5px;
 
 $content-size: 600px;
 
 $color-light: #22a2bf;
 $color-dark: #4d1933;
-$font-color: #f9f7e5;
-$accent-color: #ea034e;
+$font-color: #252520;
+$accent-color: #ffd700;
 
 @mixin content {
     max-width: $content-size;
     margin: 0 auto;
     padding: $standard-spacing;
-    background-image: linear-gradient(180deg, $color-light, $color-dark);
+    // background-image: linear-gradient(180deg, $color-light, $color-dark);
     min-height: 100%;
 }
 
 @mixin big-icon {
-    height: 100px;
-    width: 100px;
-    background-color: $accent-color;
+    height: 180px;
+    width: 180px;
+    // background-color: $accent-color;
     border-radius: 50%;
     margin: $big-spacing auto;
 }
 
 @mixin border {
-    border:1px solid $accent-color;
-    border-radius: 7px;
+    border:1px solid black;
+    border-radius: $border-radius;
 }

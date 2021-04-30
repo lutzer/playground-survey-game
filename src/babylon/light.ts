@@ -7,9 +7,9 @@ const setupLights = function(scene : Scene) : { sunLight : DirectionalLight, hem
   // light.setEnabled(false)
 
   const dirLight = new DirectionalLight('dir', new Vector3(0, -1, 0), scene)
-  dirLight.position = new Vector3(0,5,0)
+  dirLight.position = new Vector3(5,5,0)
   dirLight.setDirectionToTarget(new Vector3(0,0,0))
-  dirLight.intensity = 10
+  dirLight.intensity = 5
   dirLight.diffuse = new Color3(255/255, 255/255, 153/255)
   // dirLight.setEnabled(false)
  

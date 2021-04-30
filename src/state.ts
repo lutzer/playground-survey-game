@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { Subject } from 'rxjs'
+import { SelectableTiles } from './babylon/assets'
 import { PlaygroundSettings } from './babylon/playground'
 import { TileState } from './babylon/tile'
 
@@ -23,11 +24,19 @@ enum Actions {
   setMissingText
 }
 
+function  calculateNumberOfSelectedTiles(state: State) : number {
+  // console.log('tile', Object.values(SelectableTiles))
+  const selectedTiles = state.tiles.filter((t) => {
+    return t.type != SelectableTiles.grass && Object.keys(SelectableTiles).includes(t.type)
+  }).length
+  return selectedTiles
+}
+
 class Statemachine extends Subject<State> {
 
   static STORAGE_KEY = 'pg-state'
 
-  _state : State
+  private _state : State
 
   constructor(settings: PlaygroundSettings) {
     super()
@@ -35,7 +44,7 @@ class Statemachine extends Subject<State> {
     this._state = {
       tiles: Array(settings.gridSize * settings.gridSize).fill(null).map( (v,i) => { 
         return { 
-          type: 'grass', 
+          type: SelectableTiles.grass, 
           rotation: <number>_.sample([Math.PI, 0, Math.PI / 2, Math.PI * 1.5]), 
           index: i
         }
@@ -67,10 +76,9 @@ class Statemachine extends Subject<State> {
   }
 
   get state() : State {
-    return _.cloneDeep(this._state)
+    return _.cloneDeep(this._state) 
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   trigger(action: Actions, args: any) : void {
     if (action == Actions.selectTile) {
       this._state.selectedTile = args.id
@@ -88,5 +96,5 @@ class Statemachine extends Subject<State> {
   }
 }
 
-export { Statemachine, Actions }
+export { Statemachine, Actions, calculateNumberOfSelectedTiles }
 export type { State, PlayGroundType, Avatar }

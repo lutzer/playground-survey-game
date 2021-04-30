@@ -8,6 +8,10 @@
         .avatar {
             .icon {
                 @include big-icon;
+
+                img {
+                    width: 100%;
+                }
             }
         }
     }

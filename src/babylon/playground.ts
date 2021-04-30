@@ -1,7 +1,6 @@
 import * as BABYLON from '@babylonjs/core'
 import SimplexNoise from 'simplex-noise'
 import { distinctUntilChanged, map, pairwise, takeUntil } from 'rxjs/operators'
-import _ from 'lodash'
 import { Subject } from 'rxjs'
 
 import '@babylonjs/loaders'
@@ -9,12 +8,11 @@ import '@babylonjs/loaders'
 import { setupCamera } from './camera'
 import { setupLights } from './light'
 import { TextureArray, TileManager, TileMeshArray } from './tile'
-import { createGrid, createPlanscheGrid, createRiverGrid } from './grid'
+import { createPlanscheGrid, createRiverGrid } from './grid'
 import { loadAssets } from './assets'
-import { createFog, createSkyDome, optimizePerformance, setupFpsDisplay, showAxis, showGroundPlane } from './helpers'
-import { Actions, PlayGroundType, Statemachine } from '../state'
+import { createSkyBox, createSkyDome, optimizePerformance, setupFpsDisplay, showAxis, showGroundPlane } from './helpers'
+import { Actions, calculateNumberOfSelectedTiles, PlayGroundType, Statemachine } from '../state'
 import { applyPostProccessing } from './postprocessing'
-import { Vector3 } from '@babylonjs/core/Maths/math'
 
 // import '@babylonjs/inspector'
 
@@ -26,7 +24,8 @@ type PlaygroundSettings = {
     isometric: boolean
     zoom: number
   },
-  version: string
+  version: string,
+  selectableTiles: number
 }
 
 class Playground {
@@ -140,9 +139,11 @@ class Playground {
     // show axis
     // showAxis(10,this.scene)
 
-    const {sunLight, hemisphericLight} = setupLights(this.scene)
+    setupLights(this.scene)
+    //createSkyDome(this.scene)
 
-    const skyMaterial = createSkyDome(this.scene)
+    createSkyBox(this.scene)
+    showGroundPlane(100, this.scene)
 
     const fpsText = setupFpsDisplay(this.scene)
 
@@ -158,20 +159,6 @@ class Playground {
 
       // only update every 200 ms
       if (time - lastUpdate > 50) {
-
-        // animate light by time
-        const freq = 0.0001
-        const sinCurve = Math.sin(time * freq)
-        const cosCurve = Math.sin(time * freq)
-        sunLight.intensity = (sinCurve + 1.0) * 8
-        sunLight.position = new Vector3(9 * sinCurve, 4 * (cosCurve + 1.1), 0)
-        sunLight.setDirectionToTarget(new Vector3(0,0,0))
-        hemisphericLight.intensity = (sinCurve + 1.1)
-      
-
-        // animate sky material
-        skyMaterial.smoothness = (sinCurve + 1.0) * 0.45
-
         fpsText.text = 'fps: ' + Math.floor(this.engine.getFps())
         lastUpdate = time
       }

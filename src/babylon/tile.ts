@@ -4,7 +4,7 @@ import EventEmitter from 'events'
 import _ from 'lodash'
 import { Subject } from 'rxjs'
 import { map, takeUntil, withLatestFrom } from 'rxjs/operators'
-import { TileType } from './assets'
+import { FixedTiles, SelectableTiles, TileType } from './assets'
 import { Fountain, PlaygroundEffect, WaterLight } from './effects'
 import { Grid } from './grid'
 
@@ -116,7 +116,7 @@ class TileManager extends EventEmitter {
         position[0] * width - width/2, 
         0,
         position[1] * height - height/2)
-      tile.type = fixedTile || 'grass'
+      tile.type = fixedTile || SelectableTiles.grass
       tile.rotation = 0
       tile.fixed = fixedTile != null
       tile.show()
@@ -203,7 +203,7 @@ class Tile {
     // remove old mesh and effects
     this.dispose()
 
-    if (type == 'pool') {
+    if (type == FixedTiles.pool ) {
       this._effects.push(new Fountain(this.node.absolutePosition.add(new Vector3(0.01, 1.1, 0.01)), this._textures['texture-fountain'], this._scene))
       this._effects.push(new WaterLight(this.node.absolutePosition.add(new Vector3(0, 2, 0)), this._scene))
     }

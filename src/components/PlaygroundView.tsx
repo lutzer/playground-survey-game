@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { merge, of } from 'rxjs'
 import { Playground, PlaygroundSettings } from '../babylon/playground'
 import { TileType } from '../babylon/tile'
-import { Actions, Statemachine } from '../state'
+import { Actions, calculateNumberOfSelectedTiles, Statemachine } from '../state'
 import { TileMenu } from './TileMenu'
 
 import './PlaygroundView.scss'
@@ -15,6 +15,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
   const [loaded, setLoaded] = useState(false)
 
   const [selectedTile, setSelectedTile] = useState<number>()
+  const [numberOfSelectedTiles, setNumberOfSelectedTiles] = useState(0)
 
   const history = useHistory()
 
@@ -48,6 +49,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
     const sub = merge(of(stateMachine.state),stateMachine).pipe(delay(50)).subscribe( (state) => {
       setSelectedTile(undefined)
       setSelectedTile(state.selectedTile)
+      setNumberOfSelectedTiles(calculateNumberOfSelectedTiles(state))
     })
     return () => sub.unsubscribe()
   },[])
@@ -77,13 +79,15 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
       { selectedTile != undefined && 
         <TileMenu
           tileState={stateMachine?.state.tiles[selectedTile]}
+          numberOfSelectedTiles={numberOfSelectedTiles}
+          maximumSelectedTies={settings.selectableTiles}
           onSelect={onSelectTyleType} 
         /> 
       }
       { loaded && 
         <div className="buttons">
-          <button onClick={() => onScreenShotButtonClicked()}>Take Image</button>
-          <button className="right" onClick={() => onFinishedClicked()}>Finished</button>
+          <button onClick={() => onScreenShotButtonClicked()}>Mach ein Foto</button>
+          <button className="right" onClick={() => onFinishedClicked()}>Fertig</button>
         </div>
       }
     </div>

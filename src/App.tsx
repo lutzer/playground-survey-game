@@ -19,7 +19,8 @@ const SETTINGS : PlaygroundSettings = {
     isometric: false,
     zoom: 6
   },
-  version: '0.27'
+  version: '0.28',
+  selectableTiles: 6
 }
 
 const App = function() : React.ReactElement {

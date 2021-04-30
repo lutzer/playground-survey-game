@@ -11,7 +11,7 @@ const applyPostProccessing = function(scene: Scene, engine: Engine, camera: Came
   const pipeline = new DefaultRenderingPipeline('defaultPipeline', undefined, scene, [camera])
   pipeline.imageProcessingEnabled = true
   pipeline.imageProcessing.contrast = 0.8
-  pipeline.imageProcessing.exposure = 1.0
+  pipeline.imageProcessing.exposure = 1.2
   
   pipeline.bloomEnabled = true
   pipeline.bloomThreshold = 0.2
