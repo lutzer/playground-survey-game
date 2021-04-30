@@ -63,7 +63,7 @@ class TileManager extends EventEmitter {
 
   }
 
-  dispose() {
+  dispose() : void {
     this.$disposeObservable.next()
   }
 
@@ -78,8 +78,8 @@ class TileManager extends EventEmitter {
   _initUtilLayer() : void {
     new HemisphericLight('light1', new Vector3(0, 0, 1), this._selectLayer.utilityLayerScene)
     const material = new StandardMaterial('tileMaterial', this._selectLayer.utilityLayerScene)
-    material.diffuseColor = new Color3(234/255, 3/255, 1)
-    material.specularColor = new Color3(234/255, 3/255, 1)
+    material.diffuseColor = new Color3(0.5, 0.5, 0.5)
+    material.specularColor = new Color3(0.5, 0.5, 0.5)
     material.alpha = 0.99
     material.alphaMode = Engine.ALPHA_MAXIMIZED
     this._selectMarker.material = material

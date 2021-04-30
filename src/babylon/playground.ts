@@ -142,8 +142,8 @@ class Playground {
     setupLights(this.scene)
     //createSkyDome(this.scene)
 
-    createSkyBox(this.scene)
-    showGroundPlane(100, this.scene)
+    // createSkyBox(this.scene)
+    // showGroundPlane(100, this.scene)
 
     const fpsText = setupFpsDisplay(this.scene)
 

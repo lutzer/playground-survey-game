@@ -1,4 +1,4 @@
-import { Color3, DirectionalLight, HemisphericLight, Light, PointLight, Scene, SpotLight, Vector3 } from '@babylonjs/core'
+import { Color3, DirectionalLight, HemisphericLight, Scene, Vector3 } from '@babylonjs/core'
 
 const setupLights = function(scene : Scene) : { sunLight : DirectionalLight, hemisphericLight : HemisphericLight } {
   const light = new HemisphericLight('light', new Vector3(0, -1, 0),scene)

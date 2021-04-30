@@ -4,15 +4,18 @@ import { Playground, PlaygroundSettings } from '../babylon/playground'
 import { TileType } from '../babylon/tile'
 import { Actions, calculateNumberOfSelectedTiles, Statemachine } from '../state'
 import { TileMenu } from './TileMenu'
-
-import './PlaygroundView.scss'
 import { useHistory } from 'react-router'
 import { delay } from 'rxjs/internal/operators/delay'
+
+import './PlaygroundView.scss'
+import backIcon from '../assets/images/back.png'
+import checkIcon from '../assets/images/check.png'
 
 const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Statemachine, settings: PlaygroundSettings }) : React.ReactElement {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [playground, setPlayground] = useState<Playground>()
   const [loaded, setLoaded] = useState(false)
+  const [finished, setFinished] = useState(false)
 
   const [selectedTile, setSelectedTile] = useState<number>()
   const [numberOfSelectedTiles, setNumberOfSelectedTiles] = useState(0)
@@ -54,6 +57,17 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
     return () => sub.unsubscribe()
   },[])
 
+  //handle finish click
+  useEffect(() => {
+    if (playground) {
+      playground.enablePointerEvents = !finished
+    }
+    if (finished) {
+      stateMachine?.trigger(Actions.selectTile, { id: undefined })
+    }
+
+  },[finished, playground])
+
   //tile type selection handler
   function onSelectTyleType(type: TileType | undefined) {
     if (type)
@@ -65,10 +79,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
     playground?.takeScreenshot() 
   }
 
-  function onFinishedClicked() {
-    stateMachine?.trigger(Actions.selectTile, { id: undefined })
-    if (playground)
-      playground.enablePointerEvents = false
+  function onFinished() {
     history.push('/missing-tile')
   }
   
@@ -85,9 +96,15 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
         /> 
       }
       { loaded && 
-        <div className="buttons">
-          <button onClick={() => onScreenShotButtonClicked()}>Mach ein Foto</button>
-          <button className="right" onClick={() => onFinishedClicked()}>Fertig</button>
+        <div className="top-buttons">
+          <button onClick={() => onScreenShotButtonClicked()}>Foto</button>
+          { !finished && <button className="right" onClick={() => setFinished(true)}>Fertig</button> }
+        </div>
+      }
+      { finished && 
+        <div className="bottom-buttons">
+          <button onClick={() => setFinished(false)}><img className="left" src={backIcon}/>Zurück</button>
+          <button onClick={() => onFinished()} className="right">Weiter<img className="right" src={checkIcon}></img></button>
         </div>
       }
     </div>

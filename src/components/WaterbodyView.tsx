@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
 import { PlayGroundType } from '../state'
 
 import './WaterbodyView.scss'
@@ -11,6 +11,11 @@ const WaterbodyView = function({ onSelect } : { onSelect: (type: PlayGroundType)
     onSelect(type)
     history.push('playground')
   }
+
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
 
   return (
     <div className="waterbody-view">

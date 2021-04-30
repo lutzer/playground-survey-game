@@ -1,8 +1,6 @@
 import { Color4 } from '@babylonjs/core'
 import { Camera } from '@babylonjs/core/Cameras/camera'
 import { Engine } from '@babylonjs/core/Engines/engine'
-import { Effect } from '@babylonjs/core/Materials/effect'
-import { PostProcess } from '@babylonjs/core/PostProcesses/postProcess'
 import { DefaultRenderingPipeline } from '@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline'
 import { Scene } from '@babylonjs/core/scene'
 

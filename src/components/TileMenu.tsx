@@ -37,7 +37,7 @@ const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSe
       { canSelectedNewTile ?
         <ul>
           <li className={type == SelectableTiles.grass ? 'selected' : ''} onClick={() => onClickedHandler(SelectableTiles.grass)} key="grass">{SelectableTiles.grass}</li>
-          { TYPES.map((t,i) => {
+          { TYPES.map((t) => {
             return <li className={type == t ? 'selected' : ''} onClick={() => onClickedHandler(t)} key={t}>{t}</li>
           })}
         </ul>

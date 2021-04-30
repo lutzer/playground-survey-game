@@ -29,3 +29,13 @@ $accent-color: #ffd700;
     border:1px solid black;
     border-radius: $border-radius;
 }
+
+
+@mixin fade-out-transition {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+
+    &.fade-out {
+        opacity: 0;
+    }
+}

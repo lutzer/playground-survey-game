@@ -6,6 +6,8 @@
     .avatar-list {
 
         .avatar {
+            @include fade-out-transition;
+            
             .icon {
                 @include big-icon;
 

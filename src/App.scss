@@ -31,7 +31,7 @@ p.caption {
 }
 
 p.block {
-  background: $accent-color;
+  background: #ffd700ba;
   padding: $standard-spacing;
   border-radius: $border-radius;
 }
@@ -49,4 +49,20 @@ button {
   border: none;
   outline: none;
   font-size: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  img.left {
+    height: 16px;
+    padding-right: 3px;
+    // flex-shrink: 0;
+    // min-width: 100%;
+    // min-height: 100%
+  }
+  img.right {
+    height: 16px;
+    padding-left: 3px;
+  }
 }
