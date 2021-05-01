@@ -23,6 +23,13 @@ h2 {
   font-size: 115%;
 }
 
+br {
+  display: block;
+  margin: 10px 0;
+  line-height:22px;
+  content: " ";
+}
+
 p.caption {
   text-align: center;
   display: block;

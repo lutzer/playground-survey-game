@@ -10,10 +10,9 @@ import { setupLights } from './light'
 import { createPlanscheGrid, createRiverGrid } from './grid'
 import { loadAssets } from './assets'
 import { createSkyBox, createSkyDome, optimizePerformance, setupFpsDisplay, showAxis, showGroundPlane } from './helpers'
-import { Actions, calculateNumberOfSelectedTiles, PlayGroundType, Statemachine } from '../state'
+import { Actions, PlayGroundType, Statemachine } from '../state'
 import { applyPostProccessing } from './postprocessing'
 import { TileManager } from './tileManager'
-import { TextureArray, TileMeshArray } from './tiles'
 
 // import '@babylonjs/inspector'
 
@@ -97,44 +96,8 @@ class Playground {
       })
 
     // load assets
-    loadAssets(this.scene, (tasks) => {
-
-      // load tile meshes
-      const tileMeshes = tasks
-        .filter((task) => {
-          return task instanceof BABYLON.ContainerAssetTask && task.name.startsWith('tile')
-        })
-        .map((task) => (task as BABYLON.ContainerAssetTask))
-        .reduce<TileMeshArray>((acc, task) => {
-          // clone meshes
-          console.log(task.loadedMeshes)
-          const mesh = task.loadedContainer.instantiateModelsToScene((name) => name, false).rootNodes[0] as BABYLON.Mesh
-          console.log(mesh)
-          // save animations
-          const animations = task.loadedAnimationGroups.map((a) => {
-            const anim = a.targetedAnimations[0]
-            console.log(a.targetedAnimations)
-            a.stop()
-            a.dispose()
-            return { anim: anim.animation, target: anim.target.name  }
-          })
-          // console.log(animations)
-          mesh?.setEnabled(false)
-          acc[task.meshesNames] = { mesh: mesh, animations: animations }
-          return acc
-        }, {})
+    loadAssets(this.scene).then(({tileMeshes, textures}) => {
       tileManager.meshes = tileMeshes
-
-      // load textures
-      const textures = tasks
-        .filter((task) => {
-          return task instanceof BABYLON.TextureAssetTask
-        })
-        .map((task) => (task as BABYLON.TextureAssetTask))
-        .reduce<TextureArray>((acc, task) => {
-          acc[task.name] = task.texture
-          return acc
-        },{})
       tileManager.textures = textures
 
       // setup tiles
@@ -143,8 +106,10 @@ class Playground {
       // update tiles from current state
       tileManager.handleTileChange(this.stateMachine.state.tiles)
 
+      // make some performance optimizations
       optimizePerformance(this.scene)
 
+      // call on loaded method
       onLoaded()
     })
 
@@ -171,12 +136,11 @@ class Playground {
     const loop = (time: number) => {
 
       // only update every 200 ms
-      if (time - lastUpdate > 50) {
+      if (time - lastUpdate > 200) {
         fpsText.text = 'fps: ' + Math.floor(this.engine.getFps())
         lastUpdate = time
       }
       
-
       // animate tile movement
       tileManager.tiles.forEach((tile,i) => {
         tile.position.y = simplex.noise2D(i,time * 0.0004) * 0.02

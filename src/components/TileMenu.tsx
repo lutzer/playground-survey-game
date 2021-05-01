@@ -3,9 +3,12 @@ import { SelectableTiles, TileType } from '../babylon/assets'
 import { TileState } from '../babylon/tiles'
 
 import closeIcon from './../assets/images/close.png'
+
+import slideIcon from './../assets/images/tile_slide.png'
+import trampolinIcon from './../assets/images/tile_trampolin.png'
+
 import './TileMenu.scss'
 
-// const TYPES : TileType[] = ['grass', 'tree', 'swings', 'trampolin', 'slide', 'sandbox', 'house', 'boulders']
 const TYPES : TileType[] = [
   SelectableTiles.tree, 
   SelectableTiles.swings,
@@ -14,7 +17,8 @@ const TYPES : TileType[] = [
   SelectableTiles.sandbox,
   SelectableTiles.house,
   SelectableTiles.boulders,
-  SelectableTiles.seasaw
+  SelectableTiles.seasaw,
+  SelectableTiles.carousel
 ]
 
 const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSelectedTies} : 
@@ -22,8 +26,7 @@ const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSe
   const [type, setType] = useState(tileState?.type)
 
   function onClickedHandler(t: TileType | undefined) {
-    if (t)
-      setType(t)
+    if (t) setType(t)
     onSelect(t)
   }
 
@@ -39,7 +42,11 @@ const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSe
         <ul>
           <li className={type == SelectableTiles.grass ? 'selected' : ''} onClick={() => onClickedHandler(SelectableTiles.grass)} key="grass">{SelectableTiles.grass}</li>
           { TYPES.map((t) => {
-            return <li className={type == t ? 'selected' : ''} onClick={() => onClickedHandler(t)} key={t}>{t}</li>
+            return( 
+              <li className={type == t ? 'selected' : ''} onClick={() => onClickedHandler(t)} key={t}>
+                <img src={trampolinIcon}/>  
+              </li>
+            )
           })}
         </ul>
         :

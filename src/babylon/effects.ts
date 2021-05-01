@@ -15,12 +15,12 @@ class Fountain implements PlaygroundEffect {
     const isGpuSystem = GPUParticleSystem.IsSupported
 
     if (isGpuSystem) {
-      const gpuSystem = new GPUParticleSystem('particles', { capacity: 1000 }, scene)
+      const gpuSystem = new GPUParticleSystem('particles', { capacity: 500 }, scene)
       gpuSystem.activeParticleCount = 1000
       gpuSystem.start()
       this.particleSystem = gpuSystem
     } else {
-      const cpuSystem = new ParticleSystem('fountain', 500, scene)
+      const cpuSystem = new ParticleSystem('fountain', 300, scene)
       cpuSystem.start()
       this.particleSystem = cpuSystem
     }
@@ -42,7 +42,7 @@ class Fountain implements PlaygroundEffect {
     this.particleSystem.maxLifeTime = 0.9
 
     // Emission rate
-    this.particleSystem.emitRate = isGpuSystem ? 500 : 200
+    this.particleSystem.emitRate = isGpuSystem ? 300 : 100
     this.particleSystem.gravity = new Vector3(0, -9.81, 0)
 
     this.particleSystem.minAngularSpeed = 0

@@ -84,6 +84,7 @@ class Statemachine extends Subject<State> {
       this._state.selectedTile = args.id
     } else if (action == Actions.setTileType && this._state.selectedTile != undefined ) {
       this._state.tiles[this._state.selectedTile].type = args.type
+      this._state.tiles[this._state.selectedTile].rotation = _.sample([0, Math.PI, 3/2*Math.PI, 2*Math.PI]) || 0
     } else if (action == Actions.setAvatar && args.avatar ) {
       this._state.avatar = args.avatar
     } else if (action == Actions.setPlaygroundType && args.type ) {

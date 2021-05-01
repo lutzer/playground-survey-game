@@ -26,17 +26,11 @@ const createGrid = function(sizeX: number, sizeY = 0) : Grid {
 }
 
 const createRiverGrid = function(sizeX: number, sizeY = 0) : Grid {
-  sizeY = sizeY == 0 ? sizeX : sizeY
-  const cells : GridCell[] = []
-  for (const i of _.range(sizeX)) {
-    for (const j of _.range(sizeY)) {
-      cells.push({ position: [i / (sizeX-1),j / (sizeY-1)], fixedTile : null})
-    }
-  }
-  return {
-    cells: cells,
-    size: [sizeX, sizeY ]
-  }
+  const grid = createGrid(sizeX, sizeY)
+  const ox = Math.floor(sizeX/2) - 1
+  const oy = Math.floor(sizeY || sizeX /2) - 1
+  grid.cells[(ox + 1) * sizeX + oy + 1].fixedTile = FixedTiles.river
+  return grid
 }
 
 const createPlanscheGrid = function(sizeX: number, sizeY = 0) : Grid {

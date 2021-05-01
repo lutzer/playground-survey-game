@@ -51,8 +51,7 @@ class TileManager extends EventEmitter {
   private _selectLayer : UtilityLayerRenderer
   private _cursor : TileCursor
 
-  private _meshes: TileMeshArray
-  private _textures : TextureArray
+  private _assets : { meshes: TileMeshArray, textures: TextureArray }
 
   //Observables
   $pointerDownObservable : Subject<PointerInfo>
@@ -65,8 +64,7 @@ class TileManager extends EventEmitter {
     this.scene = scene
     this.tiles = []
 
-    this._meshes = {}
-    this._textures = {}
+    this._assets = { meshes: {}, textures: {}}
 
     this.$pointerDownObservable = new Subject()
     this.$pointerUpObservable = new Subject()
@@ -92,11 +90,11 @@ class TileManager extends EventEmitter {
   }
 
   set meshes(meshes: TileMeshArray ) {
-    this._meshes = meshes
+    this._assets.meshes = meshes
   }
 
   set textures(textures: TextureArray) {
-    this._textures = textures
+    this._assets.textures = textures
   }
 
   setupPointerObservables() : void {
@@ -121,14 +119,13 @@ class TileManager extends EventEmitter {
   setup(width: number, height: number) : void {
     // create tiles
     this.tiles = this.grid.cells.map(({position, fixedTile}, i) => {
-      const tile = new Tile(`tile${i}`, this._meshes, this._textures, this.scene)
-      tile.position = new Vector3(
-        position[0] * width - width/2, 
-        0,
-        position[1] * height - height/2)
+      const tile = new Tile(`tile${i}`, this._assets.meshes, this._assets.textures, this.scene)
+      
+      tile.position = new Vector3(position[0] * width - width/2,  0, position[1] * height - height/2)
+      
       tile.type = fixedTile || SelectableTiles.grass
+      
       tile.rotation = 0
-      tile.fixed = fixedTile != null
       tile.show()
       return tile
     })
@@ -137,7 +134,7 @@ class TileManager extends EventEmitter {
     this.grid.cells.forEach(({position, fixedTile}, i) => {
       if (fixedTile)
         return
-        
+
       const box = MeshBuilder.CreateBox(`select_tile_${i}`, { size: 1 }, this._selectLayer.utilityLayerScene)
       box.metadata = { tileIndex : i, selectable: fixedTile == null }
       box.position = new Vector3(
@@ -153,7 +150,7 @@ class TileManager extends EventEmitter {
   handleTileChange(currState: TileState[], prevState? : TileState[]) : void {
     const updatedTiles = prevState ? _.differenceWith(prevState, currState, _.isEqual) : currState
     updatedTiles.forEach((tileState) => {
-      if (!this.tiles[tileState.index].fixed) {
+      if (this.tiles[tileState.index].selectable) {
         this.tiles[tileState.index].type = tileState.type
         this.tiles[tileState.index].rotation = tileState.rotation
       }
@@ -161,7 +158,7 @@ class TileManager extends EventEmitter {
   }
 
   setSelectMarker(tileIndex: number | undefined) : void {
-    if (tileIndex != undefined && !this.tiles[tileIndex].fixed) {
+    if (tileIndex != undefined) {
       this._cursor.position = this.tiles[tileIndex].position
       this._cursor.enable = true
     } else {

@@ -19,12 +19,8 @@ type TextureArray = { [name : string] : Texture }
 class Tile {
   node: TransformNode
   name: string
-
-  fixed: boolean //indicates if tile cant be change
   
   private _position: Vector3
-
-  private _mesh : TransformNode | undefined
 
   private _type: TileType | undefined
 
@@ -46,14 +42,13 @@ class Tile {
     this._position = new Vector3(0,0,0)
 
     this.node = new TransformNode(name, scene, true)
-
-    this.fixed = false
   }
 
   dispose() : void {
     this.node?.dispose()
     this._effects.forEach((e) => e.dispose())
     this._effects = []
+    this._animation?.dispose()
   }
 
   set type(type : TileType) {
@@ -64,30 +59,32 @@ class Tile {
     // remove old mesh and effects
     this.dispose()
 
+    // add effects depending on tiles
     if (type == FixedTiles.pool ) {
       this._effects.push(new Fountain(this.node.absolutePosition.add(new Vector3(0.01, 1.1, 0.01)), this._textures['texture-fountain'], this._scene))
       this._effects.push(new WaterLight(this.node.absolutePosition.add(new Vector3(0, 2, 0)), this._scene))
     }
 
-    // instanciate new mesh
+    // instanciate new mesh keeping the same name
     const mesh = <Mesh>this._meshes[type]?.mesh.instantiateHierarchy(undefined, undefined, (src, clone) => {
       clone.name = src.name
     })
 
     // attach all animations
     this._meshes[type]?.animations.forEach(({anim, target}) => {
-      console.log(target)
-      const animationGroup = new AnimationGroup(this.name, this._scene)
-      const targetNode = mesh.getChildren((node) => {
+      this._animation = new AnimationGroup(this.name, this._scene)
+      const targetNode = mesh.getChildren(undefined, false).find((node) => {
         return node.name == target
-      }, false)
-      animationGroup.addTargetedAnimation(anim, targetNode[0])
-      animationGroup.start(true)
+      })
+      if (targetNode) {
+        this._animation.addTargetedAnimation(anim, targetNode)
+        this._animation.start(true, Math.random() * 0.5 + 0.5)
+      }
     })
+    // performance optimization
     if (mesh) mesh.doNotSyncBoundingInfo = true
+
     this.node = mesh || new TransformNode(this.name, this._scene)
-    
-    this.node.name = this.name
    
     this.node.position = this._position
     this.node.setEnabled(true)
@@ -105,6 +102,10 @@ class Tile {
 
   get position() : Vector3 {
     return this._position
+  }
+
+  get selectable() : boolean {
+    return Object.keys(SelectableTiles).includes(this._type as string)
   }
 
   show() : void {

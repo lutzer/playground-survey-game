@@ -95,10 +95,17 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
       <canvas ref={canvasRef} id='renderCanvas' touch-action='none'></canvas>
       { loaded != LoadedState.STARTED ?
         <div className="loading-screen">
-          <h2>Dein Spielpatz</h2>
-          <p className="block">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ut risus vitae ligula lobortis pellentesque vitae ac nisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam pellentesque augue nec laoreet hendrerit. Phasellus vitae iaculis nisi, ut finibus libero. Phasellus efficitur pellentesque varius. In laoreet laoreet ultrices. Duis pulvinar ligula a est vehicula dictum. In et ante diam.</p>
+          <h2>Was soll auf deinem Spielplatz sein?</h2>
+          <p className="block">
+          Du darfst 6 Sachen aussuchen, die du gerne auf einem Spielplatz haben willst und uns so zeigen, was dir wichtig ist.<br/>
+          Du kannst lauter verschiedene Sachen aussuchen oder mehrere von einer Sorte nehmen.<br/>
+          Du kannst sie auf die Fläche stellen und auch wieder wegnehmen und was Neues ausprobieren, bis du zufrieden bist.<br/>
+          </p>
           { loaded != LoadedState.LOADED ? 
-            <div className="spinner"></div> 
+            <div>
+              <div className="spinner"></div> 
+              <p className="center">Lade Spielplatz ...</p>
+            </div>
             : 
             <div className="start-button"><button className="glow" onClick={() => setLoaded(LoadedState.STARTED)}>Start</button></div>
           }
