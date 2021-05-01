@@ -6,9 +6,18 @@
     .waterbody-list {
 
         .waterbody {
+            @include fade-out-transition;
 
             .icon {
                 @include big-icon;
+                height: 240px;
+                width: 240px;
+                background-color: $icon-bg-color;
+                padding: 20px;
+
+                img {
+                    width: 100%;
+                }
             }
         }
     }

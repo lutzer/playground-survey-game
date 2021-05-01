@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { Subject } from 'rxjs'
 import { SelectableTiles } from './babylon/assets'
 import { PlaygroundSettings } from './babylon/playground'
-import { TileState } from './babylon/tile'
+import { TileState } from './babylon/tiles'
 
 type Avatar = 'flower-girl'|'explorer'|'social'
 type PlayGroundType = 'pool'|'river'

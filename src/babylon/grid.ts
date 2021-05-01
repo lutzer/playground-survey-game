@@ -1,6 +1,5 @@
 import _ from 'lodash'
-import { FixedTiles } from './assets'
-import { TileType } from './tile'
+import { FixedTiles, TileType } from './assets'
 
 type GridCell = {
   position : [number, number]

@@ -8,6 +8,8 @@ $color-light: #22a2bf;
 $color-dark: #4d1933;
 $font-color: #252520;
 $accent-color: #ffd700;
+$accent-color-bright: #f3ebbd;
+$icon-bg-color: #ffffff5e;
 
 @mixin content {
     max-width: $content-size;
@@ -20,7 +22,6 @@ $accent-color: #ffd700;
 @mixin big-icon {
     height: 180px;
     width: 180px;
-    // background-color: $accent-color;
     border-radius: 50%;
     margin: $big-spacing auto;
 }

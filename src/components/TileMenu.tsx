@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { SelectableTiles } from '../babylon/assets'
-import { TileState, TileType } from '../babylon/tile'
+import { SelectableTiles, TileType } from '../babylon/assets'
+import { TileState } from '../babylon/tiles'
 
 import closeIcon from './../assets/images/close.png'
 import './TileMenu.scss'
@@ -13,7 +13,8 @@ const TYPES : TileType[] = [
   SelectableTiles.slide,
   SelectableTiles.sandbox,
   SelectableTiles.house,
-  SelectableTiles.boulders
+  SelectableTiles.boulders,
+  SelectableTiles.seasaw
 ]
 
 const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSelectedTies} : 

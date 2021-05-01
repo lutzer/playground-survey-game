@@ -40,6 +40,10 @@ textarea {
   font-family: 'IndieFlower', serif;
 }
 
+.center {
+  text-align: center;
+}
+
 button {
   font-family: 'IndieFlower', serif;
   margin: 5px;;
@@ -53,6 +57,16 @@ button {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+
+  &.glow {
+
+    animation: glow 1s infinite alternate;
+
+    @keyframes glow {
+      from {background-color: $accent-color;}
+      to {background-color: $accent-color-bright;}
+    }
+  }
 
   img.left {
     height: 16px;

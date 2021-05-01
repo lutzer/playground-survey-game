@@ -13,7 +13,7 @@ const setupCamera = function(scene: Scene, canvas: HTMLCanvasElement, orthograph
     camera.orthoTop = zoom
   } else {
     camera.lowerBetaLimit = 0
-    camera.upperBetaLimit = Math.PI * 0.45
+    camera.upperBetaLimit = Math.PI * 0.3
     camera.lowerRadiusLimit = MIN_DISTANCE
     camera.upperRadiusLimit = MAX_DISTANCE
     camera.panningDistanceLimit = 0.001

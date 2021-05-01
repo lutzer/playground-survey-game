@@ -7,12 +7,13 @@ import '@babylonjs/loaders'
 
 import { setupCamera } from './camera'
 import { setupLights } from './light'
-import { TextureArray, TileManager, TileMeshArray } from './tile'
 import { createPlanscheGrid, createRiverGrid } from './grid'
 import { loadAssets } from './assets'
 import { createSkyBox, createSkyDome, optimizePerformance, setupFpsDisplay, showAxis, showGroundPlane } from './helpers'
 import { Actions, calculateNumberOfSelectedTiles, PlayGroundType, Statemachine } from '../state'
 import { applyPostProccessing } from './postprocessing'
+import { TileManager } from './tileManager'
+import { TextureArray, TileMeshArray } from './tiles'
 
 // import '@babylonjs/inspector'
 
@@ -105,9 +106,21 @@ class Playground {
         })
         .map((task) => (task as BABYLON.ContainerAssetTask))
         .reduce<TileMeshArray>((acc, task) => {
-          const mesh = task.loadedContainer.instantiateModelsToScene(() => task.meshesNames).rootNodes[0] as BABYLON.Mesh
+          // clone meshes
+          console.log(task.loadedMeshes)
+          const mesh = task.loadedContainer.instantiateModelsToScene((name) => name, false).rootNodes[0] as BABYLON.Mesh
+          console.log(mesh)
+          // save animations
+          const animations = task.loadedAnimationGroups.map((a) => {
+            const anim = a.targetedAnimations[0]
+            console.log(a.targetedAnimations)
+            a.stop()
+            a.dispose()
+            return { anim: anim.animation, target: anim.target.name  }
+          })
+          // console.log(animations)
           mesh?.setEnabled(false)
-          acc[task.meshesNames] =  mesh
+          acc[task.meshesNames] = { mesh: mesh, animations: animations }
           return acc
         }, {})
       tileManager.meshes = tileMeshes
