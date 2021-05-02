@@ -5,9 +5,9 @@ import { Subject } from 'rxjs'
 
 import '@babylonjs/loaders'
 
-import { setupCamera } from './camera'
+import { PlaygroundCamera } from './camera'
 import { setupLights } from './light'
-import { createPlanscheGrid, createRiverGrid } from './grid'
+import { createGrid, createPlanscheGrid, createRiverGrid } from './grid'
 import { loadAssets } from './assets'
 import { createSkyBox, createSkyDome, optimizePerformance, setupFpsDisplay, showAxis, showGroundPlane } from './helpers'
 import { Actions, PlayGroundType, Statemachine } from '../state'
@@ -34,7 +34,7 @@ class Playground {
   engine: BABYLON.Engine 
   scene: BABYLON.Scene
   settings : PlaygroundSettings
-  camera: BABYLON.Camera | undefined
+  camera: PlaygroundCamera
 
   textures : BABYLON.Texture[]
 
@@ -56,6 +56,9 @@ class Playground {
 
     this.textures = []
 
+    this.camera = new PlaygroundCamera(this.scene, this.canvas, this.settings.camera.zoom)
+    this.camera.enableControl(true)
+
     // ignore pointer events when disabled
     this.scene.onPrePointerObservable.add((pointerInfo) => {
       pointerInfo.skipOnPointerObservable = !this.enablePointerEvents
@@ -70,8 +73,6 @@ class Playground {
   }
 
   init(playGroundType: PlayGroundType, onLoaded: () => void) : void {
-  
-    this.camera = setupCamera(this.scene, this.canvas, this.settings.camera.isometric, this.settings.camera.zoom)
     
     const grid = (playGroundType == 'pool') ? createPlanscheGrid(this.settings.gridSize) : createRiverGrid(this.settings.gridSize)
   
@@ -115,7 +116,7 @@ class Playground {
 
   
     // show axis
-    showAxis(5,this.scene)
+    // showAxis(5,this.scene)
 
     setupLights(this.scene)
     //createSkyDome(this.scene)
@@ -125,7 +126,7 @@ class Playground {
 
     const fpsText = setupFpsDisplay(this.scene)
 
-    applyPostProccessing(this.scene, this.engine, this.camera)
+    // applyPostProccessing(this.scene, this.engine, this.camera.camera)
 
     // call loop function
     const startTime = Date.now()
@@ -157,24 +158,15 @@ class Playground {
       tileManager.dispose()
     })
   }
-
-  resetCamera() : void {
-    this.camera?.restoreState()
-  }
-
   takeScreenshot() : void {
     if (this.camera) {
       this.scene.render()
-      BABYLON.Tools.CreateScreenshotUsingRenderTarget(this.engine, this.camera, 1280)
+      BABYLON.Tools.CreateScreenshotUsingRenderTarget(this.engine, this.camera.camera, 1280)
     }
   }
 
   resize() : void {
-    if (this.camera?.mode == BABYLON.Camera.ORTHOGRAPHIC_CAMERA) {
-      // const aspectRatio = this.engine.getAspectRatio(this.camera)
-      // this.camera.orthoLeft = -this.settings.camera.zoom * aspectRatio
-      // this.camera.orthoRight = this.settings.camera.zoom * aspectRatio
-    }
+    this.camera.onResize()
     this.engine.resize()
   }
 }

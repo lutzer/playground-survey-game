@@ -1,20 +1,16 @@
-import { Texture } from '@babylonjs/core/Materials/Textures/texture'
+import { AnimationGroup } from '@babylonjs/core/Animations/animationGroup'
 import { Vector3 } from '@babylonjs/core/Maths/math'
 import { Mesh } from '@babylonjs/core/Meshes/mesh'
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode'
 import { Scene } from '@babylonjs/core/scene'
-import { FixedTiles, SelectableTiles, TileType } from './assets'
+import { FixedTiles, SelectableTiles, TextureArray, TileMeshArray, TileType } from './assets'
 import { Fountain, PlaygroundEffect, WaterLight } from './effects'
-import { Animation, AnimationGroup } from '@babylonjs/core'
 
 type TileState = {
   type: TileType,
   rotation: number,
   index: number
 }
-
-type TileMeshArray = { [name : string] : { mesh: Mesh, animations: { target: string, anim: Animation }[] } }
-type TextureArray = { [name : string] : Texture }
 
 class Tile {
   node: TransformNode
@@ -82,6 +78,7 @@ class Tile {
       })
       if (targetNode) {
         this._animation.addTargetedAnimation(anim, targetNode)
+        // this._animation.start(true, Math.random() * 0.5 + 0.5)
         this._animation.start(true, Math.random() * 0.5 + 0.5)
       }
     })

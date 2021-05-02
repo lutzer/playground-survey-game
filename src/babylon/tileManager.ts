@@ -8,7 +8,7 @@ import { SelectableTiles, TileType } from './assets'
 import { Grid } from './grid'
 import { TextureArray, Tile, TileMeshArray, TileState } from './tiles'
 
-const TILE_PICK_CLICK_TIMEOUT = 400
+const TILE_PICK_CLICK_TIMEOUT = 300
 
 class TileCursor {
 

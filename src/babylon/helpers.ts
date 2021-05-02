@@ -126,7 +126,7 @@ const setupFpsDisplay = function(scene : Scene) {
 }
 
 const optimizePerformance = function(scene: Scene) {
-  scene.autoClear = false // Color buffer
+  scene.autoClear = true // Color buffer
   scene.autoClearDepthAndStencil = false
   scene.freeActiveMeshes()
   scene.blockMaterialDirtyMechanism = true

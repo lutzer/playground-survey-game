@@ -1,7 +1,8 @@
 import { AbstractAssetTask, AssetsManager, ContainerAssetTask, Scene, TextureAssetTask } from '@babylonjs/core'
+import { Texture } from '@babylonjs/core/Materials/Textures/texture'
 import { Mesh } from '@babylonjs/core/Meshes/mesh'
 import { PlayGroundType } from '../state'
-import { TextureArray, TileMeshArray } from './tiles'
+import { Animation } from '@babylonjs/core'
 
 enum SelectableTiles {
   grass = 'grass',
@@ -24,6 +25,10 @@ enum FixedTiles {
 }
 
 type TileType = SelectableTiles | FixedTiles
+
+type TileMeshItem = { mesh: Mesh, animations: { target: string, anim: Animation }[] }
+type TileMeshArray = { [name : string] : TileMeshItem }
+type TextureArray = { [name : string] : Texture }
 
 function onTaskCompleted<Type>(task: AbstractAssetTask) : Promise<Type> {
   return new Promise((resolve) => {
@@ -72,11 +77,14 @@ const loadAssets = async function(scene : Scene, playGroundType: PlayGroundType)
       const mesh = task.loadedContainer.instantiateModelsToScene((name) => name, false).rootNodes[0] as Mesh
     
       // save animations + name of targets
-      const animations = task.loadedAnimationGroups.map((a) => {
-        const anim = a.targetedAnimations[0]
-        a.stop()
-        return { anim: anim.animation, target: anim.target.name  }
-      })
+      const animations = task.loadedAnimationGroups.reduce<{ anim: Animation, target: string}[]>((acc, curr) => {
+        curr.stop()
+        curr.targetedAnimations.forEach((anim) => {
+          acc.push({ anim: anim.animation, target: anim.target.name  })
+        })
+        return acc
+      },[])
+
       // console.log(animations)
       mesh?.setEnabled(false)
       acc[task.meshesNames] = { mesh: mesh, animations: animations }
@@ -98,5 +106,5 @@ const loadAssets = async function(scene : Scene, playGroundType: PlayGroundType)
 }
 
 export { loadAssets, SelectableTiles, FixedTiles }
-export type { TileType }
+export type { TileType, TileMeshArray, TextureArray }
 
