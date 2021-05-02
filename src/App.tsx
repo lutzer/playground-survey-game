@@ -16,7 +16,7 @@ const SETTINGS : PlaygroundSettings = {
   width: 6.2,
   height: 6.2,
   camera: {
-    isometric: true,
+    isometric: false,
     zoom: 6
   },
   version: '0.35',

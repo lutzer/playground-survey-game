@@ -1,5 +1,6 @@
 import { AbstractAssetTask, AssetsManager, ContainerAssetTask, Scene, TextureAssetTask } from '@babylonjs/core'
 import { Mesh } from '@babylonjs/core/Meshes/mesh'
+import { PlayGroundType } from '../state'
 import { TextureArray, TileMeshArray } from './tiles'
 
 enum SelectableTiles {
@@ -30,7 +31,7 @@ function onTaskCompleted<Type>(task: AbstractAssetTask) : Promise<Type> {
   })
 }
 
-const loadAssets = async function(scene : Scene) : Promise<{ tileMeshes: TileMeshArray, textures: TextureArray}> {
+const loadAssets = async function(scene : Scene, playGroundType: PlayGroundType) : Promise<{ tileMeshes: TileMeshArray, textures: TextureArray}> {
   const assetsManager = new AssetsManager(scene)
   assetsManager.useDefaultLoadingScreen = false
 
@@ -46,9 +47,10 @@ const loadAssets = async function(scene : Scene) : Promise<{ tileMeshes: TileMes
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', SelectableTiles.seasaw, 'assets/meshes/' ,'tile_seasaw.min.gltf')),
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', SelectableTiles.carousel, 'assets/meshes/' ,'tile_carousel.min.gltf')),
 
-    // Load pool tiles
-    onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.pool, 'assets/meshes/waterbodies/' ,'tile_pool.min.gltf')),
-    onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.river, 'assets/meshes/waterbodies/' ,'tile_stream.min.gltf')),
+    // Load pool or river tiles
+    playGroundType == 'pool' ? 
+      onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.pool, 'assets/meshes/waterbodies/' ,'tile_pool.min.gltf'))
+      : onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.river, 'assets/meshes/waterbodies/' ,'tile_stream.min.gltf')),
 
     // load textures
     onTaskCompleted<AbstractAssetTask>(assetsManager.addTextureTask('texture-fountain','assets/textures/flare.png')),

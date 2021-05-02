@@ -96,7 +96,7 @@ class Playground {
       })
 
     // load assets
-    loadAssets(this.scene).then(({tileMeshes, textures}) => {
+    loadAssets(this.scene, playGroundType).then(({tileMeshes, textures}) => {
       tileManager.meshes = tileMeshes
       tileManager.textures = textures
 
@@ -115,7 +115,7 @@ class Playground {
 
   
     // show axis
-    // showAxis(10,this.scene)
+    showAxis(5,this.scene)
 
     setupLights(this.scene)
     //createSkyDome(this.scene)
@@ -171,9 +171,9 @@ class Playground {
 
   resize() : void {
     if (this.camera?.mode == BABYLON.Camera.ORTHOGRAPHIC_CAMERA) {
-      const aspectRatio = this.engine.getAspectRatio(this.camera)
-      this.camera.orthoLeft = -this.settings.camera.zoom * aspectRatio
-      this.camera.orthoRight = this.settings.camera.zoom * aspectRatio
+      // const aspectRatio = this.engine.getAspectRatio(this.camera)
+      // this.camera.orthoLeft = -this.settings.camera.zoom * aspectRatio
+      // this.camera.orthoRight = this.settings.camera.zoom * aspectRatio
     }
     this.engine.resize()
   }

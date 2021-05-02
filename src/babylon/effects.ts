@@ -71,7 +71,7 @@ class WaterLight implements PlaygroundEffect {
   light: PointLight
 
   constructor(position: Vector3, scene: Scene) {
-    this.light = new PointLight('pointLight', new Vector3(0, 2, 0), scene)
+    this.light = new PointLight('pointLight', position, scene)
     this.light.intensity = 5
     this.light.range = 30
     this.light.diffuse = new Color3(0,1.0,1.0)
