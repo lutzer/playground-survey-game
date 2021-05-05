@@ -26,7 +26,8 @@ enum FixedTiles {
 
 type TileType = SelectableTiles | FixedTiles
 
-type TileMeshItem = { mesh: Mesh, animations: { target: string, anim: Animation }[] }
+type TileAnimation = { target: string, anim: Animation, fixedSpeed: boolean }
+type TileMeshItem = { mesh: Mesh, animations: TileAnimation[] }
 type TileMeshArray = { [name : string] : TileMeshItem }
 type TextureArray = { [name : string] : Texture }
 
@@ -77,10 +78,11 @@ const loadAssets = async function(scene : Scene, playGroundType: PlayGroundType)
       const mesh = task.loadedContainer.instantiateModelsToScene((name) => name, false).rootNodes[0] as Mesh
     
       // save animations + name of targets
-      const animations = task.loadedAnimationGroups.reduce<{ anim: Animation, target: string}[]>((acc, curr) => {
+      const fixedAnimationSpeed = Object.keys(FixedTiles).includes(task.meshesNames)
+      const animations = task.loadedAnimationGroups.reduce<TileAnimation[]>((acc, curr) => {
         curr.stop()
         curr.targetedAnimations.forEach((anim) => {
-          acc.push({ anim: anim.animation, target: anim.target.name  })
+          acc.push({ anim: anim.animation, target: anim.target.name, fixedSpeed: fixedAnimationSpeed })
         })
         return acc
       },[])

@@ -70,14 +70,6 @@ class TileManager extends EventEmitter {
     this.$pointerUpObservable = new Subject()
     this.$disposeObservable = new Subject()
 
-    // add pointer observables for tile picking
-    this.scene.onPointerObservable.add( (pInfo) => {
-      if (pInfo.type == PointerEventTypes.POINTERDOWN)
-        this.$pointerDownObservable.next(pInfo)
-      else if (pInfo.type == PointerEventTypes.POINTERUP)
-        this.$pointerUpObservable.next(pInfo)
-    })
-
     this._selectLayer = new UtilityLayerRenderer(scene, false)
     new HemisphericLight('light1', new Vector3(0, 0, 1), this._selectLayer.utilityLayerScene)
     this._cursor = new TileCursor(this._selectLayer)
@@ -98,19 +90,29 @@ class TileManager extends EventEmitter {
   }
 
   setupPointerObservables() : void {
+
+    // add pointer observables for tile picking
+    this.scene.onPointerObservable.add( (pInfo) => {
+      if (pInfo.type == PointerEventTypes.POINTERDOWN)
+        this.$pointerDownObservable.next(pInfo)
+      else if (pInfo.type == PointerEventTypes.POINTERUP)
+        this.$pointerUpObservable.next(pInfo)
+    })
+
     const $onDownPicked = this.$pointerDownObservable.pipe(map((pInfo) => {
       const pick = this._selectLayer.utilityLayerScene.pick(pInfo.event.offsetX, pInfo.event.offsetY)
-      return ({ pick: pick, time: Date.now()})
+      return ({ pick: pick, event: pInfo.event, time: Date.now()})
     }))
 
     const $onUpPicked = this.$pointerUpObservable.pipe(map((pInfo) => {
       const pick = this._selectLayer.utilityLayerScene.pick(pInfo.event.offsetX, pInfo.event.offsetY)
-      return ({ pick: pick, time: Date.now()})
+      return ({ pick: pick, event: pInfo.event, time: Date.now()})
     }))
 
     // test if tile on down event is the same than on up event
     $onUpPicked.pipe(withLatestFrom($onDownPicked), takeUntil(this.$disposeObservable)).subscribe( ([up, down]) => {
-      if (up.pick?.hit && up.pick?.pickedMesh?.name == down.pick?.pickedMesh?.name && up.time - down.time < TILE_PICK_CLICK_TIMEOUT) {
+      const dist = Math.abs(up.event.screenX - down.event.screenX) + Math.abs(up.event.screenY - down.event.screenY)
+      if (up.pick?.hit && up.pick?.pickedMesh?.name == down.pick?.pickedMesh?.name && dist < 10) {
         this.emit('tile-selected', up.pick.pickedMesh?.metadata?.tileIndex)
       }
     })

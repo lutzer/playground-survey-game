@@ -5,7 +5,7 @@ import { Subject } from 'rxjs'
 
 import '@babylonjs/loaders'
 
-import { PlaygroundCamera } from './camera'
+import { OrthographicCamera } from './camera'
 import { setupLights } from './light'
 import { createGrid, createPlanscheGrid, createRiverGrid } from './grid'
 import { loadAssets } from './assets'
@@ -21,7 +21,6 @@ type PlaygroundSettings = {
   width: number
   height: number
   camera: {
-    isometric: boolean
     zoom: number
   },
   version: string,
@@ -34,7 +33,7 @@ class Playground {
   engine: BABYLON.Engine 
   scene: BABYLON.Scene
   settings : PlaygroundSettings
-  camera: PlaygroundCamera
+  camera: OrthographicCamera
 
   textures : BABYLON.Texture[]
 
@@ -56,7 +55,7 @@ class Playground {
 
     this.textures = []
 
-    this.camera = new PlaygroundCamera(this.scene, this.canvas, this.settings.camera.zoom)
+    this.camera = new OrthographicCamera(this.scene, this.canvas, this.settings.camera.zoom)
     this.camera.enableControl(true)
 
     // ignore pointer events when disabled
@@ -161,7 +160,8 @@ class Playground {
   takeScreenshot() : void {
     if (this.camera) {
       this.scene.render()
-      BABYLON.Tools.CreateScreenshotUsingRenderTarget(this.engine, this.camera.camera, 1280)
+      const size = { height: this.canvas.height*2, width: this.canvas.width*2}
+      BABYLON.Tools.CreateScreenshotUsingRenderTarget(this.engine, this.camera.camera, size)
     }
   }
 

@@ -71,15 +71,15 @@ class Tile {
     })
 
     // attach animations to target nodes
-    this._meshes[type]?.animations.forEach(({anim, target}) => {
+    this._meshes[type]?.animations.forEach(({anim, target, fixedSpeed}) => {
       this._animation = new AnimationGroup(this.name, this._scene)
       const targetNode = mesh.getChildren(undefined, false).find((node) => {
         return node.name == target
       })
       if (targetNode) {
         this._animation.addTargetedAnimation(anim, targetNode)
-        // this._animation.start(true, Math.random() * 0.5 + 0.5)
-        this._animation.start(true, Math.random() * 0.5 + 0.5)
+        const speed = fixedSpeed ? undefined : Math.random() * 0.5 + 0.5
+        this._animation.start(true, speed)
       }
     })
     // performance optimization

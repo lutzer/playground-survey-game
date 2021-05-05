@@ -9,6 +9,9 @@ import { delay } from 'rxjs/internal/operators/delay'
 import './PlaygroundView.scss'
 import backIcon from '../assets/images/back.png'
 import checkIcon from '../assets/images/check.png'
+import plusIcon from '../assets/images/plus.png'
+import minusIcon from '../assets/images/minus.png'
+
 import { TileType } from '../babylon/assets'
 
 enum LoadedState {
@@ -88,6 +91,16 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
   function onFinished() {
     history.push('/missing-tile')
   }
+
+  function raiseZoom() {
+    if (playground)
+      playground.camera.zoom -= 1
+  }
+
+  function lowerZoom() {
+    if (playground)
+      playground.camera.zoom += 1
+  }
   
 
   return (
@@ -118,6 +131,16 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
             <button onClick={() => onScreenShotButtonClicked()}>Foto</button>
             { !finished && <button className="right" onClick={() => setFinished(true)}>Fertig</button> }
           </div>
+          <div className="bottom-buttons">
+            { !finished && <div className="center-menu">
+              <button className="button-zoom" onClick={lowerZoom}><img src={minusIcon}/></button>
+              <div className="avatar-icon"></div>
+              <button className="button-zoom" onClick={raiseZoom}><img src={plusIcon}/></button>
+            </div> 
+            }
+            { finished && <button onClick={() => setFinished(false)}>Ich bin noch nicht fertig</button> }
+            { finished && <button onClick={() => onFinished()} className="right glow">Weiter<img className="right" src={checkIcon}></img></button> }
+          </div>
           { selectedTile != undefined &&
             <TileMenu
               tileState={stateMachine?.state.tiles[selectedTile]}
@@ -125,12 +148,6 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
               maximumSelectedTies={settings.selectableTiles}
               onSelect={onSelectTyleType} 
             /> 
-          }
-          { finished &&
-            <div className="bottom-buttons">
-              <button onClick={() => setFinished(false)}><img className="left" src={backIcon}/>Zurück</button>
-              <button onClick={() => onFinished()} className="right glow">Weiter<img className="right" src={checkIcon}></img></button>
-            </div>
           }
         </div>
       }

@@ -1,14 +1,19 @@
-import { ArcRotateCamera, Camera, Engine, Scene, UniversalCamera, Vector2, Vector3 } from '@babylonjs/core'
-import { PointerEventTypes, PointerInfo } from '@babylonjs/core/Events/pointerEvents'
+import { Camera, Scene, UniversalCamera, Vector3 } from '@babylonjs/core'
+import { PointerInfo } from '@babylonjs/core/Events/pointerEvents'
 import { Observer } from '@babylonjs/core/Misc/observable'
 import { Nullable } from '@babylonjs/core/types'
 import { combineLatest, fromEvent, of, Subject } from 'rxjs'
 import { switchMap, takeUntil } from 'rxjs/operators'
 
-const MAX_DISTANCE = 20
-const MIN_DISTANCE = 5
+// import panzoom from 'panzoom'
 
-class PlaygroundCamera {
+const MAX_ZOOM = 10
+const MIN_ZOOM = 1
+
+const MAX_X = 4
+const MAX_Y = 4
+
+class OrthographicCamera {
 
   private scene : Scene
   private canvas : HTMLCanvasElement
@@ -34,10 +39,16 @@ class PlaygroundCamera {
 
     this.aspectRatio = this.scene.getEngine().getAspectRatio(this.camera)
 
-    this.onResize()
+    this.update()
 
     this.$disposeObservable = new Subject()
     this.pointerObserver = null
+
+    // const pointer = panzoom(this.canvas)
+
+    // pointer.on('pan', (e) => {
+    //   console.log('Fired when the `element` is being panned', e)
+    // })
   }
 
   dispose() {
@@ -63,7 +74,8 @@ class PlaygroundCamera {
     $dragObservable.subscribe( ([move, down, cursor]) => {
       const dx = down.screenX - move.screenX
       const dy = down.screenY - move.screenY
-      this.setCameraTarget(cursor.x + dx/50, cursor.y + dy/50)
+      const zoomDivisor = 80 * 5/cursor.z
+      this.setCameraCenter(cursor.x + dx/zoomDivisor, cursor.y + dy/zoomDivisor)
     })
     
   }
@@ -81,10 +93,20 @@ class PlaygroundCamera {
     this.camera.orthoLeft = -zoom * this.aspectRatio + this.cursor.x
   }
 
-  setCameraTarget(x : number,y : number) : void {
-    this.cursor.x = x
-    this.cursor.y = y
+  setCameraCenter(x : number,y : number) : void {
+    this.cursor.x = Math.max(-MAX_X, Math.min(MAX_X, x))
+    this.cursor.y = Math.max(-MAX_Y, Math.min(MAX_Y, y))
     this.update()
+  }
+
+  set zoom(zoom: number) {
+    console.log(zoom)
+    this.cursor.z = Math.max( MIN_ZOOM, Math.min(MAX_ZOOM, zoom))
+    this.update()
+  }
+
+  get zoom() : number {
+    return this.cursor.z
   }
 
   getCameraTarget() : [number, number] {
@@ -92,4 +114,4 @@ class PlaygroundCamera {
   }
 }
 
-export { PlaygroundCamera}
+export { OrthographicCamera}

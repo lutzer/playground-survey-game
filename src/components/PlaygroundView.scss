@@ -34,7 +34,7 @@
     }
 
     .spinner {
-      color: $icon-bg-color;
+      color: $accent-color;
       font-size: 10px;
       margin: 100px auto;
       width: 1em;
@@ -104,6 +104,33 @@
     .right {
       float: right;
     }
+
+    .center-menu {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .button-zoom {
+        border-radius: 50%;
+        height: 40px;
+        width: 40px;
+
+        img {
+          width: 100%;
+        }
+      }
+  
+      .avatar-icon {
+        border-radius: 50%;
+        height: 60px;
+        width: 60px;
+        display: inline-block;
+        background: white;
+        margin: 10px 5px;
+      }
+    }
+
+    
   }
 
 }

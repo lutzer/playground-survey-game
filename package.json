@@ -17,6 +17,7 @@
     "@types/react-dom": "^17.0.3",
     "events": "^3.3.0",
     "lodash": "^4.17.21",
+    "panzoom": "^9.4.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
