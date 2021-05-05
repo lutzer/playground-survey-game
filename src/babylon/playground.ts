@@ -56,7 +56,6 @@ class Playground {
     this.textures = []
 
     this.camera = new OrthographicCamera(this.scene, this.canvas, this.settings.camera.zoom)
-    this.camera.enableControl(true)
 
     // ignore pointer events when disabled
     this.scene.onPrePointerObservable.add((pointerInfo) => {
@@ -106,10 +105,8 @@ class Playground {
       // update tiles from current state
       tileManager.handleTileChange(this.stateMachine.state.tiles)
 
-      // make some performance optimizations
       optimizePerformance(this.scene)
-
-      // call on loaded method
+      this.camera.enableControl()
       onLoaded()
     })
 

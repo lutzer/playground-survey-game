@@ -7,6 +7,8 @@ import { StackPanel } from '@babylonjs/gui/2D/controls/stackPanel'
 import { TextBlock } from '@babylonjs/gui/2D/controls/textBlock'
 import { GradientMaterial } from '@babylonjs/materials/gradient/gradientMaterial'
 import { SkyMaterial } from '@babylonjs/materials/sky/skyMaterial'
+import { Subject, Observable as RxObservable } from 'rxjs'
+import { share } from 'rxjs/operators'
 
 const showAxis = function(size : number, scene : Scene) : void {
 
@@ -132,4 +134,12 @@ const optimizePerformance = function(scene: Scene) {
   scene.blockMaterialDirtyMechanism = true
 }
 
-export { showAxis, showGroundPlane, getNodeChildren, createSkyBox, createSkyDome, createFog, optimizePerformance, setupFpsDisplay }
+const fromHammerEvent = function(hammer: HammerManager, event: string) : RxObservable<HammerInput> {
+  const subject = new Subject<HammerInput>()
+  hammer.on(event,(e: HammerInput) => {
+    subject.next(e)
+  })
+  return subject.pipe(share())
+}
+
+export { showAxis, showGroundPlane, getNodeChildren, createSkyBox, createSkyDome, createFog, optimizePerformance, setupFpsDisplay, fromHammerEvent }

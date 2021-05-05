@@ -7,10 +7,9 @@ import { useHistory } from 'react-router'
 import { delay } from 'rxjs/internal/operators/delay'
 
 import './PlaygroundView.scss'
-import backIcon from '../assets/images/back.png'
 import checkIcon from '../assets/images/check.png'
-import plusIcon from '../assets/images/plus.png'
-import minusIcon from '../assets/images/minus.png'
+import rotateRightIcon from '../assets/images/rotate_right.png'
+import rotateLeftIcon from '../assets/images/rotate_left.png'
 
 import { TileType } from '../babylon/assets'
 
@@ -101,6 +100,14 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
     if (playground)
       playground.camera.zoom += 1
   }
+
+  function rotateLeft() {
+    playground?.camera.rotateLeft()
+  }
+
+  function rotateRight() {
+    playground?.camera.rotateRight()
+  }
   
 
   return (
@@ -133,9 +140,9 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
           </div>
           <div className="bottom-buttons">
             { !finished && <div className="center-menu">
-              <button className="button-zoom" onClick={lowerZoom}><img src={minusIcon}/></button>
+              <button className="button-zoom" onClick={rotateLeft}><img src={rotateLeftIcon}/></button>
               <div className="avatar-icon"></div>
-              <button className="button-zoom" onClick={raiseZoom}><img src={plusIcon}/></button>
+              <button className="button-zoom" onClick={rotateRight}><img src={rotateRightIcon}/></button>
             </div> 
             }
             { finished && <button onClick={() => setFinished(false)}>Ich bin noch nicht fertig</button> }
