@@ -57,12 +57,12 @@ class Tile {
 
     // add effects depending on tiles
     if (type == FixedTiles.pool ) {
-      this._effects.push(new Fountain(this.node.absolutePosition.add(new Vector3(0.01, 1.1, 0.01)), this._textures['texture-fountain'], this._scene))
-      this._effects.push(new WaterLight(this.node.absolutePosition.add(new Vector3(0, 2, 0)), this._scene))
+      this._effects.push(new Fountain(this.node.getAbsolutePosition().add(new Vector3(0.01, 1.1, 0.01)), this._textures['texture-fountain'], this._scene))
+      this._effects.push(new WaterLight(this.node.getAbsolutePosition().add(new Vector3(0, 2, 0)), this._scene))
     } else if ( type == FixedTiles.river ) {
-      this._effects.push(new WaterLight(this.node.absolutePosition.add(new Vector3(-1, 2.5, -0.5)), this._scene))
-      this._effects.push(new WaterLight(this.node.absolutePosition.add(new Vector3(1, 3.0, -1)), this._scene))
-      this._effects.push(new WaterLight(this.node.absolutePosition.add(new Vector3(-2, 1.5, -1)), this._scene))
+      this._effects.push(new WaterLight(this.node.getAbsolutePosition().add(new Vector3(-1, 2.5, -0.5)), this._scene))
+      this._effects.push(new WaterLight(this.node.getAbsolutePosition().add(new Vector3(1, 3.0, -1)), this._scene))
+      this._effects.push(new WaterLight(this.node.getAbsolutePosition().add(new Vector3(-2, 1.5, -1)), this._scene))
     }
 
     // instanciate new mesh keeping the same name

@@ -118,14 +118,14 @@ class TileManager extends EventEmitter {
 
   setup(width: number, height: number) : void {
     // create tiles
-    this.tiles = this.grid.cells.map(({position, fixedTile}, i) => {
+    this.tiles = this.grid.cells.map(({position, fixedTile, rotation}, i) => {
       const tile = new Tile(`tile${i}`, this._assets.meshes, this._assets.textures, this.scene)
       
       tile.position = new Vector3(position[0] * width - width/2,  0, position[1] * height - height/2)
       
       tile.type = fixedTile || SelectableTiles.grass
       
-      tile.rotation = 0
+      tile.rotation = rotation || 0
       tile.show()
       return tile
     })
@@ -135,11 +135,11 @@ class TileManager extends EventEmitter {
       if (fixedTile)
         return
 
-      const box = MeshBuilder.CreateBox(`select_tile_${i}`, { size: 1 }, this._selectLayer.utilityLayerScene)
+      const box = MeshBuilder.CreateBox(`select_tile_${i}`, { width: 1, height:0.01, depth:1 }, this._selectLayer.utilityLayerScene)
       box.metadata = { tileIndex : i, selectable: fixedTile == null }
       box.position = new Vector3(
         position[0] * width - width/2, 
-        0,
+        0.8,
         position[1] * height - height/2
       )
       box.visibility = 0

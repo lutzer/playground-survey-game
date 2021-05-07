@@ -51,26 +51,34 @@ const showAxis = function(size : number, scene : Scene) : void {
 const showGroundPlane = function(size: number, scene : Scene) : void {
   const ground = MeshBuilder.CreateGround('ground', {width:size, height:size})
   const material = new StandardMaterial('ground',scene)
-  material.ambientColor = new Color3(77/255, 25/255, 51/255)
-  material.specularColor = new Color3(77/255, 25/255, 51/255)
-  material.emissiveColor = new Color3(77/255, 25/255, 51/255)
+  // material.ambientColor = new Color3(77/255, 25/255, 51/255)
+  // material.specularColor = new Color3(77/255, 25/255, 51/255)
+  // material.emissiveColor = new Color3(77/255, 25/255, 51/255)
   // material.specularPower = 100
   // material.emi
+
+  // var mat = new StandardMaterial("", scene);
+  material.ambientTexture = new Texture('assets/textures/ground.jpg', scene)
+  material.specularColor = new Color3(0, 0, 0)
+  // material.specularPower = 0
+  // ground.material = mat;
+
   ground.material = material
   ground.position.y = -1
   scene.addMesh(ground)
 }
 
 const createSkyBox = function(scene : Scene) : void  {  
-  const skybox = MeshBuilder.CreateBox('skyBox', { size : 100.0 }, scene)
-  const skyboxMaterial = new StandardMaterial('skyBox', scene)
-  skyboxMaterial.backFaceCulling = false
-  skyboxMaterial.reflectionTexture = new CubeTexture('assets/textures/sky3/skybox', scene)
-  skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE
-  skyboxMaterial.diffuseColor = new Color3(0, 0, 0)
-  skyboxMaterial.specularColor = new Color3(0, 0, 0)
-  skybox.material = skyboxMaterial
-  skybox.position.y = 0
+  scene.createDefaultSkybox()
+  // const skybox = MeshBuilder.CreateBox('skyBox', { size : 100.0 }, scene)
+  // const skyboxMaterial = new StandardMaterial('skyBox', scene)
+  // skyboxMaterial.backFaceCulling = false
+  // skyboxMaterial.reflectionTexture = new CubeTexture('assets/textures/sky3/skybox', scene)
+  // skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE
+  // skyboxMaterial.diffuseColor = new Color3(0, 0, 0)
+  // skyboxMaterial.specularColor = new Color3(0, 0, 0)
+  // skybox.material = skyboxMaterial
+  // skybox.position.y = 0
 }
 
 const createSkyDome = function(scene: Scene) : GradientMaterial {

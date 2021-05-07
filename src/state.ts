@@ -37,12 +37,15 @@ class Statemachine extends Subject<State> {
   static STORAGE_KEY = 'pg-state'
 
   private _state : State
+  private _initialState : State
+  private _settings: PlaygroundSettings
 
   constructor(settings: PlaygroundSettings) {
     super()
+    this._settings = settings
     // set initial state
-    this._state = {
-      tiles: Array(settings.gridSize * settings.gridSize).fill(null).map( (v,i) => { 
+    this._initialState = {
+      tiles: Array(this._settings.gridSize * this._settings.gridSize).fill(null).map( (v,i) => { 
         return { 
           type: SelectableTiles.grass, 
           rotation: <number>_.sample([Math.PI, 0, Math.PI / 2, Math.PI * 1.5]), 
@@ -50,11 +53,16 @@ class Statemachine extends Subject<State> {
         }
       }),
       playgroundType: 'pool',
-      version: settings.version
+      version: this._settings.version
     }
+    this._state = this._initialState
     // load state from storage
     this.load()
     this.next(this.state)
+  }
+
+  reset() {
+    this._state = this._initialState
   }
 
   load() : void {

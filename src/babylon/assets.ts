@@ -21,7 +21,12 @@ enum SelectableTiles {
 enum FixedTiles { 
   empty = 'empty',
   pool = 'pool',
-  river = 'river'
+  river = 'river',
+  lighttower = 'lighttower',
+  alley1 = 'alley1',
+  alley2 = 'alley2',
+  trees1 = 'trees1',
+  trees2 = 'trees2'
 }
 
 type TileType = SelectableTiles | FixedTiles
@@ -57,6 +62,13 @@ const loadAssets = async function(scene : Scene, playGroundType: PlayGroundType)
     playGroundType == 'pool' ? 
       onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.pool, 'assets/meshes/waterbodies/' ,'tile_pool.min.gltf'))
       : onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.river, 'assets/meshes/waterbodies/' ,'tile_stream.min.gltf')),
+
+    // load fixed tiles
+    onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.lighttower, 'assets/meshes/fixed/' ,'tile_lighttower.min.gltf')),
+    onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.alley1, 'assets/meshes/fixed/' ,'tile_alley1.min.gltf')),
+    onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.alley2, 'assets/meshes/fixed/' ,'tile_alley2.min.gltf')),
+    onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.trees1, 'assets/meshes/fixed/' ,'tile_trees1.min.gltf')),
+    onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.trees2, 'assets/meshes/fixed/' ,'tile_trees2.min.gltf')),
 
     // load textures
     onTaskCompleted<AbstractAssetTask>(assetsManager.addTextureTask('texture-fountain','assets/textures/flare.png')),

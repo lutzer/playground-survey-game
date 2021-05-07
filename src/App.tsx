@@ -11,14 +11,16 @@ import { WaterbodyView } from './components/WaterbodyView'
 import { MissingTileView } from './components/MissingTileView'
 import { FinishedView } from './components/FinishedView'
 
+const SIZE = 8
+
 const SETTINGS : PlaygroundSettings = {
-  gridSize: 7,
-  width: 6.2,
-  height: 6.2,
+  gridSize: SIZE,
+  width: SIZE*0.9,
+  height: SIZE*0.9,
   camera: {
     zoom: 5
   },
-  version: '0.35',
+  version: '0.38',
   selectableTiles: 6
 }
 
