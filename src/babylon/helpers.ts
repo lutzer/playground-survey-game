@@ -48,7 +48,7 @@ const showAxis = function(size : number, scene : Scene) : void {
   zChar.position = new Vector3(0, 0.05 * size, 0.9 * size)
 }
 
-const showGroundPlane = function(size: number, scene : Scene) {
+const showGroundPlane = function(size: number, scene : Scene) : void {
   const ground = MeshBuilder.CreateGround('ground', {width:size, height:size})
   const material = new StandardMaterial('ground',scene)
   material.ambientColor = new Color3(77/255, 25/255, 51/255)
@@ -88,7 +88,7 @@ const createSkyDome = function(scene: Scene) : GradientMaterial {
   return gradientMaterial
 }
 
-const createFog = function(scene: Scene) {
+const createFog = function(scene: Scene) : void {
   //enable fog mode
   scene.fogMode = Scene.FOGMODE_EXP
   scene.fogColor = new Color3(102/255, 130/255, 93/255)
@@ -107,7 +107,7 @@ const getNodeChildren = function(node: Node) : string[] {
   },[])
 }
 
-const setupFpsDisplay = function(scene : Scene) {
+const setupFpsDisplay = function() : TextBlock {
   const advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI('UI')
   const stackPanel = new StackPanel()
   stackPanel.verticalAlignment = Control.VERTICAL_ALIGNMENT_TOP
@@ -123,7 +123,7 @@ const setupFpsDisplay = function(scene : Scene) {
   return text
 }
 
-const optimizePerformance = function(scene: Scene) {
+const optimizePerformance = function(scene: Scene) : void {
   scene.autoClear = true // Color buffer
   scene.autoClearDepthAndStencil = false
   scene.freeActiveMeshes()

@@ -1,3 +1,4 @@
+import { minBy } from 'lodash'
 import { Observable } from 'rxjs/internal/Observable'
 import { interval } from 'rxjs/internal/observable/interval'
 import { scan } from 'rxjs/internal/operators/scan'
@@ -14,12 +15,17 @@ const fromHammerEvent = function(hammer: HammerManager, event: string) : Observa
 }
 
 const animateValue = function(from: number, to:number, time : number, steps = time/40, callback : (v : number, finished: boolean) => void) : void {
+  
+  function easeInOut(t : number) : number { 
+    return t<.5 ? 2*t*t : -1+(4-2*t)*t 
+  }
+  
   const timeBetweenSteps = time/steps
   interval(timeBetweenSteps).pipe(scan( (acc) => {
     return acc + 1/steps
   }, 0), takeWhile((t) => t < 1)).subscribe({
     next: (t) => {
-      callback(from + (to-from) * t, false)
+      callback(from + (to-from) * easeInOut(t), false)
     },
     complete: () => {
       callback(to, true)
@@ -27,4 +33,25 @@ const animateValue = function(from: number, to:number, time : number, steps = ti
   })
 }
 
-export { fromHammerEvent, animateValue }
+function snapTo(value : number, snapPositions : number[]) : number {
+  return minBy(snapPositions, (p) => {
+    return Math.abs(value - p)
+  }) || value
+}
+
+function constrainRad(value: number) : number {
+  while ( value < 0) {
+    value += Math.PI * 2
+  }
+  while (value > Math.PI * 2) {
+    value -= Math.PI * 2
+  }
+  return value
+}
+
+function radDifference(value1: number, value2: number) : number {
+  const diff = value1 - value2
+  return (diff + Math.PI) % (Math.PI * 2) - Math.PI
+}
+
+export { fromHammerEvent, animateValue, radDifference, constrainRad, snapTo }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Redirect, Route, Switch, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 
 import { PlaygroundSettings } from './babylon/playground'
 import { Actions, Statemachine } from './state'

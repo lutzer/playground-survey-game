@@ -1,12 +1,9 @@
-import { AttachToBoxBehavior, Camera, Matrix, Scene, UniversalCamera, Vector2, Vector3 } from '@babylonjs/core'
-import { PointerInfo } from '@babylonjs/core/Events/pointerEvents'
-import { Observer } from '@babylonjs/core/Misc/observable'
-import { Nullable } from '@babylonjs/core/types'
+import { Camera, Scene, UniversalCamera, Vector2, Vector3 } from '@babylonjs/core'
 import { combineLatest, fromEvent, of, Subject, merge } from 'rxjs'
-import { filter, switchMap, takeUntil } from 'rxjs/operators'
-
+import { filter, skipWhile, switchMap, takeUntil } from 'rxjs/operators'
 import Hammer from 'hammerjs'
-import { animateValue, fromHammerEvent } from './utils'
+
+import { animateValue, constrainRad, fromHammerEvent, snapTo } from './utils'
 
 const MAX_ZOOM = 10
 const MIN_ZOOM = 1
@@ -15,6 +12,11 @@ const MAX_X = 4
 const MAX_Y = 4
 
 const DISTANCE = 10
+
+const ROTATION_THRESHOLD = 5
+const PINCH_THRESHOLD = 0.1
+
+const ROTATION_SNAP_POSITIONS = [ Math.PI * 1/4, Math.PI * 3/4, Math.PI * 5/4, Math.PI * 7/4]
 
 function multiplyMatrixAndPoint(matrix : [number, number, number, number], point : [number, number]) : [number, number] {
   return [ point[0] * matrix[0] + point[1] * matrix[1], point[0] * matrix[2] + point[1] * matrix[3] ]
@@ -56,19 +58,25 @@ class OrthographicCamera {
     this.$disposeObservable = new Subject()
   }
 
-  dispose() {
+  dispose() : void {
     this.$disposeObservable.next()
   }
 
   enableControl() : void {
 
-    // react to pinching
     const mc = new Hammer(this.canvas)
-    mc.get('pinch').set({ enable: true, threshold: 0 })
 
+    // react to pinching
+    mc.get('pinch').set({ enable: true, threshold: PINCH_THRESHOLD })
     const $pinchStart = fromHammerEvent(mc, 'pinchstart')
     const $pinchEnd = fromHammerEvent(mc, 'pinchend')
     const $pinchMove = fromHammerEvent(mc, 'pinchmove')
+
+    // react to rotating
+    mc.get('rotate').set({ enable: true })
+    const $rotateStart = fromHammerEvent(mc, 'rotatestart')
+    const $rotateEnd = fromHammerEvent(mc, 'rotateend')
+    const $rotateMove = fromHammerEvent(mc, 'rotatemove')
 
     const $pinchObservable = $pinchStart.pipe(switchMap( () =>
       combineLatest([$pinchMove, of(this._zoom)])
@@ -77,6 +85,18 @@ class OrthographicCamera {
 
     $pinchObservable.subscribe(([move, zoom]) => {
       this.zoom = zoom / move.scale
+    })
+
+    const $rotateObservable = $rotateStart.pipe(switchMap( (start) =>
+      combineLatest([$rotateMove, of(start), of(this.rotation)])
+        .pipe(skipWhile( ([move, start]) => {
+          return Math.abs(start.rotation - move.rotation) < ROTATION_THRESHOLD
+        }),takeUntil($rotateEnd))
+    ), takeUntil(this.$disposeObservable))
+
+    $rotateObservable.subscribe(([move, start, rot]) => {
+      const drot = start.rotation - move.rotation
+      this.rotation = rot - drot / 180 * Math.PI
     })
 
     // react to scrolling
@@ -145,7 +165,7 @@ class OrthographicCamera {
   }
 
   set rotation(angle : number) {
-    this._rotation = angle
+    this._rotation = constrainRad(angle)
     this.updateCameraPosition()
   }
 
@@ -155,7 +175,9 @@ class OrthographicCamera {
 
   rotateLeft() : void {
     if (this._isAnimating) return
-    animateValue(this._rotation, this._rotation - Math.PI/2, 500, undefined, (v, done) => {
+    let angle = snapTo(constrainRad(this._rotation - Math.PI/2), ROTATION_SNAP_POSITIONS)
+    angle = this._rotation - Math.PI/2 < 0 ? angle - Math.PI * 2 : angle
+    animateValue(this._rotation, angle, 800, undefined, (v, done) => {
       this.rotation = v
       this._isAnimating = !done
     })
@@ -163,7 +185,9 @@ class OrthographicCamera {
 
   rotateRight() : void {
     if (this._isAnimating) return
-    animateValue(this._rotation, this._rotation + Math.PI/2, 500, undefined, (v, done) => {
+    let angle = snapTo(constrainRad(this._rotation + Math.PI/2), ROTATION_SNAP_POSITIONS)
+    angle = this._rotation + Math.PI/2 > Math.PI * 2 ? Math.PI * 2 + angle : angle
+    animateValue(this._rotation, angle, 800, undefined, (v, done) => {
       this.rotation = v
       this._isAnimating = !done
     })

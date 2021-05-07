@@ -120,7 +120,7 @@ class Playground {
     // createSkyBox(this.scene)
     // showGroundPlane(100, this.scene)
 
-    const fpsText = setupFpsDisplay(this.scene)
+    const fpsText = setupFpsDisplay()
 
     // applyPostProccessing(this.scene, this.engine, this.camera.camera)
 

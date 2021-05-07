@@ -1,14 +1,12 @@
-import { Mesh, Scene, MeshBuilder, Vector3, StandardMaterial, Color3, UtilityLayerRenderer, HemisphericLight, TransformNode, PointerEventTypes, PointerInfo, Texture } from '@babylonjs/core'
+import { Mesh, Scene, MeshBuilder, Vector3, StandardMaterial, Color3, UtilityLayerRenderer, HemisphericLight, PointerEventTypes, PointerInfo } from '@babylonjs/core'
 import { Engine } from '@babylonjs/core/Engines/engine'
 import EventEmitter from 'events'
 import _ from 'lodash'
 import { Subject } from 'rxjs'
 import { map, takeUntil, withLatestFrom } from 'rxjs/operators'
-import { SelectableTiles, TileType } from './assets'
+import { SelectableTiles } from './assets'
 import { Grid } from './grid'
 import { TextureArray, Tile, TileMeshArray, TileState } from './tiles'
-
-const TILE_PICK_CLICK_TIMEOUT = 300
 
 class TileCursor {
 
