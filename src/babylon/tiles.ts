@@ -66,12 +66,12 @@ class Tile {
     }
 
     // instanciate new mesh keeping the same name
-    const mesh = <Mesh>this._meshes[type]?.mesh.instantiateHierarchy(undefined, undefined, (src, clone) => {
+    const mesh = <Mesh>this._meshes[type]?.mesh?.instantiateHierarchy(undefined, undefined, (src, clone) => {
       clone.name = src.name
     })
 
     // attach animations to target nodes
-    this._meshes[type]?.animations.forEach(({anim, target, fixedSpeed}) => {
+    this._meshes[type]?.animations?.forEach(({anim, target, fixedSpeed}) => {
       this._animation = new AnimationGroup(this.name, this._scene)
       const targetNode = mesh.getChildren(undefined, false).find((node) => {
         return node.name == target

@@ -2,6 +2,7 @@ import * as BABYLON from '@babylonjs/core'
 import SimplexNoise from 'simplex-noise'
 import { distinctUntilChanged, map, pairwise, takeUntil } from 'rxjs/operators'
 import { Subject } from 'rxjs'
+import { from as fromPromise } from 'rxjs'
 
 import '@babylonjs/loaders'
 
@@ -95,20 +96,22 @@ class Playground {
       })
 
     // load assets
-    loadAssets(this.scene, playGroundType).then(({tileMeshes, textures}) => {
-      tileManager.meshes = tileMeshes
-      tileManager.textures = textures
+    fromPromise(loadAssets(this.scene, playGroundType))
+      .pipe(takeUntil(this.$disposeObservable))
+      .subscribe(({tileMeshes, textures}) => {
+        tileManager.meshes = tileMeshes
+        tileManager.textures = textures
 
-      // setup tiles
-      tileManager.setup(this.settings.width, this.settings.height)
+        // setup tiles
+        tileManager.setup(this.settings.width, this.settings.height)
 
-      // update tiles from current state
-      tileManager.handleTileChange(this.stateMachine.state.tiles)
+        // update tiles from current state
+        tileManager.handleTileChange(this.stateMachine.state.tiles)
 
-      optimizePerformance(this.scene)
-      this.camera.enableControl()
-      onLoaded()
-    })
+        optimizePerformance(this.scene)
+        this.camera.enableControl()
+        onLoaded()
+      })
 
   
     // show axis
