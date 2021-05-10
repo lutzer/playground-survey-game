@@ -4,7 +4,7 @@ import { SelectableTiles } from './babylon/assets'
 import { PlaygroundSettings } from './babylon/playground'
 import { TileState } from './babylon/tiles'
 
-type Avatar = 'flower-girl'|'explorer'|'social'
+type Avatar = 'builder'|'explorer'|'social'
 type PlayGroundType = 'pool'|'river'
 
 type State = {

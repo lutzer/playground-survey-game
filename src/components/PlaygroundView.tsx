@@ -116,11 +116,9 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
       { loaded != LoadedState.STARTED ?
         <div className="loading-screen">
           <div className="content">
-            <h2>Was soll auf deinem Spielplatz sein?</h2>
+            <h1>Was soll auf deinem Spielplatz sein?</h1>
             <p className="block">
-            Du darfst 6 Sachen aussuchen, die du gerne auf einem Spielplatz haben willst und uns so zeigen, was dir wichtig ist.<br/>
-            Du kannst lauter verschiedene Sachen aussuchen oder mehrere von einer Sorte nehmen.<br/>
-            Du kannst sie auf die Fläche stellen und auch wieder wegnehmen und was Neues ausprobieren, bis du zufrieden bist.<br/>
+            Du darfst 6 Sachen aussuchen, die du gerne auf einem Spielplatz haben willst und uns so zeigen, was dir wichtig ist.
             </p>
             { loaded != LoadedState.LOADED ? 
               <div>

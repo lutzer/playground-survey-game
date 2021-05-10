@@ -6,7 +6,6 @@
     .avatar-list {
 
         .avatar {
-            @include fade-out-transition;
             
             .icon {
                 @include big-icon;
@@ -14,6 +13,24 @@
                 img {
                     width: 100%;
                 }
+            }
+        }
+    }
+
+    .avatar-select-dialog {
+
+        .overlay {
+            @include overlay;
+        }
+
+        .dialog {
+            @include dialog;
+
+            text-align: center;
+
+            img {
+                max-height: 280px;
+                max-width: 100%;
             }
         }
     }

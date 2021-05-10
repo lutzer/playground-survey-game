@@ -26,7 +26,9 @@ const MissingTileView = function({ onSubmit, initial } : { onSubmit: (text: stri
           onChange={(e) => setText(e.target.value)}>
         </textarea>
       </div>
-      <button onClick={() => onFinishedClicked() }>Ich bin fertig</button>
+      <div className="center">
+        <button onClick={() => onFinishedClicked() }>Alles Abschicken</button>
+      </div>
     </div>
   )
 }

@@ -10,6 +10,7 @@ import { PlaygroundView } from './components/PlaygroundView'
 import { WaterbodyView } from './components/WaterbodyView'
 import { MissingTileView } from './components/MissingTileView'
 import { FinishedView } from './components/FinishedView'
+import { StartView } from './components/StartView'
 
 const SIZE = 8
 
@@ -54,7 +55,7 @@ const App = function() : React.ReactElement {
             <FinishedView/>
           </Route>
           <Route path="/">
-            <Redirect to="/avatar"/>
+            <StartView onStart={() => stateMachine?.reset()}/>
           </Route>
         </Switch>
       </Router>

@@ -112,7 +112,7 @@ class Playground {
 
   
     // show axis
-    showAxis(5,this.scene)
+    // showAxis(5,this.scene)
 
     setupLights(this.scene)
     

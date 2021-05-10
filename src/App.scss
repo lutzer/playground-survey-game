@@ -30,6 +30,10 @@ br {
   content: " ";
 }
 
+p {
+  font-size: 115%;
+}
+
 p.caption {
   text-align: center;
   display: block;
@@ -51,6 +55,11 @@ textarea {
   text-align: center;
 }
 
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
 button {
   font-family: 'IndieFlower', serif;
   margin: 5px;;
@@ -64,6 +73,8 @@ button {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  font-size: 110%;
+  font-weight: bold;
 
   &.glow {
 

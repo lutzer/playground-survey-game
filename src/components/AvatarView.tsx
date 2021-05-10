@@ -1,52 +1,96 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import { Avatar } from '../state'
 
 import explorerImage from '../assets/images/explorer.png'
-import girlImage from '../assets/images/girl.png'
+import builderImage from '../assets/images/builder.png'
 import kidsImage from '../assets/images/two_kids.png'
 
+import checkIcon from '../assets/images/check.png'
+import backIcon from '../assets/images/arrow_back.png'
+
 import './AvatarView.scss'
+import { useLocation } from 'react-router-dom'
+
+const descriptions = new Map<Avatar,{title: string, text: string, img: string}>()
+
+descriptions.set('explorer', {
+  title: 'Entdecker / in',
+  text: 'Entdecker/in sind neugierig und möchten gerne herumlaufen und alles erkunden.',
+  img: explorerImage
+})
+
+descriptions.set('builder', {
+  title: 'Denker / in',
+  text: 'Denker/in bauen gerne Dinge. Sie gehen den Sachen auf den Grund.',
+  img: builderImage
+})
+
+descriptions.set('social', {
+  title: 'Freunde',
+  text: 'Freunde machen alles gemeinsam.',
+  img: kidsImage
+})
 
 const AvatarView = function({ onSelect } : { onSelect: (avatar: Avatar) => void}) : React.ReactElement {
   const history = useHistory()
-  const [selected, setSelected] = useState<string|undefined>(undefined)
+
+  const [selected, setSelected] = useState<Avatar|undefined>()
+
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
 
   function onAvatarSelect(avatar: Avatar) {
-    onSelect(avatar)
     setSelected(avatar)
-    setTimeout(() => {
-      history.push('/waterbody')
-    },1000)
+    // history.push('/waterbody')
+  }
+
+  function onConfirm() {
+    if (selected)
+      onSelect(selected)
+    history.push('/waterbody')
+  }
+
+  function onReject() {
+    setSelected(undefined)
   }
 
   return (
     <div className="avatar-view">
-      <h1>Willkommen</h1>
-      <p className="block">
-      Wir wollen in eurer Nähe einen neuen Spielplatz bauen. Und zwar nahe beim Tempelhofer Feld auf dem alten Friedhof neben dem Park, auf einer großen Wiese zwischen den Bäumen. Es soll viel Wasser zum Planschen geben und lustige Sachen zum Spielen.<br/>
-      Kannst du uns dabei helfen?<br/>
-      Was tust du gerne? Rennen und springen? Höhlen bauen? Mit anderen Kindern spielen?
-      Such dir deine Figur aus und komm mit einen tollen Spielplatz zu planen.
-      </p>
-      <h2>Wähle deinen Avatar</h2>
+      <h1>Wähle deinen Avatar</h1>
       <div className="avatar-list">
-        <div className={'avatar' + ((selected && selected != 'explorer') ? ' fade-out' : '')} onClick={() => onAvatarSelect('explorer')}>
+        <div className="avatar" onClick={() => onAvatarSelect('explorer')}>
           <div className="icon">
             <img src={explorerImage}></img>
           </div>
         </div>
-        <div className={'avatar' + ((selected && selected != 'flower-girl') ? ' fade-out' : '')} onClick={() => onAvatarSelect('flower-girl')}>
+        <div className="avatar" onClick={() => onAvatarSelect('builder')}>
           <div className="icon">
-            <img src={girlImage}></img>
+            <img src={builderImage}></img>
           </div>
         </div>
-        <div className={'avatar' + ((selected && selected != 'social') ? '  fade-out' : '')} onClick={() => onAvatarSelect('social')}>
+        <div className="avatar" onClick={() => onAvatarSelect('social')}>
           <div className="icon">
             <img src={kidsImage}></img>
           </div>
         </div>
       </div>
+      { selected && 
+        <div className="avatar-select-dialog">
+          <div className="overlay"></div>
+          <div className="dialog">
+            <h2>{descriptions.get(selected)?.title}</h2>
+            <img src={descriptions.get(selected)?.img}></img>
+            <p>{descriptions.get(selected)?.text}</p>
+            <div className="button-group">
+              <button className="round" onClick={onReject}><img src={backIcon}></img></button>
+              <button className="round" onClick={onConfirm}><img src={checkIcon}></img></button>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   )
 }

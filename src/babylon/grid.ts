@@ -36,6 +36,13 @@ const createGrid = function(sizeX: number, sizeY = 0) : Grid {
     }
   }
 
+  // create trees
+  _.range(8).forEach(() => {
+    const x = Math.floor(Math.random()*sizeX)
+    const y = Math.floor(Math.random()*sizeY)
+    createTree(y+x*sizeY, cells)
+  })
+
   // add light towers
   createLighttower(7 + 7*sizeX, cells)
   createLighttower(7 + 0*sizeX, cells)
@@ -46,12 +53,7 @@ const createGrid = function(sizeX: number, sizeY = 0) : Grid {
     cells[0+i*sizeX].rotation = Math.random() > 0.5 ? 0 : Math.PI
   }
 
-  // create trees
-  _.range(20).forEach(() => {
-    const x = Math.floor(Math.random()*sizeX)
-    const y = Math.floor(Math.random()*sizeY)
-    createTree(y+x*sizeY, cells)
-  })
+  
   
   return {
     cells: cells,
@@ -79,7 +81,7 @@ const createRiverGrid = function(sizeX: number, sizeY = 0) : Grid {
 
 const createPlanscheGrid = function(sizeX: number, sizeY = 0) : Grid {
   const grid = createGrid(sizeX, sizeY)
-  const ox = Math.floor(sizeX/2) - 3
+  const ox = Math.floor(sizeX/2) - 2
   const oy = Math.floor(sizeY || sizeX /2) - 1
   grid.cells[(ox + 0) * sizeX + oy + 0].fixedTile = FixedTiles.empty
   grid.cells[(ox + 0) * sizeX + oy + 1].fixedTile = FixedTiles.empty
