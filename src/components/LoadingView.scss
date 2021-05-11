@@ -11,6 +11,39 @@
   padding: $standard-spacing;
   overflow: scroll;
 
+  .text-field {
+    position: relative;
+    margin-top: 20%;
+    padding: $standard-spacing;
+    padding-bottom: 60px;
+    margin-left: 20px;
+    background: $accent-color;
+    border-radius: $border-radius;
+    font-size: 110%;
+    // height: 120px;
+    margin-bottom: 80px;
+
+    button {
+      position: absolute;
+      bottom:10px;
+      right: 10px;
+      background-color: $accent-color-bright;
+    }
+
+    .floating-image {
+      position: absolute;
+      bottom: -80px;
+      left: -40px;
+      width: 120px;
+      height: 120px;
+      z-index: 10;
+  
+      img {
+        width: 100%;
+      }
+    }
+  }
+
   p {
     .image {
       

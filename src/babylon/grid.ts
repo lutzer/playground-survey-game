@@ -37,7 +37,7 @@ const createGrid = function(sizeX: number, sizeY = 0) : Grid {
   }
 
   // create trees
-  _.range(16).forEach(() => {
+  _.range(5).forEach(() => {
     const x = Math.floor(Math.random()*sizeX)
     const y = Math.floor(Math.random()*sizeY)
     createTree(y+x*sizeY, cells)

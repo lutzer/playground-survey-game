@@ -15,6 +15,18 @@
 
   p {
     margin: 3px;
+    word-break: break-all;
+
+    .image {
+      display: block;
+      text-align: center;
+
+      img {
+        width: 100px;
+        height: 100px;
+        margin: -10px;
+      }
+    }
   }
 
 

@@ -15,21 +15,7 @@ import slideIcon from './../assets/images/icon_tile_slide.png'
 import treeIcon from './../assets/images/icon_tile_tree.png'
 import emptyIcon from './../assets/images/icon_tile_empty.png'
 
-
-
 import './TileMenu.scss'
-
-// const TYPES : TileType[] = [
-//   SelectableTiles.tree, 
-//   SelectableTiles.swings,
-//   SelectableTiles.trampolin,
-//   SelectableTiles.slide,
-//   SelectableTiles.sandbox,
-//   SelectableTiles.house,
-//   SelectableTiles.boulders,
-//   SelectableTiles.seasaw,
-//   SelectableTiles.carousel
-// ]
 
 const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSelectedTies} : 
   {tileState?: TileState, onSelect : (t: TileType | undefined) => void, numberOfSelectedTiles: number, maximumSelectedTies: number}) : React.ReactElement {
@@ -72,7 +58,9 @@ const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSe
             { renderTileLink(treeIcon, SelectableTiles.tree, SelectableTiles.tree == type) }
           </ul>
           :
-          <p>Du hast schon {maximumSelectedTies} Elemente ausgewaehlt. Du kannst bereits plazierte Elemente ändern oder sie löschen um neue zu plazieren.</p>
+          <p>Du hast schon {maximumSelectedTies} Elemente ausgewaehlt. Klicke ein bereits plaziertes Element an um es zu aendern oder zu loeschen.
+            <span className="image"><img src={emptyIcon}/></span>
+          </p>
         }
       </div>
     </div>

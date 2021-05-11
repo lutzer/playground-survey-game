@@ -14,74 +14,6 @@
     height: 100%;
   }
 
-  .loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background-image: url("./../assets/images/background.jpg");
-    background-size: cover;
-    padding: $standard-spacing;
-
-    .content {
-      @include content;
-    }
-
-    .start-button {
-      text-align: center;
-      padding: 30px;
-      font-weight: bold;
-      font-size: 110%;
-      
-      button {
-        width: 100px;
-      }
-    }
-
-    .spinner {
-      color: $accent-color;
-      font-size: 10px;
-      margin: 100px auto;
-      width: 1em;
-      height: 1em;
-      border-radius: 50%;
-      position: relative;
-      text-indent: -9999em;
-      animation: load4 1.3s infinite linear;
-      transform: translateZ(0);
-    }
-
-    @keyframes load4 {
-      0%,
-      100% {
-        box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
-      }
-      12.5% {
-        box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
-      }
-      25% {
-        box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
-      }
-      37.5% {
-        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
-      }
-      50% {
-        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
-      }
-      62.5% {
-        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
-      }
-      75% {
-        box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
-      }
-      87.5% {
-        box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
-      }
-    }
-   
-  }
-
   .top-buttons {
     position: fixed;
     top: 0;
@@ -128,11 +60,16 @@
   
       .avatar-icon {
         border-radius: 50%;
-        height: 60px;
-        width: 60px;
+        height: 90px;
+        width: 90px;
         display: inline-block;
-        background: white;
+        background: transparent;
         margin: 10px 5px;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
       }
     }
 
