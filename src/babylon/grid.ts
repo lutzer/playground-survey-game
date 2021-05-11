@@ -37,7 +37,7 @@ const createGrid = function(sizeX: number, sizeY = 0) : Grid {
   }
 
   // create trees
-  _.range(8).forEach(() => {
+  _.range(16).forEach(() => {
     const x = Math.floor(Math.random()*sizeX)
     const y = Math.floor(Math.random()*sizeY)
     createTree(y+x*sizeY, cells)
@@ -49,7 +49,7 @@ const createGrid = function(sizeX: number, sizeY = 0) : Grid {
 
   // create alley
   for (const i of _.range(sizeX)) {
-    cells[0+i*sizeX].fixedTile = Math.random() > 0.5 ? FixedTiles.alley1 : FixedTiles.alley2
+    cells[0+i*sizeX].fixedTile = _.sample([FixedTiles.alley1, FixedTiles.alley2, FixedTiles.alley3]) || null
     cells[0+i*sizeX].rotation = Math.random() > 0.5 ? 0 : Math.PI
   }
 

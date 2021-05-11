@@ -13,6 +13,7 @@ import seasawIcon from './../assets/images/icon_tile_seasaw.png'
 import swingsIcon from './../assets/images/icon_tile_swings.png'
 import slideIcon from './../assets/images/icon_tile_slide.png'
 import treeIcon from './../assets/images/icon_tile_tree.png'
+import emptyIcon from './../assets/images/icon_tile_empty.png'
 
 
 
@@ -59,7 +60,7 @@ const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSe
         <p className="number-selected">Elemente ausgewählt: {numberOfSelectedTiles} von {maximumSelectedTies}</p>
         { canSelectedNewTile ?
           <ul>
-            <li className={type == SelectableTiles.grass ? 'selected' : ''} onClick={() => onClickedHandler(SelectableTiles.grass)} key="grass">{SelectableTiles.grass}</li>
+            { renderTileLink(emptyIcon, SelectableTiles.grass, SelectableTiles.grass == type) }
             { renderTileLink(trampolinIcon, SelectableTiles.trampolin, SelectableTiles.trampolin == type) }
             { renderTileLink(bouldersIcon, SelectableTiles.boulders, SelectableTiles.boulders == type) }
             { renderTileLink(houseIcon, SelectableTiles.house, SelectableTiles.house == type) }

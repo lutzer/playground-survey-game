@@ -14,7 +14,9 @@ enum SelectableTiles {
   boulders = 'boulders',
   swings = 'swings',
   seasaw = 'seasaw',
-  carousel = 'carousel'
+  carousel = 'carousel',
+  playhut = 'playhut',
+  junglegym = 'junglegym'
 }
 
 //tiles for plansche
@@ -25,6 +27,7 @@ enum FixedTiles {
   lighttower = 'lighttower',
   alley1 = 'alley1',
   alley2 = 'alley2',
+  alley3 = 'alley2',
   trees1 = 'trees1',
   trees2 = 'trees2'
 }
@@ -57,6 +60,8 @@ const loadAssets = async function(scene : Scene, playGroundType: PlayGroundType)
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', SelectableTiles.boulders, 'assets/meshes/' ,'tile_boulders.min.gltf')),
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', SelectableTiles.seasaw, 'assets/meshes/' ,'tile_seasaw.min.gltf')),
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', SelectableTiles.carousel, 'assets/meshes/' ,'tile_carousel.min.gltf')),
+    onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', SelectableTiles.playhut, 'assets/meshes/' ,'tile_playhut.min.gltf')),
+    onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', SelectableTiles.junglegym, 'assets/meshes/' ,'tile_junglegym.min.gltf')),
 
     // Load pool or river tiles
     playGroundType == 'pool' ? 
@@ -67,6 +72,7 @@ const loadAssets = async function(scene : Scene, playGroundType: PlayGroundType)
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.lighttower, 'assets/meshes/fixed/' ,'tile_lighttower.min.gltf')),
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.alley1, 'assets/meshes/fixed/' ,'tile_alley1.min.gltf')),
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.alley2, 'assets/meshes/fixed/' ,'tile_alley2.min.gltf')),
+    onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.alley3, 'assets/meshes/fixed/' ,'tile_alley3.min.gltf')),
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.trees1, 'assets/meshes/fixed/' ,'tile_trees1.min.gltf')),
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', FixedTiles.trees2, 'assets/meshes/fixed/' ,'tile_trees2.min.gltf')),
 

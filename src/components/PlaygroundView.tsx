@@ -12,6 +12,7 @@ import rotateRightIcon from '../assets/images/rotate_right.png'
 import rotateLeftIcon from '../assets/images/rotate_left.png'
 
 import { TileType } from '../babylon/assets'
+import { LoadingView } from './LoadingView'
 
 enum LoadedState {
   LOADING,
@@ -76,6 +77,11 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
 
   },[finished, playground])
 
+  useEffect(() => {
+    if (playground && loaded == LoadedState.STARTED)
+      playground.enable = true
+  }, [loaded])
+
   //tile type selection handler
   function onSelectTyleType(type: TileType | undefined) {
     if (type)
@@ -114,22 +120,9 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
     <div className='playground-view'>
       <canvas ref={canvasRef} id='renderCanvas' touch-action='none'></canvas>
       { loaded != LoadedState.STARTED ?
-        <div className="loading-screen">
-          <div className="content">
-            <h1>Was soll auf deinem Spielplatz sein?</h1>
-            <p className="block">
-            Du darfst 6 Sachen aussuchen, die du gerne auf einem Spielplatz haben willst und uns so zeigen, was dir wichtig ist.
-            </p>
-            { loaded != LoadedState.LOADED ? 
-              <div>
-                <div className="spinner"></div> 
-                <p className="center">Lade Spielplatz ...</p>
-              </div>
-              : 
-              <div className="start-button"><button className="glow" onClick={() => setLoaded(LoadedState.STARTED)}>Start</button></div>
-            }
-          </div>
-        </div>
+        <LoadingView 
+          loaded={loaded != LoadedState.LOADED} 
+          onStartClicked={() => setLoaded(LoadedState.STARTED)} />
         :
         <div>
           <div className="top-buttons">

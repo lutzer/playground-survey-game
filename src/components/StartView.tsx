@@ -15,7 +15,7 @@ const StartView = function({onStart} : { onStart : () => void}) : React.ReactEle
 
   return (
     <div className="start-view">
-      <h1>Willkommen auf dem Spielplatz Ipsum</h1>
+      <h1>Willkommen auf dem Spielplatz xxx</h1>
       <div className="image"><img src={towerImg}/></div>
       <p className="block">
         Wir wollen in eurer Nähe einen neuen Spielplatz bauen. Und zwar nahe beim Tempelhofer Feld auf dem alten Friedhof neben dem Park, auf einer großen Wiese zwischen den Bäumen. Es soll viel Wasser zum Planschen geben und lustige Sachen zum Spielen.<br/>

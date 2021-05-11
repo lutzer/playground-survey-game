@@ -41,6 +41,7 @@ class Playground {
   stateMachine: Statemachine
 
   enablePointerEvents: boolean
+  enable : boolean
 
   $disposeObservable : Subject<void>
 
@@ -51,6 +52,9 @@ class Playground {
     this.stateMachine = stateMachine
     this.settings = settings
     this.enablePointerEvents = true
+
+    // start disabled
+    this.enable = false
 
     this.$disposeObservable = new Subject()
 
@@ -150,7 +154,8 @@ class Playground {
 
     // start render loop
     this.engine.runRenderLoop(() => {
-      this.scene.render()
+      if (this.enable)
+        this.scene.render()
     })
 
     // cleanup when scene is disposes

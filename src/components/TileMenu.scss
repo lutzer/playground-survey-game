@@ -1,3 +1,5 @@
+@use "sass:color";
+
 @import "../_vars.scss";
 
 .TileMenu {
@@ -53,15 +55,15 @@
 
     li {
       // flex-basis: 20%;
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       display: block;
       // background-color: $icon-bg-color;
       color: white;
       margin: 5px;
       border-radius: 50%;
       overflow: hidden;
-      padding: 5px;
+      margin: 2px -5px;
 
       img {
         width: 100%;
@@ -69,7 +71,7 @@
       }
 
       &.selected {
-        background-color: #22a2bf;
+        background-color: color.adjust($accent-color-bright, $alpha: 0.1);
       }
     }
   }
