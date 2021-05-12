@@ -27,6 +27,13 @@ function createLighttower(index : number, cells: GridCell[]) : void {
   }
 }
 
+function createAlley(index: number, cells: GridCell[]) : void {
+  cells[index] = {...cells[index],
+    fixedTile: _.sample([FixedTiles.alley1, FixedTiles.alley2]) || null,
+    rotation: Math.random() > 0.5 ? 0 : Math.PI
+  }
+}
+
 const createGrid = function(sizeX: number, sizeY = 0) : Grid {
   sizeY = sizeY == 0 ? sizeX : sizeY
   const cells : GridCell[] = []
@@ -37,11 +44,10 @@ const createGrid = function(sizeX: number, sizeY = 0) : Grid {
   }
 
   // create trees
-  _.range(5).forEach(() => {
-    const x = Math.floor(Math.random()*sizeX)
-    const y = Math.floor(Math.random()*sizeY)
-    createTree(y+x*sizeY, cells)
-  })
+  createTree(7+6*sizeY, cells)
+  createTree(7+5*sizeY, cells)
+  createTree(7+1*sizeY, cells)
+  createTree(6+0*sizeY, cells)
 
   // add light towers
   createLighttower(7 + 7*sizeX, cells)
@@ -49,8 +55,7 @@ const createGrid = function(sizeX: number, sizeY = 0) : Grid {
 
   // create alley
   for (const i of _.range(sizeX)) {
-    cells[0+i*sizeX].fixedTile = _.sample([FixedTiles.alley1, FixedTiles.alley2, FixedTiles.alley3]) || null
-    cells[0+i*sizeX].rotation = Math.random() > 0.5 ? 0 : Math.PI
+    createAlley(0+i*sizeX, cells)
   }
 
   

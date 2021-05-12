@@ -11,18 +11,19 @@ import backIcon from '../assets/images/arrow_back.png'
 
 import './AvatarView.scss'
 import { useLocation } from 'react-router-dom'
+import { shuffle } from 'shuffle-seed'
 
 const descriptions = new Map<Avatar,{title: string, text: string, img: string}>()
 
 descriptions.set('explorer', {
-  title: 'Entdecker / in',
-  text: 'Entdecker/in sind neugierig und möchten gerne herumlaufen und alles erkunden.',
+  title: 'Entdecker / innen',
+  text: 'Entdecker/innen sind neugierig und möchten gerne herumlaufen und alles erkunden.',
   img: explorerImage
 })
 
 descriptions.set('builder', {
-  title: 'Denker / in',
-  text: 'Denker/in bauen gerne Dinge. Sie gehen den Sachen auf den Grund.',
+  title: 'Denker / innen',
+  text: 'Denker/innen bauen gerne Dinge. Sie gehen den Sachen auf den Grund.',
   img: builderImage
 })
 
@@ -32,10 +33,12 @@ descriptions.set('social', {
   img: kidsImage
 })
 
-const AvatarView = function({ onSelect } : { onSelect: (avatar: Avatar) => void}) : React.ReactElement {
+const AvatarView = function({ onSelect, seed } : { onSelect: (avatar: Avatar) => void, seed: number }) : React.ReactElement {
   const history = useHistory()
 
   const [selected, setSelected] = useState<Avatar|undefined>()
+
+  const avatars = shuffle<Avatar>(['explorer','social','builder'], seed)
 
   const { pathname } = useLocation()
   useEffect(() => {
@@ -57,25 +60,22 @@ const AvatarView = function({ onSelect } : { onSelect: (avatar: Avatar) => void}
     setSelected(undefined)
   }
 
+  function renderAvatarImage(avatar: Avatar) {
+    const img = avatar == 'explorer' ? explorerImage : avatar == 'builder' ? builderImage : kidsImage
+    return(
+      <div key={avatar} className="avatar" onClick={() => onAvatarSelect(avatar)}>
+        <div className="icon">
+          <img src={img}></img>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="avatar-view">
       <h1>Wähle deinen Avatar</h1>
       <div className="avatar-list">
-        <div className="avatar" onClick={() => onAvatarSelect('explorer')}>
-          <div className="icon">
-            <img src={explorerImage}></img>
-          </div>
-        </div>
-        <div className="avatar" onClick={() => onAvatarSelect('builder')}>
-          <div className="icon">
-            <img src={builderImage}></img>
-          </div>
-        </div>
-        <div className="avatar" onClick={() => onAvatarSelect('social')}>
-          <div className="icon">
-            <img src={kidsImage}></img>
-          </div>
-        </div>
+        { avatars.map((a) => renderAvatarImage(a)) }
       </div>
       { selected && 
         <div className="avatar-select-dialog">

@@ -43,6 +43,8 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
   const [loaded, setLoaded] = useState(LoadedState.LOADING)
   const [finished, setFinished] = useState(false)
 
+  const [seed, setSeed] = useState(0)
+
   const [selectedTile, setSelectedTile] = useState<number>()
   const [numberOfSelectedTiles, setNumberOfSelectedTiles] = useState(0)
 
@@ -81,6 +83,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
       setSelectedTile(undefined)
       setSelectedTile(state.selectedTile)
       setNumberOfSelectedTiles(calculateNumberOfSelectedTiles(state))
+      setSeed(state.seed)
     })
     return () => sub.unsubscribe()
   },[])
@@ -167,6 +170,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
               numberOfSelectedTiles={numberOfSelectedTiles}
               maximumSelectedTies={settings.selectableTiles}
               onSelect={onSelectTyleType} 
+              seed={seed}
             /> 
           }
         </div>

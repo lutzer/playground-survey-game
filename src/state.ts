@@ -14,6 +14,7 @@ type State = {
   playgroundType: PlayGroundType
   missing? : string
   version: string
+  seed: number
 }
 
 enum Actions {
@@ -53,7 +54,8 @@ class Statemachine extends Subject<State> {
         }
       }),
       playgroundType: 'pool',
-      version: this._settings.version
+      version: this._settings.version,
+      seed: Math.floor(Math.random() * 1000)
     }
     this._state = this._initialState
     // load state from storage
@@ -61,8 +63,10 @@ class Statemachine extends Subject<State> {
     this.next(this.state)
   }
 
-  reset() {
+  reset() : void {
     this._state = this._initialState
+    this.save()
+    this.next(this.state)
   }
 
   load() : void {

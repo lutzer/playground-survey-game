@@ -1,3 +1,5 @@
+@use "sass:color";
+
 @import "../_vars.scss";
 
 .loading-view {
@@ -17,7 +19,7 @@
     padding: $standard-spacing;
     padding-bottom: 60px;
     margin-left: 20px;
-    background: $accent-color;
+    background-color: color.adjust($accent-color, $alpha: -0.2);
     border-radius: $border-radius;
     font-size: 110%;
     // height: 120px;
@@ -28,6 +30,17 @@
       bottom:10px;
       right: 10px;
       background-color: $accent-color-bright;
+    }
+
+    .image {
+      display: block;
+      text-align: center;
+      margin-bottom :-60px;
+
+      img {
+        height: 120px;
+        margin-top: -30px;
+      }
     }
 
     .floating-image {

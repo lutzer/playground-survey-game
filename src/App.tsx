@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 
 import { PlaygroundSettings } from './babylon/playground'
-import { Actions, Statemachine } from './state'
+import { Actions, State, Statemachine } from './state'
 
 import './App.scss'
 import { AvatarView } from './components/AvatarView'
@@ -27,35 +27,53 @@ const SETTINGS : PlaygroundSettings = {
 
 const App = function() : React.ReactElement {
   const [stateMachine, setStateMachine] = useState<Statemachine>()
+  const [currentState, setCurrentState] = useState<State>()
 
   // setup statemachine and load state
   useEffect(() => {
     setStateMachine(new Statemachine(SETTINGS))
   },[])
 
+  // update state
+  useEffect(() => {
+    setCurrentState(stateMachine?.state)
+    const subscription = stateMachine?.subscribe((state) => {
+      setCurrentState(state)
+    })
+    return () => {
+      subscription?.unsubscribe()
+    }
+  }, [stateMachine])
+
+  function onSubmit() {
+    console.log(stateMachine?.state)
+    stateMachine?.reset()
+  }
+
+
   return (
     <div className='App'>
       <Router>
         <Switch>
           <Route path="/avatar">
-            <AvatarView onSelect={(a) => stateMachine?.trigger(Actions.setAvatar, {avatar: a})}/>
+            <AvatarView onSelect={(a) => stateMachine?.trigger(Actions.setAvatar, {avatar: a})} seed={currentState?.seed || 0}/>
           </Route>
           <Route path="/waterbody">
-            <WaterbodyView onSelect={(t) => stateMachine?.trigger(Actions.setPlaygroundType, {type: t})}/>
+            <WaterbodyView onSelect={(t) => stateMachine?.trigger(Actions.setPlaygroundType, {type: t})} seed={currentState?.seed || 0}/>
           </Route>
           <Route path="/playground">
             { stateMachine && <PlaygroundView stateMachine={stateMachine} settings={SETTINGS}/> }
           </Route>
           <Route path="/missing-tile">
             <MissingTileView 
-              initial={stateMachine?.state.missing || ''}
-              onSubmit={(t) => stateMachine?.trigger(Actions.setMissingText, { text: t})}/>
+              initial={currentState?.missing || ''}
+              onSubmit={(t) => { stateMachine?.trigger(Actions.setMissingText, { text: t}); onSubmit() }}/>
           </Route>
           <Route path="/finished">
             <FinishedView/>
           </Route>
           <Route path="/">
-            <StartView onStart={() => stateMachine?.reset()}/>
+            <StartView/>
           </Route>
         </Switch>
       </Router>

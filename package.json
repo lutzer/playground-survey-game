@@ -20,6 +20,7 @@
     "react-scripts": "4.0.3",
     "rxjs": "^6.6.7",
     "sass": "^1.32.8",
+    "shuffle-seed": "^1.1.6",
     "simplex-noise": "^2.4.0",
     "typescript": "^4.2.3"
   },
@@ -55,6 +56,7 @@
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
     "@types/react-router-dom": "^5.1.7",
+    "@types/shuffle-seed": "^1.1.0",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
     "eslint": "^7.22.0",

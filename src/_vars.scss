@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $standard-spacing: 15px;
 $big-spacing: 20px;
 $border-radius: 5px;
@@ -47,21 +49,10 @@ $icon-bg-color: #ffffff5e;
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: $border-radius;
-    background-color: rgba(255, 217, 0, 0.8);
+    background-color: $accent-color;
     width: 80%;
-    max-width: 400px;
+    max-width: 500px;
     padding: $standard-spacing;
-
-    button.round {
-        background: none;
-        height: 60px;
-        width: 60px;
-        border-radius: 50%;
-
-        img {
-            height: 100%;
-        }
-    }
 }
 
 @mixin overlay {

@@ -2,21 +2,43 @@
 
 ## Meeting 22.4.2021
 
-- [ ] remove trees on the playground elements
-- [ ] plansche & river remain
+- [x] remove trees on the playground elements
+- [x] plansche & river remain
 - [x] restrict tiles to 6 to choose from
 - [ ] put tempelhof as horizon
-- [ ] put tree avenue
+- [x] put tree avenue
 - [x] remove day night cycle
 - [x] happy rainbow background colors
 
 ## Meeting 30.4.2021
 
-- [ ] make the flower girl more introverted, sitting down, maybe sandcastles?
+- [x] make the flower girl more introverted, sitting down, maybe sandcastles?
 - [ ] change hand guesture of the two kids 
-- [ ] write invoice
+- [x] write invoice
 - [ ] setup server and create test setup
-- [ ] talk with mila & linda for testing
-- [ ] put landing light element
-- [ ] trees are placed fixed and only decorative
-- [ ] have elements that are more natural and playground elements with less nature around them
+- [x] talk with mila & linda for testing
+- [x] put landing light element
+- [x] trees are placed fixed and only decorative
+- [x] have elements that are more natural and playground elements with less nature around them
+
+## Meeting 11.5.2021
+
+- [x] delete missing tile form data on restart
+- [x] add play again button
+- [x] randomize avatars and waterbodie selection
+- [ ] randomize tile menu icons
+- [ ] include links and description to inititative on startscreen
+- [ ] last screen includes contacts
+- [ ] put forest tiles in the corners / between the ligh towers
+- [ ] fix iphone bug instantially selected
+- [ ] fix iphone context menu bug
+- [ ] fix iphone blauer select balken, kopieren, ...
+- [ ] fix text erros umlaute
+- [ ] animate trampolin better
+- [ ] add map background
+- [ ] make the element icons bigger 
+- [ ] make the selection (selected tile) highlighted
+- [ ] trampoline animation
+- [ ] sky box
+- [ ] add playhut & swing & limbing thing tile
+- [ ] add data collection server

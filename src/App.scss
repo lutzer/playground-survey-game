@@ -52,6 +52,7 @@ textarea {
 }
 
 .center {
+  display: block;
   text-align: center;
 }
 
@@ -96,5 +97,16 @@ button {
   img.right {
     height: 16px;
     padding-left: 3px;
+  }
+
+  &.round {
+    background: none;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+
+    img {
+        height: 100%;
+    }
   }
 }
