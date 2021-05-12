@@ -5,6 +5,7 @@ import _ from 'lodash'
 import { Subject } from 'rxjs'
 import { map, takeUntil, withLatestFrom } from 'rxjs/operators'
 import { SelectableTiles } from './assets'
+import { Smoke } from './effects'
 import { Grid } from './grid'
 import { TextureArray, Tile, TileMeshArray, TileState } from './tiles'
 
@@ -29,6 +30,7 @@ class TileCursor {
     this._selectMarker.isPickable = false
     this._selectMarker.translate(new Vector3(0,1,0), 0.73)
     this._selectMarker.bakeCurrentTransformIntoVertices()
+
   }
 
   set enable(enable : boolean) {

@@ -125,7 +125,7 @@ class Playground {
     
 
     createSkyBox(this.scene)
-    // showGroundPlane(40, this.scene)
+    // showGroundPlane(45, this.scene)
     // createSkyDome(this.scene)
 
     const fpsText = setupFpsDisplay()
@@ -148,7 +148,7 @@ class Playground {
       
       // animate tile movement
       tileManager.tiles.forEach((tile,i) => {
-        tile.position.y = simplex.noise2D(i,time * 0.0004) * 0.02
+        tile.position.y = simplex.noise2D(i,time * 0.0001) * 0.05
       })
     }
 

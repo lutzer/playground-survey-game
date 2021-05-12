@@ -4,7 +4,7 @@ import { Mesh } from '@babylonjs/core/Meshes/mesh'
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode'
 import { Scene } from '@babylonjs/core/scene'
 import { FixedTiles, SelectableTiles, TextureArray, TileMeshArray, TileType } from './assets'
-import { Fountain, PlaygroundEffect, WaterLight } from './effects'
+import { Fountain, PlaygroundEffect, Smoke, WaterLight } from './effects'
 
 type TileState = {
   type: TileType,

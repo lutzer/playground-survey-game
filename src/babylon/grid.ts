@@ -87,7 +87,7 @@ const createRiverGrid = function(sizeX: number, sizeY = 0) : Grid {
 const createPlanscheGrid = function(sizeX: number, sizeY = 0) : Grid {
   const grid = createGrid(sizeX, sizeY)
   const ox = Math.floor(sizeX/2) - 2
-  const oy = Math.floor(sizeY || sizeX /2) - 1
+  const oy = Math.floor(sizeY || sizeX /2) - 2
   grid.cells[(ox + 0) * sizeX + oy + 0].fixedTile = FixedTiles.empty
   grid.cells[(ox + 0) * sizeX + oy + 1].fixedTile = FixedTiles.empty
   grid.cells[(ox + 0) * sizeX + oy + 2].fixedTile = FixedTiles.empty

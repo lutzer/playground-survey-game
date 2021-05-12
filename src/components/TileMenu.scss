@@ -91,14 +91,15 @@
 
       .selected {
         position: absolute;
-        top: 55%;
+        top: 57%;
         left: 50%;
         transform: translate(-50%,-50%);
         width: 90%;
-        height: 90%;
+        height: 78%;
         border-radius: 50%;
         background-color: color.adjust($accent-color-bright, $alpha: -0.2);
         z-index: 1;
+        filter: blur(5px);
       }
     }
   }
