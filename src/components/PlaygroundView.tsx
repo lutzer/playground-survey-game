@@ -56,10 +56,13 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
   useEffect(() => {
     if (!canvasRef || canvasRef.current == null)
       return
+    // disable context menu
+    canvasRef.current.oncontextmenu = function(e) { e.preventDefault(); e.stopPropagation() }
 
     const playground = new Playground({ canvas: canvasRef.current, settings: settings, stateMachine: stateMachine })
     playground.init(stateMachine.state.playgroundType, () => setLoaded(LoadedState.LOADED))
     setPlayground(playground)
+    
     return () => {
       playground.dispose()
       setPlayground(undefined)
@@ -79,7 +82,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
 
   // subscribe to state changes
   useEffect(() => {
-    const sub = merge(of(stateMachine.state),stateMachine).pipe(delay(50)).subscribe( (state) => {
+    const sub = merge(of(stateMachine.state),stateMachine).pipe(delay(150)).subscribe( (state) => {
       setSelectedTile(undefined)
       setSelectedTile(state.selectedTile)
       setNumberOfSelectedTiles(calculateNumberOfSelectedTiles(state))

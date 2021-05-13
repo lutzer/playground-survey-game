@@ -75,6 +75,7 @@ class TileManager extends EventEmitter {
     this._cursor = new TileCursor(this._selectLayer)
     
     this.setupPointerObservables()
+
   }
 
   dispose() : void {
@@ -152,9 +153,10 @@ class TileManager extends EventEmitter {
   handleTileChange(currState: TileState[], prevState? : TileState[]) : void {
     const updatedTiles = prevState ? _.differenceWith(prevState, currState, _.isEqual) : currState
     updatedTiles.forEach((tileState) => {
-      if (this.tiles[tileState.index].selectable) {
-        this.tiles[tileState.index].type = tileState.type
-        this.tiles[tileState.index].rotation = tileState.rotation
+      const tile = this.tiles[tileState.index]
+      if (tile.selectable) {
+        tile.type = tileState.type
+        tile.rotation = tileState.rotation
       }
     })
   }

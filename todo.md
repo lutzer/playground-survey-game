@@ -26,19 +26,19 @@
 - [x] delete missing tile form data on restart
 - [x] add play again button
 - [x] randomize avatars and waterbodie selection
-- [ ] randomize tile menu icons
+- [x] randomize tile menu icons
 - [ ] include links and description to inititative on startscreen
 - [ ] last screen includes contacts
-- [ ] put forest tiles in the corners / between the ligh towers
-- [ ] fix iphone bug instantially selected
+- [x] put forest tiles in the corners / between the ligh towers
+- [?] fix iphone bug instantially selected
 - [ ] fix iphone context menu bug
 - [ ] fix iphone blauer select balken, kopieren, ...
-- [ ] fix text erros umlaute
+- [x] fix text erros umlaute
 - [ ] animate trampolin better
 - [ ] add map background
-- [ ] make the element icons bigger 
-- [ ] make the selection (selected tile) highlighted
+- [x] make the element icons bigger 
+- [?] make the selection (selected tile) highlighted
 - [ ] trampoline animation
 - [ ] sky box
-- [ ] add playhut & swing & limbing thing tile
+- [x] add playhut & swing & limbing thing tile
 - [ ] add data collection server

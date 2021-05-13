@@ -7,20 +7,14 @@ interface PlaygroundEffect {
 
 class Smoke implements PlaygroundEffect {
 
-  particleSystem : BaseParticleSystem
+  particleSystem : ParticleSystem | undefined
 
-  constructor(texture: Texture, scene: Scene) {
-    
-    const isGpuSystem = GPUParticleSystem.IsSupported
+  constructor(name: string, texture: Texture, scene: Scene) {
+    if (!GPUParticleSystem.IsSupported)
+      return
 
-    if (isGpuSystem) {
-      const gpuSystem = new GPUParticleSystem('particles', { capacity: 1000 }, scene)
-      gpuSystem.activeParticleCount = 1000
-      this.particleSystem = gpuSystem
-    } else {
-      const cpuSystem = new ParticleSystem('fountain', 300, scene)
-      this.particleSystem = cpuSystem
-    }
+    this.particleSystem = new ParticleSystem(name + Math.random(), 300, scene)
+  
 
     this.particleSystem.particleTexture = texture
 
@@ -30,56 +24,36 @@ class Smoke implements PlaygroundEffect {
     this.particleSystem.color2 = new Color4(0.0, 0.0, 0.0, 1.0)
     this.particleSystem.colorDead = new Color4(1, 1, 1, 0.0)
 
-    this.particleSystem.minSize = 0.01
-    this.particleSystem.maxSize = 0.1
+    this.particleSystem.minSize = 0.05
+    this.particleSystem.maxSize = 0.3
 
     // Life time of each particle (random between...
     this.particleSystem.minLifeTime = 0.1
-    this.particleSystem.maxLifeTime = 1.5
+    this.particleSystem.maxLifeTime = 0.5
 
     // Emission rate
-    // this.particleSystem.emitRate = isGpuSystem ? 300 : 100
+    this.particleSystem.emitRate = 1000
 
     // Speed
     this.particleSystem.minEmitPower = 0.5
-    this.particleSystem.maxEmitPower = 5
-    this.particleSystem.updateSpeed = 0.03
+    this.particleSystem.maxEmitPower = 3
+    this.particleSystem.updateSpeed = 0.01
 
 
-    console.log('created')
+    this.particleSystem.targetStopDuration = 0.1
+    // this.particleSystem.disposeOnStop = true
 
   }
 
   dispose() : void {
-    if (this.particleSystem instanceof ParticleSystem || this.particleSystem instanceof GPUParticleSystem)
-      this.particleSystem.dispose()
-  }
-
-  reset() : void {
-    if (this.particleSystem instanceof ParticleSystem || this.particleSystem instanceof GPUParticleSystem)
-      this.particleSystem.reset()
-  }
-
-  start() : void {
-    if (this.particleSystem instanceof ParticleSystem || this.particleSystem instanceof GPUParticleSystem)
-      this.particleSystem.start()
-    console.log('started')
-  }
-
-  stop() : void {
-    if (this.particleSystem instanceof ParticleSystem || this.particleSystem instanceof GPUParticleSystem)
-      this.particleSystem.stop()
+    this.particleSystem?.dispose()
   }
 
   run(positon: Vector3) : void {
-    if (this.particleSystem instanceof ParticleSystem || this.particleSystem instanceof GPUParticleSystem) {
+    if (this.particleSystem) {
       this.particleSystem.emitter = positon
-      this.particleSystem.emitRate = 100
-      this.start()
-      setTimeout(() => {
-        console.log('stop')
-        this.particleSystem.emitRate = 0
-      },1000)
+      this.particleSystem.reset()
+      this.particleSystem.start()
     }
   }
 

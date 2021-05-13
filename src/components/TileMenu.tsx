@@ -75,7 +75,7 @@ const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSe
               { shuffledTiles.map((t) => renderTileLink(t.icon, t.type, t.type == type))}
             </ul>
             :
-            <p>Du hast schon {maximumSelectedTies} Elemente ausgewaehlt. Klicke ein bereits plaziertes Element an um es zu aendern oder zu loeschen.
+            <p>Du hast schon {maximumSelectedTies} Elemente ausgewählt. Klicke ein bereits plaziertes Element an um es zu ändern oder zu löschen.
               <span className="image"><img src={emptyIcon}/></span>
             </p>
           }
