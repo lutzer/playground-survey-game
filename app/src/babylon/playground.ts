@@ -85,6 +85,9 @@ class Playground {
     // register select events
     tileManager.on('tile-selected', (id) => this.stateMachine.trigger(Actions.selectTile, { id: id }) )
 
+    // register tile setup events
+    tileManager.on('tile-setup', (args) => { this.stateMachine.trigger(Actions.setupTile, args)  })
+
     // sync change in tiles states with meshes
     this.stateMachine
       .pipe(pairwise(), takeUntil(this.$disposeObservable))

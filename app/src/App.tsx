@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
+import { HashRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 
 import { PlaygroundSettings } from './babylon/playground'
 import { Actions, State, Statemachine } from './state'
@@ -12,8 +12,8 @@ import { MissingTileView } from './components/MissingTileView'
 import { FinishedView } from './components/FinishedView'
 import { StartView } from './components/StartView'
 
+const API_ADDRESS = '/api/results/'
 const SIZE = 8
-
 const SETTINGS : PlaygroundSettings = {
   gridSize: SIZE,
   width: SIZE*0.9,
@@ -45,9 +45,19 @@ const App = function() : React.ReactElement {
     }
   }, [stateMachine])
 
-  function onSubmit() {
-    console.log(stateMachine?.state)
-    stateMachine?.reset()
+  async function onSubmit() {
+    fetch(API_ADDRESS, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(stateMachine?.state)
+    }).catch( (err) => {
+      console.error(err)
+    }).then(() => {
+      stateMachine?.reset()
+    })
   }
 
 

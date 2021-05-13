@@ -47,6 +47,10 @@ class Tile {
     this._animation?.dispose()
   }
 
+  get type() : TileType {
+    return this._type || FixedTiles.empty
+  }
+
   set type(type : TileType) {
     if (this._type == type)
       return
@@ -91,8 +95,12 @@ class Tile {
     this.node.setEnabled(true)
   }
 
+  get rotation() : number {
+    return this.node.rotation.y 
+  }
+
   set rotation(rotation: number) {
-    this.node?.rotate(new Vector3(0,1,0), rotation)
+    this.node.rotate(new Vector3(0,1,0), rotation)
   }
 
   set position(position: Vector3) {

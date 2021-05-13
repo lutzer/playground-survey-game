@@ -125,11 +125,10 @@ class TileManager extends EventEmitter {
       const tile = new Tile(`tile${i}`, this._assets.meshes, this._assets.textures, this.scene)
       
       tile.position = new Vector3(position[0] * width - width/2,  0, position[1] * height - height/2)
-      
       tile.type = fixedTile || SelectableTiles.grass
-      
       tile.rotation = rotation || 0
       tile.show()
+      this.emit('tile-setup', { id: i, type: tile.type, rotation: tile.rotation})
       return tile
     })
 
@@ -154,7 +153,7 @@ class TileManager extends EventEmitter {
     const updatedTiles = prevState ? _.differenceWith(prevState, currState, _.isEqual) : currState
     updatedTiles.forEach((tileState) => {
       const tile = this.tiles[tileState.index]
-      if (tile.selectable) {
+      if (tile && tile.selectable) {
         tile.type = tileState.type
         tile.rotation = tileState.rotation
       }

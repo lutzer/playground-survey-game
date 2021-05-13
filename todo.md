@@ -41,4 +41,4 @@
 - [ ] trampoline animation
 - [ ] sky box
 - [x] add playhut & swing & limbing thing tile
-- [ ] add data collection server
+- [x] add data collection server

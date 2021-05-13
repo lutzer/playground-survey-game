@@ -22,7 +22,8 @@ enum Actions {
   setTileType,
   setAvatar,
   setPlaygroundType,
-  setMissingText
+  setMissingText,
+  setupTile
 }
 
 function  calculateNumberOfSelectedTiles(state: State) : number {
@@ -103,6 +104,12 @@ class Statemachine extends Subject<State> {
       this._state.playgroundType = args.type
     } else if (action == Actions.setMissingText && args.text ) {
       this._state.missing = args.text
+    } else if (action == Actions.setupTile && 
+        args.id != undefined && args.type && args.rotation != undefined) {
+      this._state.tiles[args.id].type = args.type
+      this._state.tiles[args.id].rotation = args.rotation
+    } else {
+      console.warn('Statemachine: could not find any action handler')
     }
     this.next(this.state)
     this.save()
