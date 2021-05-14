@@ -56,7 +56,7 @@ const showGroundPlane = function(size: number, scene : Scene, yOffset = 0) : voi
   const ground = MeshBuilder.CreateGround('ground', {width:size, height:size})
   const groundMaterial = new StandardMaterial('ground',scene)
   const texture = new Texture('assets/textures/ground.jpg', scene)
-  texture.uScale = texture.vScale = 5
+  texture.uScale = texture.vScale = 30
   groundMaterial.diffuseTexture = texture
   groundMaterial.specularColor = new Color3(0, 0, 0)
   ground.material = groundMaterial
