@@ -86,7 +86,7 @@ class Playground {
     tileManager.on('tile-selected', (id) => this.stateMachine.trigger(Actions.selectTile, { id: id }) )
 
     // register tile setup events
-    tileManager.on('tile-setup', (args) => { this.stateMachine.trigger(Actions.setupTile, args)  })
+    tileManager.on('tile-setup', (args) => { this.stateMachine.trigger(Actions.setupTile, args) })
 
     // sync change in tiles states with meshes
     this.stateMachine
@@ -127,8 +127,8 @@ class Playground {
     setupLights(this.scene)
     
 
-    createSkyBox(this.scene)
-    // showGroundPlane(45, this.scene)
+    //createSkyBox(this.scene)
+    showGroundPlane(45, this.scene)
     // createSkyDome(this.scene)
 
     const fpsText = setupFpsDisplay()
@@ -149,9 +149,10 @@ class Playground {
         lastUpdate = time
       }
       
-      // animate tile movement
+      //animate tile movement
       tileManager.tiles.forEach((tile,i) => {
-        tile.position.y = simplex.noise2D(i,time * 0.0001) * 0.05
+        if (!tile.isEntering)
+          tile.position.y = simplex.noise2D(i,time * 0.0001) * 0.05
       })
     }
 

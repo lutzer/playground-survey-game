@@ -1,13 +1,14 @@
-import { Mesh, Scene, MeshBuilder, Vector3, StandardMaterial, Color3, UtilityLayerRenderer, HemisphericLight, PointerEventTypes, PointerInfo } from '@babylonjs/core'
+import { Mesh, Animation, Scene, MeshBuilder, Vector3, StandardMaterial, Color3, UtilityLayerRenderer, HemisphericLight, PointerEventTypes, PointerInfo } from '@babylonjs/core'
+import { IAnimationKey } from '@babylonjs/core/Animations/animationKey'
 import { Engine } from '@babylonjs/core/Engines/engine'
 import EventEmitter from 'events'
 import _ from 'lodash'
 import { Subject } from 'rxjs'
 import { map, takeUntil, withLatestFrom } from 'rxjs/operators'
 import { SelectableTiles } from './assets'
-import { Smoke } from './effects'
 import { Grid } from './grid'
 import { TextureArray, Tile, TileMeshArray, TileState } from './tiles'
+import { easeInOut } from './utils'
 
 class TileCursor {
 
@@ -120,9 +121,15 @@ class TileManager extends EventEmitter {
   }
 
   setup(width: number, height: number) : void {
+    // create slide in animation
+    const ySlideAnimation : Animation = new Animation('enter-animation', 'position.y',10, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CONSTANT )
+    ySlideAnimation.setKeys(_.range(8).map<IAnimationKey>( (i) => { 
+      return { frame: i, value:  easeInOut(i/8) - 1 } 
+    }))
+
     // create tiles
     this.tiles = this.grid.cells.map(({position, fixedTile, rotation}, i) => {
-      const tile = new Tile(`tile${i}`, this._assets.meshes, this._assets.textures, this.scene)
+      const tile = new Tile(`tile${i}`, this._assets.meshes, this._assets.textures, this.scene, ySlideAnimation)
       
       tile.position = new Vector3(position[0] * width - width/2,  0, position[1] * height - height/2)
       tile.type = fixedTile || SelectableTiles.grass

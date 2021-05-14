@@ -143,7 +143,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
 
   return (
     <div className='playground-view'>
-      <canvas ref={canvasRef} id='renderCanvas' touch-action='none'></canvas>
+      <canvas ref={canvasRef} id='renderCanvas' touch-action='none' onSelectCapture={(e) => e.preventDefault()}></canvas>
       { loaded != LoadedState.STARTED ?
         <LoadingView 
           avatar={avatar}

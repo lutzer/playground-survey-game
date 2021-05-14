@@ -4,7 +4,9 @@ import { AdvancedDynamicTexture } from '@babylonjs/gui/2D/advancedDynamicTexture
 import { Control } from '@babylonjs/gui/2D/controls/control'
 import { StackPanel } from '@babylonjs/gui/2D/controls/stackPanel'
 import { TextBlock } from '@babylonjs/gui/2D/controls/textBlock'
+import { SkyMaterial } from '@babylonjs/materials'
 import { GradientMaterial } from '@babylonjs/materials/gradient/gradientMaterial'
+import { GridMaterial } from '@babylonjs/materials/grid/gridMaterial'
 
 const showAxis = function(size : number, scene : Scene) : void {
 
@@ -48,28 +50,47 @@ const showAxis = function(size : number, scene : Scene) : void {
   zChar.position = new Vector3(0, 0.05 * size, 0.9 * size)
 }
 
-const showGroundPlane = function(size: number, scene : Scene) : void {
+const showGroundPlane = function(size: number, scene : Scene, yOffset = 0) : void {
+  
+  //create ground
   const ground = MeshBuilder.CreateGround('ground', {width:size, height:size})
-  const material = new StandardMaterial('ground',scene)
-  // material.ambientColor = new Color3(77/255, 25/255, 51/255)
-  // material.specularColor = new Color3(77/255, 25/255, 51/255)
-  // material.emissiveColor = new Color3(77/255, 25/255, 51/255)
-  // material.specularPower = 100
-  // material.emi
-
-  // var mat = new StandardMaterial("", scene);
-  material.ambientTexture = new Texture('assets/textures/ground.jpg', scene)
-  material.specularColor = new Color3(0, 0, 0)
-  // material.specularPower = 0
-  // ground.material = mat;
-
-  ground.material = material
-  ground.position.y = -1
+  const groundMaterial = new StandardMaterial('ground',scene)
+  const texture = new Texture('assets/textures/ground.jpg', scene)
+  texture.uScale = texture.vScale = 5
+  groundMaterial.diffuseTexture = texture
+  groundMaterial.specularColor = new Color3(0, 0, 0)
+  ground.material = groundMaterial
+  ground.position.y = yOffset
   scene.addMesh(ground)
+
+  //create Grid
+  const grid = MeshBuilder.CreateGround('ground', {width:size, height:size})
+  const gridMaterial = new GridMaterial('default', scene)
+  gridMaterial.majorUnitFrequency = 1
+  gridMaterial.minorUnitVisibility = 0
+  gridMaterial.gridRatio = 1.02
+  gridMaterial.backFaceCulling = false
+  gridMaterial.mainColor = new Color3(0, 0, 0)
+  gridMaterial.lineColor = new Color3(1.0, 1.0, 1.0)
+  gridMaterial.opacity = 0.1
+  grid.material = gridMaterial
+  grid.position.y = yOffset
+  scene.addMesh(grid)
+
+  // const material = new GradientMaterial('grad', scene)
+  // material. = Color3.Black() // Set the gradient top color
+  // material.bottomColor = Color3.White() // Set the gradient bottom color
+  // material.offset = 0.25
+
+  
 }
 
 const createSkyBox = function(scene : Scene) : void  {  
-  scene.createDefaultSkybox()
+  const skybox = Mesh.CreateBox('skyBox', 100, scene, false, Mesh.BACKSIDE)
+  skybox.rotate(new Vector3(0,0,1), 180)
+  const skyMaterial = new SkyMaterial('skyMaterial', scene)
+  // skyMaterial.backFaceCulling = false
+  skybox.material = skyMaterial
   // const skybox = MeshBuilder.CreateBox('skyBox', { size : 100.0 }, scene)
   // const skyboxMaterial = new StandardMaterial('skyBox', scene)
   // skyboxMaterial.backFaceCulling = false

@@ -14,12 +14,15 @@ const fromHammerEvent = function(hammer: HammerManager, event: string) : Observa
   return subject.pipe(share())
 }
 
+const easeInOut = function (t : number) : number { 
+  return t<.5 ? 2*t*t : -1+(4-2*t)*t 
+}
+
+const easeOut = function (t : number) : number { 
+  return t*(2-t)
+}
+
 const animateValue = function(from: number, to:number, time : number, steps = time/40, callback : (v : number, finished: boolean) => void) : void {
-  
-  function easeInOut(t : number) : number { 
-    return t<.5 ? 2*t*t : -1+(4-2*t)*t 
-  }
-  
   const timeBetweenSteps = time/steps
   interval(timeBetweenSteps).pipe(scan( (acc) => {
     return acc + 1/steps
@@ -54,4 +57,4 @@ function radDifference(value1: number, value2: number) : number {
   return (diff + Math.PI) % (Math.PI * 2) - Math.PI
 }
 
-export { fromHammerEvent, animateValue, radDifference, constrainRad, snapTo }
+export { fromHammerEvent, animateValue, radDifference, constrainRad, snapTo, easeInOut, easeOut }

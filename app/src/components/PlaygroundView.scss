@@ -8,12 +8,16 @@
   right: 0;
   height: 100%;
   overflow: hidden;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 
   canvas {
     width: 100%;
     height: 100%;
-    -webkit-user-select: none !important;
-    -webkit-touch-callout: none !important;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -youbkit-touch-callout: none;
+    -youbkit-user-select: none; 
   }
 
   .top-buttons {

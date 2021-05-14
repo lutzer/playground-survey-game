@@ -1,10 +1,13 @@
+import { Animation, IAnimationKey } from '@babylonjs/core'
 import { AnimationGroup } from '@babylonjs/core/Animations/animationGroup'
 import { Vector3 } from '@babylonjs/core/Maths/math'
 import { Mesh } from '@babylonjs/core/Meshes/mesh'
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode'
 import { Scene } from '@babylonjs/core/scene'
+import _ from 'lodash'
 import { FixedTiles, SelectableTiles, TextureArray, TileMeshArray, TileType } from './assets'
 import { Fountain, PlaygroundEffect, WaterLight } from './effects'
+import { easeInOut } from './utils'
 
 type TileState = {
   type: TileType,
@@ -28,12 +31,16 @@ class Tile {
   private _effects : PlaygroundEffect[] = []
 
   private _animation : AnimationGroup | undefined;
+  private _enterAnimation : Animation | undefined;
+  private _isEntering = false
 
-  constructor(name: string, meshes: TileMeshArray, textures: TextureArray, scene: Scene) {
+  constructor(name: string, meshes: TileMeshArray, textures: TextureArray, scene: Scene, enterAnimation?: Animation) {
     this.name = name
     this._meshes = meshes
     this._textures = textures
     this._scene = scene
+
+    this._enterAnimation = enterAnimation
 
     this._position = new Vector3(0,0,0)
 
@@ -89,10 +96,22 @@ class Tile {
     // performance optimization
     if (mesh) mesh.doNotSyncBoundingInfo = true
 
+    // animation to slide in
+    if (mesh && this._enterAnimation) {
+      this._isEntering= true
+      this._scene.beginDirectAnimation(this.node, [this._enterAnimation], 0, 8, false, 1, () => {
+        this._isEntering = false
+      })
+    }
+
     this.node = mesh || new TransformNode(this.name, this._scene)
    
     this.node.position = this._position
     this.node.setEnabled(true)
+  }
+
+  get isEntering() : boolean {
+    return this._isEntering
   }
 
   get rotation() : number {
