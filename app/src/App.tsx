@@ -21,7 +21,7 @@ const SETTINGS : PlaygroundSettings = {
   camera: {
     zoom: 5
   },
-  version: '0.38',
+  version: '0.39',
   selectableTiles: 6
 }
 

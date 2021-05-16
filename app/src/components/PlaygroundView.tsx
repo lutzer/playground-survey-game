@@ -43,14 +43,14 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
   const [playground, setPlayground] = useState<Playground>()
   const [loaded, setLoaded] = useState(LoadedState.LOADING)
   const [finished, setFinished] = useState(false)
-  const [showHelp, setShowHelp] = useState(false)
+  const [showHelp, setShowHelp] = useState(true)
 
-  const [seed, setSeed] = useState(0)
+  const [seed] = useState(stateMachine.state.seed)
 
   const [selectedTile, setSelectedTile] = useState<number>()
   const [numberOfSelectedTiles, setNumberOfSelectedTiles] = useState(0)
 
-  const [avatar, setAvatar] = useState(getAvatarImage(stateMachine.state.avatar))
+  const [avatar] = useState(getAvatarImage(stateMachine.state.avatar))
 
   const history = useHistory()
 
@@ -86,9 +86,11 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
   useEffect(() => {
     const sub = merge(of(stateMachine.state),stateMachine).pipe(delay(150)).subscribe( (state) => {
       setSelectedTile(undefined)
-      setSelectedTile(state.selectedTile)
+      if (state.selectedTile) {
+        setShowHelp(false)
+        setSelectedTile(state.selectedTile)
+      }
       setNumberOfSelectedTiles(calculateNumberOfSelectedTiles(state))
-      setSeed(state.seed)
     })
     return () => sub.unsubscribe()
   },[])
@@ -101,7 +103,6 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
     if (finished) {
       stateMachine?.trigger(Actions.selectTile, { id: undefined })
     }
-
   },[finished, playground])
 
   useEffect(() => {
@@ -141,7 +142,6 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
   function rotateRight() {
     playground?.camera.rotateRight()
   }
-  
 
   return (
     <div className='playground-view'>
@@ -183,13 +183,10 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
               seed={seed}
             /> 
           }
-          { showHelp && 
-            <div className='overlay'>
-              <HintView avatar={avatar || ''} onClose={() => setShowHelp(false)}/> 
-            </div>
-          }
+          
         </div>
       }
+      { showHelp && <HintView avatar={avatar || ''} onClose={() => setShowHelp(false)} /> }
     </div>
   )
 }

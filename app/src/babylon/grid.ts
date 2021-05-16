@@ -46,6 +46,7 @@ const createGrid = function(sizeX: number, sizeY = 0) : Grid {
   // create trees
   createTree(7+6*sizeY, cells)
   createTree(7+5*sizeY, cells)
+  createTree(7+3*sizeY, cells)
   createTree(7+1*sizeY, cells)
   createTree(6+0*sizeY, cells)
 

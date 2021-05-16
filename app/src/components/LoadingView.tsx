@@ -10,7 +10,7 @@ const LoadingView = function({ loaded, avatar, onStartClicked } :
     <div className="loading-view">
       <div className="content">
         <h1>Was soll auf deinem Spielplatz sein?</h1>
-        <HintView avatar={avatar || ''}/>
+        {/* <HintView avatar={avatar || ''}/> */}
         <div className="loading">
           { !loaded && 
             <div>

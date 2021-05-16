@@ -3,8 +3,10 @@
 @import "../_vars.scss";
 
 .hint-view {
-  position: relative;
-  margin-top: 20%;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%,-50%);
   padding: $standard-spacing;
   padding-top: 20px;
   padding-bottom: 60px;
@@ -14,6 +16,8 @@
   font-size: 110%;
   // height: 120px;
   margin-bottom: 80px;
+  max-width: $content-size;
+  width:70%;
 
   .close-button {
     position:absolute;
