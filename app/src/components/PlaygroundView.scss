@@ -20,18 +20,28 @@
     -youbkit-user-select: none; 
   }
 
+  .overlay {
+    @include overlay;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10%;
+
+    > div {
+      max-width: $content-size;
+    }
+  }
+
   .top-buttons {
     position: fixed;
     top: 0;
     margin: 0;
     width: 100%;
+    display: flex;
+    justify-content: space-between;
 
     > button {
       margin: $standard-spacing;
-    }
-
-    .right {
-      float: right;
     }
   }
 
@@ -41,12 +51,17 @@
     margin: 0;
     width: 100%;
 
-    > button {
+    button {
       margin: $standard-spacing;
     }
 
     .right {
       float: right;
+    }
+
+    .space-between {
+      display: flex;
+      justify-content: space-between;
     }
 
     .center-menu {

@@ -1,0 +1,67 @@
+@use "sass:color";
+
+@import "../_vars.scss";
+
+.hint-view {
+  position: relative;
+  margin-top: 20%;
+  padding: $standard-spacing;
+  padding-top: 20px;
+  padding-bottom: 60px;
+  margin-left: 20px;
+  background-color: color.adjust($accent-color, $alpha: -0.2);
+  border-radius: $border-radius;
+  font-size: 110%;
+  // height: 120px;
+  margin-bottom: 80px;
+
+  .close-button {
+    position:absolute;
+    background-color: white;
+    height: 34px;
+    width: 34px;
+    top: -23px;
+    right: 10px;
+    border-radius: 50%;
+    padding: 5px;
+    
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .buttons {
+    position: absolute;
+    bottom:10px;
+    right: 10px;
+  }
+
+  button {
+
+    background-color: $accent-color-bright;
+  }
+
+  .image {
+    display: block;
+    text-align: center;
+
+    img {
+      height: 120px;
+      margin-top: -10px;
+    }
+  }
+
+  .floating-image {
+    position: absolute;
+    bottom: -80px;
+    left: -40px;
+    width: 120px;
+    height: 120px;
+    z-index: 10;
+
+    img {
+      width: 100%;
+    }
+  }
+}

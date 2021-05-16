@@ -17,6 +17,7 @@ import rotateLeftIcon from '../assets/images/rotate_left.png'
 import explorerImage from '../assets/images/explorer.png'
 import builderImage from '../assets/images/builder.png'
 import kidsImage from '../assets/images/two_kids.png'
+import { HintView } from './HintView'
 
 
 enum LoadedState {
@@ -42,6 +43,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
   const [playground, setPlayground] = useState<Playground>()
   const [loaded, setLoaded] = useState(LoadedState.LOADING)
   const [finished, setFinished] = useState(false)
+  const [showHelp, setShowHelp] = useState(false)
 
   const [seed, setSeed] = useState(0)
 
@@ -152,20 +154,25 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
         :
         <div>
           <div className="top-buttons">
-            <button onClick={() => onScreenShotButtonClicked()}>Foto</button>
-            { !finished && <button className="right" onClick={() => setFinished(true)}>Fertig</button> }
+            { !finished && <button onClick={() => setShowHelp(true)}>Hilfe</button> }
+            { !finished && <button onClick={() => setFinished(true)}>Fertig</button> }
           </div>
           <div className="bottom-buttons">
-            { !finished && <div className="center-menu">
-              <button className="button-zoom" onClick={rotateLeft}><img src={rotateLeftIcon}/></button>
-              <div className="avatar-icon">
-                <img src={avatar}/>
+            { !finished ? 
+              <div className="center-menu">
+                <button className="button-zoom" onClick={rotateLeft}><img src={rotateLeftIcon}/></button>
+                <div className="avatar-icon">
+                  <img src={avatar}/>
+                </div>
+                <button className="button-zoom" onClick={rotateRight}><img src={rotateRightIcon}/></button>
               </div>
-              <button className="button-zoom" onClick={rotateRight}><img src={rotateRightIcon}/></button>
-            </div> 
+              : 
+              <div className="space-between">
+                <button onClick={() => setFinished(false)}>Ich bin noch nicht fertig</button>
+                {/* <button onClick={() => onScreenShotButtonClicked()}>Foto</button> */}
+                <button onClick={() => onFinished()} className="right glow">Weiter<img className="right" src={checkIcon}></img></button>
+              </div>
             }
-            { finished && <button onClick={() => setFinished(false)}>Ich bin noch nicht fertig</button> }
-            { finished && <button onClick={() => onFinished()} className="right glow">Weiter<img className="right" src={checkIcon}></img></button> }
           </div>
           { selectedTile != undefined &&
             <TileMenu
@@ -175,6 +182,11 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
               onSelect={onSelectTyleType} 
               seed={seed}
             /> 
+          }
+          { showHelp && 
+            <div className='overlay'>
+              <HintView avatar={avatar || ''} onClose={() => setShowHelp(false)}/> 
+            </div>
           }
         </div>
       }
