@@ -39,6 +39,8 @@ class OrthographicCamera {
 
   private _isAnimating = false
 
+  enableControl = true
+
   constructor(scene: Scene, canvas: HTMLCanvasElement, zoom: number) {
     this.scene = scene
     this.canvas = canvas
@@ -62,7 +64,7 @@ class OrthographicCamera {
     this.$disposeObservable.next()
   }
 
-  enableControl() : void {
+  attachControl() : void {
 
     const mc = new Hammer(this.canvas)
 
@@ -83,7 +85,7 @@ class OrthographicCamera {
         .pipe(takeUntil($pinchEnd))
     ), takeUntil(this.$disposeObservable))
 
-    $pinchObservable.subscribe(([move, zoom]) => {
+    $pinchObservable.pipe(filter(() => this.enableControl)).subscribe(([move, zoom]) => {
       this.zoom = zoom / move.scale
     })
 
@@ -94,7 +96,7 @@ class OrthographicCamera {
         }),takeUntil($rotateEnd))
     ), takeUntil(this.$disposeObservable))
 
-    $rotateObservable.subscribe(([move, start, rot]) => {
+    $rotateObservable.pipe(filter(() => this.enableControl)).subscribe(([move, start, rot]) => {
       const drot = start.rotation - move.rotation
       this.rotation = rot - drot / 180 * Math.PI
     })
@@ -110,7 +112,7 @@ class OrthographicCamera {
         .pipe(takeUntil(merge($pointerUp,$pointerDownMultiple)))
     ), takeUntil(this.$disposeObservable))
 
-    $dragObservable.subscribe( ([move, down, cursor]) => {
+    $dragObservable.pipe(filter(() => this.enableControl)).subscribe( ([move, down, cursor]) => {
       const dx = down.screenX - move.screenX
       const dy = down.screenY - move.screenY
       
@@ -123,7 +125,7 @@ class OrthographicCamera {
 
     // react to mousewheel
     const $wheelTurn = fromEvent<WheelEvent>(window,'wheel')
-    $wheelTurn.subscribe( (e) => {
+    $wheelTurn.pipe(filter(() => this.enableControl)).subscribe( (e) => {
       this.zoom -= Math.sign(e.deltaY) * 0.5
     })
     

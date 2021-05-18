@@ -116,7 +116,7 @@ class Playground {
         tileManager.handleTileChange(this.stateMachine.state.tiles)
 
         optimizePerformance(this.scene)
-        this.camera.enableControl()
+        this.camera.attachControl()
         onLoaded()
       })
 
@@ -178,6 +178,11 @@ class Playground {
   resize() : void {
     this.camera.onResize()
     this.engine.resize()
+  }
+
+  enableMouse(enable: boolean) {
+    this.enablePointerEvents = enable
+    this.camera.enableControl = enable
   }
 }
 

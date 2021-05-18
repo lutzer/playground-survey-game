@@ -186,7 +186,12 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
           
         </div>
       }
-      { showHelp && <HintView avatar={avatar || ''} onClose={() => setShowHelp(false)} /> }
+      { showHelp && 
+        <HintView 
+          avatar={avatar || ''} 
+          onClose={loaded == LoadedState.STARTED ? (() => setShowHelp(false)) : undefined} 
+          startHint={loaded == LoadedState.STARTED ? 1 : 0}/> 
+      }
     </div>
   )
 }
