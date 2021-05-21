@@ -31,14 +31,25 @@
 - [ ] last screen includes contacts
 - [x] put forest tiles in the corners / between the ligh towers
 - [?] fix iphone bug instantially selected
-- [ ] fix iphone context menu bug
-- [ ] fix iphone blauer select balken, kopieren, ...
+- [x] fix iphone context menu bug
+- [x] fix iphone blauer select balken, kopieren, ...
 - [x] fix text erros umlaute
-- [ ] animate trampolin better
-- [ ] add map background
+- [x] animate trampolin better
+- [?] add map background
 - [x] make the element icons bigger 
-- [?] make the selection (selected tile) highlighted
-- [ ] trampoline animation
-- [ ] sky box
+- [?] make the selection (selected tile) highlighted, does not work on mobile
+- [x] trampoline animation
 - [x] add playhut & swing & limbing thing tile
 - [x] add data collection server
+
+## Meeting 18.5.2021
+
+* [ ] Server aufsetzen
+* [ ] Webspace kummern
+* [ ] Domainnamen: spielplatz-schillerkiez.de
+* [ ] Datenausgabe, welches Format?
+* [ ] Baeume in einer Linie auf der entgegengesetzten Linie der alley
+* [ ] Impressum
+* [ ] Find webservice to host game
+* [ ] Text auf der Startseite
+* [ ] Was muss in ein Impressum?
