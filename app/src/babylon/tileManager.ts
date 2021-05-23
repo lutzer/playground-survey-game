@@ -168,7 +168,7 @@ class TileManager extends EventEmitter {
   }
 
   setSelectMarker(tileIndex: number | undefined) : void {
-    if (tileIndex != undefined) {
+    if (tileIndex != undefined && this.tiles[tileIndex] != undefined) {
       this._cursor.position = this.tiles[tileIndex].position
       this._cursor.enable = true
     } else {

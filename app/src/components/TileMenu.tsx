@@ -21,20 +21,20 @@ import emptyIcon from './../assets/images/icon_tile_empty.png'
 import gymIcon from './../assets/images/icon_tile_junglegym.png'
 import springsIcon from './../assets/images/icon_tile_springs.png'
 
-const tileIcons: {type: SelectableTiles, icon: string}[] = [
-  { type: SelectableTiles.trampolin, icon: trampolinIcon },
-  { type: SelectableTiles.boulders, icon: bouldersIcon },
-  { type: SelectableTiles.house, icon: houseIcon },
-  { type: SelectableTiles.carousel, icon: carousselIcon },
-  { type: SelectableTiles.sandbox, icon: sandboxIcon },
-  { type: SelectableTiles.seasaw, icon: seasawIcon },
-  { type: SelectableTiles.swings, icon: swingsIcon },
-  { type: SelectableTiles.slide, icon: slideIcon },
-  { type: SelectableTiles.tree, icon: treeIcon },
-  { type: SelectableTiles.playhut, icon: playhutIcon },
-  { type: SelectableTiles.junglegym, icon: gymIcon },
-  { type: SelectableTiles.springs, icon: springsIcon }
-] 
+const tileIcons: {type: SelectableTiles, icon: string, name: string}[] = [
+  { type: SelectableTiles.trampolin, icon: trampolinIcon, name: 'Trampolin' },
+  { type: SelectableTiles.boulders, icon: bouldersIcon, name: 'Steine'  },
+  { type: SelectableTiles.house, icon: houseIcon, name: 'Haus' },
+  { type: SelectableTiles.carousel, icon: carousselIcon, name: 'Karoussel' },
+  { type: SelectableTiles.sandbox, icon: sandboxIcon, name: 'Sandkasten' },
+  { type: SelectableTiles.seasaw, icon: seasawIcon, name: 'Wippe' },
+  { type: SelectableTiles.swings, icon: swingsIcon, name: 'Schaukel' },
+  { type: SelectableTiles.slide, icon: slideIcon, name: 'Rutsche'  },
+  { type: SelectableTiles.tree, icon: treeIcon, name: 'Bäume' },
+  { type: SelectableTiles.playhut, icon: playhutIcon, name: 'Spielhaus' },
+  { type: SelectableTiles.junglegym, icon: gymIcon, name: 'Klettergerüst' },
+  { type: SelectableTiles.springs, icon: springsIcon, name: 'Federwippe' }
+]
 
 const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSelectedTies, seed} : 
   {tileState?: TileState, onSelect : (t: TileType | undefined) => void, numberOfSelectedTiles: number, maximumSelectedTies: number, seed : number}) : React.ReactElement {
@@ -49,10 +49,11 @@ const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSe
 
   const canSelectedNewTile = (numberOfSelectedTiles < maximumSelectedTies) || type != SelectableTiles.grass
 
-  function renderTileLink(img: string, type: TileType, selected : boolean) {
+  function renderTileLink(img: string, type: TileType, name: string, selected : boolean) {
     return(
       <li onClick={() => onClickedHandler(type)} key={type}>
-        <img src={img}/>  
+        <img src={img}/>
+        <span className="caption">{name}</span>
         { selected && <div className="selected"></div> }
       </li>
     )
@@ -71,8 +72,8 @@ const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSe
         <div className="dialog-content">
           { canSelectedNewTile ?
             <ul>
-              { renderTileLink(emptyIcon, SelectableTiles.grass, SelectableTiles.grass == type) }
-              { shuffledTiles.map((t) => renderTileLink(t.icon, t.type, t.type == type))}
+              { renderTileLink(emptyIcon, SelectableTiles.grass, '', SelectableTiles.grass == type) }
+              { shuffledTiles.map((t) => renderTileLink(t.icon, t.type, t.name, t.type == type))}
             </ul>
             :
             <p>Du hast schon {maximumSelectedTies} Elemente ausgewählt. Klicke ein bereits plaziertes Element an um es zu ändern oder zu löschen.

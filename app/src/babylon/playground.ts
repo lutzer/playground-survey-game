@@ -99,6 +99,7 @@ class Playground {
     this.stateMachine
       .pipe(map((state) => state.selectedTile), distinctUntilChanged(), takeUntil(this.$disposeObservable))
       .subscribe((selectedTile) => {
+        this.camera.enableControl = selectedTile == undefined
         tileManager.setSelectMarker(selectedTile)
       })
 
