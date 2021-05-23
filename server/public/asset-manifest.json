@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.ce1936e1.chunk.css",
-    "main.js": "/static/js/main.9673bf0b.chunk.js",
-    "main.js.map": "/static/js/main.9673bf0b.chunk.js.map",
+    "main.css": "/static/css/main.c517a892.chunk.css",
+    "main.js": "/static/js/main.37d27450.chunk.js",
+    "main.js.map": "/static/js/main.37d27450.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.0540de66.js",
     "runtime-main.js.map": "/static/js/runtime-main.0540de66.js.map",
     "static/js/2.5ee3ebce.chunk.js": "/static/js/2.5ee3ebce.chunk.js",
     "static/js/2.5ee3ebce.chunk.js.map": "/static/js/2.5ee3ebce.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.ce1936e1.chunk.css.map": "/static/css/main.ce1936e1.chunk.css.map",
+    "static/css/main.c517a892.chunk.css.map": "/static/css/main.c517a892.chunk.css.map",
     "static/js/2.5ee3ebce.chunk.js.LICENSE.txt": "/static/js/2.5ee3ebce.chunk.js.LICENSE.txt",
     "static/media/App.scss": "/static/media/IndieFlower-Regular.9bd64a34.ttf",
     "static/media/LoadingView.scss": "/static/media/background.5166305e.jpg",
@@ -40,7 +40,7 @@
   "entrypoints": [
     "static/js/runtime-main.0540de66.js",
     "static/js/2.5ee3ebce.chunk.js",
-    "static/css/main.ce1936e1.chunk.css",
-    "static/js/main.9673bf0b.chunk.js"
+    "static/css/main.c517a892.chunk.css",
+    "static/js/main.37d27450.chunk.js"
   ]
 }
