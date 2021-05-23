@@ -10,9 +10,9 @@ html, body, #root, .App {
   margin: 0;
   font-family: 'IndieFlower', serif;
   color: $font-color;
-  // background-image: linear-gradient(180deg, $color-light, $color-dark);
   background-image: url("./assets/images/background.jpg");
   background-size: cover;
+
 }
 
 h1, h2 {
@@ -41,7 +41,8 @@ p.caption {
   margin: 0;
 }
 
-p.block {
+.block {
+  font-size: 115%;
   background: #ffd700ba;
   padding: $standard-spacing;
   border-radius: $border-radius;

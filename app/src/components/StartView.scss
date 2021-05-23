@@ -1,13 +1,64 @@
 @import "../_vars.scss";
 
 .start-view {
-  @include content;
+  // @include content;
+  padding: 0;
+
+  .logo {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    background: black;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s;
+    opacity: 1;
+
+    video {
+      max-width: 60%;
+    }
+
+    &.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  .content {
+    @include content;
+    background-image: url("./../assets/images/start.jpg");
+    background-size: cover;
+    border-radius: $border-radius;
+    min-height: 1000px;
+    padding: $standard-spacing*2;
+    padding-top: 20%;
+  }
+
+  @media (min-width: 500px) {
+    .content {
+      background-image: none;
+    }
+    
+  }
+
+  .block {
+    overflow: hidden;
+    max-height: 0px;
+    transition: max-height 5s 1s;
+
+    &.open {
+      max-height: 1000px;
+    }
+  }
 
   .image {
     text-align: center;
     img {
       max-width: 100%;
-      max-height: 250px;
+      // max-height: 250px;
       border-radius: $border-radius;
     }
   }

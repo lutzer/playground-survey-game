@@ -4,10 +4,10 @@ import low from 'lowdb'
 import FileSync from 'lowdb/adapters/FileSync'
 import { resolve } from 'path'
 
-const PORT = 8000
+const PORT = process.env.PORT || 8080
 const API_PATH = '/api'
 const DATA_FILE = resolve(__dirname, '../data/data.json')
-const STATIC_WEB_DIR = resolve(__dirname, '../../app/build')
+const STATIC_WEB_DIR = resolve(__dirname, '../public')
 
 type DbSchema = {
   results: any[]
@@ -42,7 +42,7 @@ app.get(`${API_PATH}/results`, async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  logger.info(`Server is running at https://localhost:${PORT}`)
+  logger.info(`Server is running at http://localhost:${PORT}`)
 });
 
 

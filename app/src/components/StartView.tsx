@@ -1,31 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 
 import './StartView.scss'
 
-import towerImg from '../assets/images/lighttower.png'
-
 const StartView = function({onStart} : { onStart? : () => void}) : React.ReactElement {
   const history = useHistory()
+  const [animate, startAnimation] = useState(false)
 
   function onButtonClicked() {
     if (onStart) onStart()
     history.push('/avatar')
   }
 
+  // animate after certain time
+  useEffect(() => {
+    setTimeout(() => {
+      startAnimation(true)
+      window.scrollTo(0, 0)
+    },3000)
+  },[])
+
   return (
     <div className="start-view">
-      <h1>Willkommen auf dem Spielplatz am Feld</h1>
-      <div className="image"><img src={towerImg}/></div>
-      <p className="block">
-        Wir wollen in eurer Nähe einen neuen Spielplatz bauen. Und zwar nahe beim Tempelhofer Feld auf dem alten Friedhof neben dem Park, auf einer großen Wiese zwischen den Bäumen. Es soll viel Wasser zum Planschen geben und lustige Sachen zum Spielen.<br/>
-        Kannst du uns dabei helfen?<br/>
-        Was tust du gerne? Rennen und springen? Höhlen bauen? Mit anderen Kindern spielen?
-        Such dir deine Figur aus und komm mit einen tollen Spielplatz zu planen.<br/>
-        <span className="center">
-          <button onClick={onButtonClicked}>Weiter</button>
-        </span>
-      </p>
+      <div className={ animate ? 'logo fade-out' : 'logo' }>
+        <video width="500" height="250" autoPlay loop muted>
+          <source src="/assets/videos/logo.mp4" type="video/mp4"/>
+        </video>
+      </div>
+      <div className="content">
+        <div className={ animate ? 'block open' : 'block' }>
+          <h1>Der Spielplatz im Schillerkiez</h1>
+          Wir wollen in eurer Nähe einen neuen Spielplatz bauen. Und zwar nahe beim Tempelhofer Feld auf dem alten Friedhof neben dem Park, auf einer großen Wiese zwischen den Bäumen. Es soll viel Wasser zum Planschen geben und lustige Sachen zum Spielen.<br/>
+          Kannst du uns dabei helfen?<br/>
+          Was tust du gerne? Rennen und springen? Höhlen bauen? Mit anderen Kindern spielen?
+          Such dir deine Figur aus und komm mit einen tollen Spielplatz zu planen.<br/>
+          <span className="center">
+            <button onClick={onButtonClicked}>Start</button>
+          </span>
+        </div>
+      </div>
     </div>
   )
 }

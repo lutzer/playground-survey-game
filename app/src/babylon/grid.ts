@@ -46,9 +46,10 @@ const createGrid = function(sizeX: number, sizeY = 0) : Grid {
   // create trees
   createTree(7+6*sizeY, cells)
   createTree(7+5*sizeY, cells)
+  createTree(7+4*sizeY, cells)
   createTree(7+3*sizeY, cells)
+  createTree(7+2*sizeY, cells)
   createTree(7+1*sizeY, cells)
-  createTree(6+0*sizeY, cells)
 
   // add light towers
   createLighttower(7 + 7*sizeX, cells)
@@ -58,8 +59,6 @@ const createGrid = function(sizeX: number, sizeY = 0) : Grid {
   for (const i of _.range(sizeX)) {
     createAlley(0+i*sizeX, cells)
   }
-
-  
   
   return {
     cells: cells,

@@ -60,7 +60,7 @@ const TileMenu = function({tileState, onSelect, numberOfSelectedTiles, maximumSe
 
   return (
     <div className="TileMenu">
-      <div className="overlay"></div>
+      <div className="overlay" onClick={() => onClickedHandler(undefined)}></div>
       <div className="dialog">
         <div className="dialog-header">
           <div className="close-button" key="close" onClick={() => onClickedHandler(undefined)}>
