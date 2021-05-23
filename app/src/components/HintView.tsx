@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
 
 import './HintView.scss'
+
+import nextIcon from './../assets/images/next.png'
+import previousIcon from './../assets/images/previous.png'
+
 import grassIcon from './../assets/images/icon_tile_grass.png'
 import emptyIcon from './../assets/images/icon_tile_empty.png'
 import closeIcon from './../assets/images/close.png'
 import fertigIcon from './../assets/images/fertig.png'
 
 const hints : {text: string, img?: string }[] = [
-  { text: 'Hey, ich habe hier ein paar Tips für dich, wie du deinen Spielpatz baust. Klicke einfach auf Weiter.' },
+  { text: 'Hey, ich habe hier ein paar Tips für dich, wie du deinen Spielpatz baust.' },
   { text: 'Suche dir 6 Dinge aus, die du gerne auf einem Spielplatz haben willst. Klicke auf ein leeres Feld um dort etwas zu bauen.', img: grassIcon},
   { text: 'Wenn du auf ein bebautes Feld klickst, kannst du es entfernen oder zu etwas Anderem ändern. Baum-, Allee- und Wasserfelder lassen sich nicht verändern.', img: emptyIcon},
   { text: 'Du kannst die Ansicht drehen und näher heranzoomen. Wenn du zufrieden bist, drücke oben rechts auf Fertig.', img: fertigIcon}
@@ -39,8 +43,8 @@ const HintView = function({onClose, avatar, startHint = 0} : { onClose?: () => v
       {hints[hintIndex].text}
       { hints[hintIndex].img && <span className="image"><img src={hints[hintIndex].img}/></span> }
       <div className='buttons'>
-        <button disabled={hintIndex < 1} onClick={onBackClicked}>Zurück</button>
-        <button disabled={hintIndex > hints.length -2} onClick={onNextClicked}>Weiter</button>
+        <button disabled={hintIndex < 1} onClick={onBackClicked}><img src={previousIcon}/></button>
+        <button disabled={hintIndex > hints.length -2} onClick={onNextClicked}><img src={nextIcon}/></button>
       </div>
       <div className="floating-image"><img src={avatar}/></div>
     </div>

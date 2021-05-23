@@ -11,6 +11,7 @@ import { LoadingView } from './LoadingView'
 import './PlaygroundView.scss'
 
 import checkIcon from '../assets/images/check.png'
+import helpIcon from '../assets/images/help.png'
 import rotateRightIcon from '../assets/images/rotate_right.png'
 import rotateLeftIcon from '../assets/images/rotate_left.png'
 
@@ -153,10 +154,15 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
           onStartClicked={() => setLoaded(LoadedState.STARTED)} />
         :
         <div>
-          <div className="top-buttons">
-            { !finished && <button onClick={() => setShowHelp(true)}>Hilfe</button> }
-            { !finished && <button onClick={() => setFinished(true)}>Fertig</button> }
-          </div>
+          { !finished && 
+            <div className="top-buttons">
+              <button onClick={() => setShowHelp(true)}><img src={helpIcon}/></button>
+              <div className="top-right">
+                <button onClick={() => setFinished(true)}>Fertig</button>
+                <TileCounter count={numberOfSelectedTiles} maximum={settings.selectableTiles}/>
+              </div> 
+            </div>
+          }
           <div className="bottom-buttons">
             { !finished ? 
               <div className="center-menu">
@@ -192,6 +198,17 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
           onClose={loaded == LoadedState.STARTED ? (() => setShowHelp(false)) : undefined} 
           startHint={loaded == LoadedState.STARTED ? 1 : 0}/> 
       }
+    </div>
+  )
+}
+
+import tileIcon from './../assets/images/icon_tile_grass.png'
+
+const TileCounter = function({ count, maximum} : { count: number, maximum: number}) : React.ReactElement {
+  return(
+    <div className="tile-counter">
+      <img src={tileIcon}/>
+      <span>{count}/{maximum}</span>
     </div>
   )
 }

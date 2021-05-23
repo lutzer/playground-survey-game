@@ -42,8 +42,11 @@
   }
 
   button {
+    // background-color: $accent-color-bright;
 
-    background-color: $accent-color-bright;
+    &:disabled {
+      opacity: 0.3
+    }
   }
 
   .image {

@@ -40,8 +40,41 @@
     display: flex;
     justify-content: space-between;
 
+    .top-right {
+      display: flex;
+      align-items: center;
+    }
+
     > button {
+      height:48px;
+      width:48px;
       margin: $standard-spacing;
+      border-radius: 50%;
+    }
+
+    .tile-counter {
+      position: relative;
+      background-color: $accent-color;
+      border-radius: 50%;
+      height:60px;
+      width:60px;
+      margin: $standard-spacing;
+      text-align: center;
+      line-height: 60px;
+      font-size: 140%;
+      font-weight: bold;
+
+      img {
+        position: absolute;
+        top:-7px;
+        left:0;
+        height:100%;
+        opacity: 0.6;
+      }
+
+      span {
+        position: relative;
+      }
     }
   }
 

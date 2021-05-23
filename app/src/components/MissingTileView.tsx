@@ -4,6 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import './MissingTileView.scss'
 
 import missingImage  from './../assets/images/missingtile.png'
+import sendIcon from './../assets/images/send.png'
 
 const MissingTileView = function({ onSubmit, initial } : { onSubmit: (text: string) => void, initial: string }) : React.ReactElement {
   const history = useHistory()
@@ -36,7 +37,7 @@ const MissingTileView = function({ onSubmit, initial } : { onSubmit: (text: stri
         </textarea>
       </div>
       <div className="center">
-        <button onClick={() => onFinishedClicked() }>Abschicken</button>
+        <button onClick={() => onFinishedClicked() }>Abschicken<img className="right" src={sendIcon}/></button>
       </div>
     </div>
   )

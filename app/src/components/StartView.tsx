@@ -3,6 +3,8 @@ import { useHistory } from 'react-router'
 
 import './StartView.scss'
 
+import playIcon from './../assets/images/play.png'
+
 const StartView = function({onStart} : { onStart? : () => void}) : React.ReactElement {
   const history = useHistory()
   const [animate, startAnimation] = useState(false)
@@ -35,7 +37,7 @@ const StartView = function({onStart} : { onStart? : () => void}) : React.ReactEl
           Was tust du gerne? Rennen und springen? Höhlen bauen? Mit anderen Kindern spielen?
           Such dir deine Figur aus und komm mit einen tollen Spielplatz zu planen.<br/>
           <span className="center">
-            <button onClick={onButtonClicked}>Start</button>
+            <button onClick={onButtonClicked}>Start<img className="right" src={playIcon}/></button>
           </span>
         </div>
         <div className="impressum">

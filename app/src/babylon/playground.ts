@@ -132,7 +132,7 @@ class Playground {
     showGroundPlane(45, this.scene)
     // createSkyDome(this.scene)
 
-    const fpsText = setupFpsDisplay()
+    // const fpsText = setupFpsDisplay()
 
     // applyPostProccessing(this.scene, this.engine, this.camera.camera)
 
@@ -141,14 +141,14 @@ class Playground {
     this.scene.onBeforeRenderObservable.add(() => { loop(Date.now() - startTime) })
 
     const simplex = new SimplexNoise()
-    let lastUpdate = 0
+    // let lastUpdate = 0
     const loop = (time: number) => {
 
       // only update every 200 ms
-      if (time - lastUpdate > 200) {
-        fpsText.text = 'fps: ' + Math.floor(this.engine.getFps())
-        lastUpdate = time
-      }
+      // if (time - lastUpdate > 200) {
+      //   fpsText.text = 'fps: ' + Math.floor(this.engine.getFps())
+      //   lastUpdate = time
+      // }
       
       //animate tile movement
       tileManager.tiles.forEach((tile,i) => {
