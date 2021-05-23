@@ -28,7 +28,7 @@ const StartView = function({onStart} : { onStart? : () => void}) : React.ReactEl
         </video>
       </div>
       <div className="content">
-        <div className={ animate ? 'block open' : 'block' }>
+        <div className="block">
           <h1>Der Spielplatz im Schillerkiez</h1>
           Wir wollen in eurer Nähe einen neuen Spielplatz bauen. Und zwar nahe beim Tempelhofer Feld auf dem alten Friedhof neben dem Park, auf einer großen Wiese zwischen den Bäumen. Es soll viel Wasser zum Planschen geben und lustige Sachen zum Spielen.<br/>
           Kannst du uns dabei helfen?<br/>
@@ -37,6 +37,9 @@ const StartView = function({onStart} : { onStart? : () => void}) : React.ReactEl
           <span className="center">
             <button onClick={onButtonClicked}>Start</button>
           </span>
+        </div>
+        <div className="impressum">
+          <button onClick={() => history.push('/impressum')}>Impressum</button>
         </div>
       </div>
     </div>

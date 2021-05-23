@@ -111,3 +111,13 @@ button {
     }
   }
 }
+
+.impressum {
+  padding-top: 100px;
+  bottom: $standard-spacing;
+  text-align: center;
+  
+  button {
+    font-size: 100% !important;
+  }
+}

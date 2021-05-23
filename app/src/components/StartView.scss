@@ -29,28 +29,18 @@
 
   .content {
     @include content;
-    background-image: url("./../assets/images/start.jpg");
+    background-image: url("./../assets/images/start_narrow.jpg");
     background-size: cover;
     border-radius: $border-radius;
-    min-height: 1000px;
     padding: $standard-spacing*2;
     padding-top: 20%;
   }
 
-  @media (min-width: 500px) {
+  @media (min-width: $content-size) {
     .content {
       background-image: none;
-    }
-    
-  }
-
-  .block {
-    overflow: hidden;
-    max-height: 0px;
-    transition: max-height 5s 1s;
-
-    &.open {
-      max-height: 1000px;
+      padding-top: 10%;
+      min-height: 100%;
     }
   }
 
@@ -65,6 +55,13 @@
 
   button {
     font-size: 120%;
+  }
+}
 
+@media (min-width: $content-size) {
+  .start-view {
+    background-image: url("./../assets/images/start_wide.jpg");
+    background-size: cover;
+    min-height: 100%;
   }
 }

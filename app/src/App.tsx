@@ -11,6 +11,7 @@ import { WaterbodyView } from './components/WaterbodyView'
 import { MissingTileView } from './components/MissingTileView'
 import { FinishedView } from './components/FinishedView'
 import { StartView } from './components/StartView'
+import { ImpressumView } from './components/ImpressumView'
 
 const API_ADDRESS = '/api/results/'
 const SIZE = 8
@@ -81,6 +82,9 @@ const App = function() : React.ReactElement {
           </Route>
           <Route path="/finished">
             <FinishedView/>
+          </Route>
+          <Route path="/impressum">
+            <ImpressumView/>
           </Route>
           <Route path="/">
             <StartView/>

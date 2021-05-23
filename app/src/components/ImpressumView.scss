@@ -1,0 +1,23 @@
+@import '../_vars.scss';
+
+.impressum-view {
+  @include content;
+  text-align: center;
+
+  .image {
+    height: 200px;
+
+    img {
+      height: 100%;
+    }
+  }
+
+  span.paragraph {
+    display: block;
+    padding: 10px 0;
+
+    br {
+      margin:0;
+    }
+  }
+}

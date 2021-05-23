@@ -17,12 +17,15 @@ const FinishedView = function() : React.ReactElement {
     <div className='finished-view'>
       <h1>Dankeschön!</h1>
       <div className="image"><img src={thankyouImg}/></div>
-      <p className="block">
+      <div className="block">
         Danke, dass du uns gezeigt hast was du gut findest und dir auf dem Spielplatz wünschst.<br/>
         Wenn viele Kinder uns sagen, was sie gerne wollen, können wir einen besseren Spielplatz für euch bauen. Also erzähle deinen Freunden und Nachbarn von dem Spiel!
-      </p>
-      <div className="center" onClick={() => history.push('/')}><button>Neues Spiel</button></div>
+        <div className="center" onClick={() => history.push('/')}><button>Neues Spiel</button></div>
+      </div>
       
+      <div className="impressum">
+        <button onClick={() => history.push('/impressum')}>Impressum</button>
+      </div>
     </div>
   )
 }

@@ -44,12 +44,12 @@
 
 ## Meeting 18.5.2021
 
-* [ ] Server aufsetzen
-* [ ] Webspace kummern
-* [ ] Domainnamen: spielplatz-schillerkiez.de
-* [ ] Datenausgabe, welches Format?
-* [ ] Baeume in einer Linie auf der entgegengesetzten Linie der alley
-* [ ] Impressum
-* [ ] Find webservice to host game
-* [ ] Text auf der Startseite
-* [ ] Was muss in ein Impressum?
+* [x] Server aufsetzen
+* [x] Webspace kummern
+* [?] Domainnamen: spielplatz-schillerkiez.de
+* [x] Datenausgabe, welches Format?
+* [x] Baeume in einer Linie auf der entgegengesetzten Linie der alley
+* [x] Impressum
+* [x] Find webservice to host game
+* [x] Text auf der Startseite
+* [x] Was muss in ein Impressum?
