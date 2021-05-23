@@ -23,14 +23,14 @@ import springsIcon from './../assets/images/icon_tile_springs.png'
 
 const tileIcons: {type: SelectableTiles, icon: string, name: string}[] = [
   { type: SelectableTiles.trampolin, icon: trampolinIcon, name: 'Trampolin' },
-  { type: SelectableTiles.boulders, icon: bouldersIcon, name: 'Steine'  },
-  { type: SelectableTiles.house, icon: houseIcon, name: 'Haus' },
+  { type: SelectableTiles.boulders, icon: bouldersIcon, name: 'Felsen' },
+  { type: SelectableTiles.house, icon: houseIcon, name: 'Baumhaus' },
   { type: SelectableTiles.carousel, icon: carousselIcon, name: 'Karoussel' },
   { type: SelectableTiles.sandbox, icon: sandboxIcon, name: 'Sandkasten' },
   { type: SelectableTiles.seasaw, icon: seasawIcon, name: 'Wippe' },
   { type: SelectableTiles.swings, icon: swingsIcon, name: 'Schaukel' },
   { type: SelectableTiles.slide, icon: slideIcon, name: 'Rutsche'  },
-  { type: SelectableTiles.tree, icon: treeIcon, name: 'Bäume' },
+  { type: SelectableTiles.tree, icon: treeIcon, name: 'Wald' },
   { type: SelectableTiles.playhut, icon: playhutIcon, name: 'Spielhaus' },
   { type: SelectableTiles.junglegym, icon: gymIcon, name: 'Klettergerüst' },
   { type: SelectableTiles.springs, icon: springsIcon, name: 'Federwippe' }

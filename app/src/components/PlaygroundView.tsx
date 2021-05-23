@@ -156,7 +156,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
         <div>
           { !finished && 
             <div className="top-buttons">
-              <button onClick={() => setShowHelp(true)}><img src={helpIcon}/></button>
+              <button className="help-button" onClick={() => setShowHelp(true)}>?</button>
               <div className="top-right">
                 <button onClick={() => setFinished(true)}>Fertig</button>
                 <TileCounter count={numberOfSelectedTiles} maximum={settings.selectableTiles}/>
