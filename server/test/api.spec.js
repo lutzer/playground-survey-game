@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const chai = require('chai')
 const chaiHttp = require('chai-http')
 const { app } = require('../build/index')
@@ -22,7 +20,7 @@ describe('API Routes', () => {
       avatar: 'avatar',
       playgroundType: 'type',
       missing: 'lorem',
-      version: 0.0,
+      version: '0.0',
       seed: 0
     })
     expect(result).to.have.status(200);
@@ -35,7 +33,7 @@ describe('API Routes', () => {
       avatar: 'avatar',
       playgroundType: 'type',
       missing: 'lorem',
-      version: 0.0,
+      version: '0.0',
       seed: 0,
       what: "?"
     })
@@ -56,7 +54,7 @@ describe('API Routes', () => {
       avatar: 'avatar',
       playgroundType: 'type',
       missing: 'lorem',
-      version: 0.0,
+      version: '0.0',
       seed: seed
     })
     let result = await chai.request(app).get('/api/results')

@@ -18,7 +18,7 @@ describe('Validator Tests', () => {
       avatar: 'avatar',
       playgroundType: 'type',
       missing: 'lorem',
-      version: 0.0,
+      version: '0.0',
       seed: 0
     })
     expect(result.valid).to.be.true

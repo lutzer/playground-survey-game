@@ -14,7 +14,7 @@ const getValidator = function() {
       avatar: { type: 'string' },
       playgroundType: { type: 'string' },
       missing: { type: 'string' },
-      version: { type: 'number' },
+      version: { type: 'string' },
       seed: { type: 'number' }
     },
     additionalProperties: false,
