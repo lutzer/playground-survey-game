@@ -13,6 +13,7 @@
     display: flex;
     flex-direction: column;
     max-height: 60%;
+    overflow-y: visible;
 
     .dialog-content {
         overflow-y: scroll;

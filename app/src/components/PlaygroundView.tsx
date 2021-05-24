@@ -10,8 +10,8 @@ import { LoadingView } from './LoadingView'
 
 import './PlaygroundView.scss'
 
-import checkIcon from '../assets/images/check.png'
-import helpIcon from '../assets/images/help.png'
+import nextIcon from '../assets/images/next.png'
+import backIcon from '../assets/images/previous.png'
 import rotateRightIcon from '../assets/images/rotate_right.png'
 import rotateLeftIcon from '../assets/images/rotate_left.png'
 
@@ -88,7 +88,6 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
     const sub = merge(of(stateMachine.state),stateMachine).pipe(delay(150)).subscribe( (state) => {
       setSelectedTile(undefined)
       if (state.selectedTile) {
-        setShowHelp(false)
         setSelectedTile(state.selectedTile)
       }
       setNumberOfSelectedTiles(calculateNumberOfSelectedTiles(state))
@@ -174,9 +173,9 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
               </div>
               : 
               <div className="space-between">
-                <button onClick={() => setFinished(false)}>Ich bin noch nicht fertig</button>
+                <button onClick={() => setFinished(false)}><img src={backIcon}/>Zurück</button>
                 {/* <button onClick={() => onScreenShotButtonClicked()}>Foto</button> */}
-                <button onClick={() => onFinished()} className="right glow">Weiter<img className="right" src={checkIcon}></img></button>
+                <button onClick={() => onFinished()} className="right glow">Weiter<img src={nextIcon}></img></button>
               </div>
             }
           </div>

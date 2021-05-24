@@ -35,18 +35,21 @@ const HintView = function({onClose, avatar, startHint = 0} : { onClose?: () => v
 
   return (
     <div className="hint-view">
-      { onClose && 
-        <div className="close-button" key="close" onClick={onClose}>
-          <img src={closeIcon}></img>
+      { onClose && <div onClick={onClose} className="overlay"></div> }
+      <div className="hint-dialog">
+        { onClose && 
+          <div className="close-button" key="close" onClick={onClose}>
+            <img src={closeIcon}></img>
+          </div>
+        }
+        {hints[hintIndex].text}
+        { hints[hintIndex].img && <span className="image"><img src={hints[hintIndex].img}/></span> }
+        <div className='buttons'>
+          <button disabled={hintIndex < 1} onClick={onBackClicked}><img src={previousIcon}/></button>
+          <button disabled={hintIndex > hints.length -2} onClick={onNextClicked}><img src={nextIcon}/></button>
         </div>
-      }
-      {hints[hintIndex].text}
-      { hints[hintIndex].img && <span className="image"><img src={hints[hintIndex].img}/></span> }
-      <div className='buttons'>
-        <button disabled={hintIndex < 1} onClick={onBackClicked}><img src={previousIcon}/></button>
-        <button disabled={hintIndex > hints.length -2} onClick={onNextClicked}><img src={nextIcon}/></button>
+        <div className="floating-image"><img src={avatar}/></div>
       </div>
-      <div className="floating-image"><img src={avatar}/></div>
     </div>
   )
 }

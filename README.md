@@ -21,6 +21,7 @@ Gamified Survey for planing the playground at Tempelhofer Feld in Berlin.
 * create app with `heroku create playground-survey-server`
 * add remote to git `heroku git:remote -a playground-survey-server`
 * push server subdir to heroku `git subtree push --prefix server heroku master`
+* subsequent deploys by running `./deploy.sh`
 
 #### Download database backup
 
