@@ -1,8 +1,8 @@
 node_modules
 
-src/config.ts
-
 build/
 
 data/*
 !data/.keepå
+
+.env
