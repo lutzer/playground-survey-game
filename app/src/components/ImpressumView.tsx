@@ -22,16 +22,14 @@ const ImpressumView = function() : React.ReactElement {
 
         <span className="paragraph">
           Diakonisches Werk Berlin Stadtmitte e.V.<br/>
-          Geschäftsstelle, Wilhelmstraße 115, 10963 Berlin
+          Geschäftsstelle, Wilhelmstraße 115, 10963 Berlin<br/>
+          <a href="https://www.diakonie-stadtmitte.de">www.diakonie-stadtmitte.de</a>
         </span>
 
         <span className="paragraph">
-          geschaeftsstelle@diakonie.de<br/>
-          <a href="https://www.diakonie-stadtmitte.de">www.diakonie-stadtmitte.de</a><br/>
-        </span>
-
-        <span className="paragraph">
-        Geschäftsführung: Monika Lüke
+        Projektleitung: <br/>
+        Katarina Henkys: <a href="https://www.gartenplan.berlin/">www.gartenplan.berlin</a><br/>
+        Karola Reiter
         </span>
 
         <span className="paragraph">
