@@ -79,6 +79,7 @@ const PlaygroundView = function({ stateMachine, settings } : { stateMachine: Sta
     }
     window.addEventListener('resize', onResize)
     return () => {
+      playground?.dispose()
       window.removeEventListener('resize', onResize)
     }
   },[playground])

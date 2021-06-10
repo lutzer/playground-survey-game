@@ -70,8 +70,9 @@ class Playground {
 
   dispose() : void {
     this.$disposeObservable.next()
-    this.scene.dispose()
+    this.engine.stopRenderLoop()
     this.engine.dispose()
+    // this.scene.dispose()
   }
 
   init(playGroundType: PlayGroundType, onLoaded: () => void) : void {
