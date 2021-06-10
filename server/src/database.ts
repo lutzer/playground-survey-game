@@ -40,7 +40,8 @@ const getDatabase = async function() {
     await client.query(
     `CREATE TABLE ${DATABASE_TABLE} ( 
       id SERIAL PRIMARY KEY,
-      data jsonb NOT NULL
+      data jsonb NOT NULL,
+      date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );`)
   }
 

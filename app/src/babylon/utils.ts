@@ -57,4 +57,12 @@ function radDifference(value1: number, value2: number) : number {
   return (diff + Math.PI) % (Math.PI * 2) - Math.PI
 }
 
-export { fromHammerEvent, animateValue, radDifference, constrainRad, snapTo, easeInOut, easeOut }
+async function PromiseResolveSerial(promises : Promise<unknown>[]) : Promise<unknown[]> {
+  const results = []
+  for(const p of promises) {
+    results.push(await p)
+  }
+  return results
+}
+
+export { fromHammerEvent, animateValue, radDifference, constrainRad, snapTo, easeInOut, easeOut, PromiseResolveSerial }

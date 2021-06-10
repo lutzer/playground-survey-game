@@ -3,6 +3,7 @@ import { Texture } from '@babylonjs/core/Materials/Textures/texture'
 import { Mesh } from '@babylonjs/core/Meshes/mesh'
 import { PlayGroundType } from '../state'
 import { Animation } from '@babylonjs/core'
+import { PromiseResolveSerial } from './utils'
 
 enum SelectableTiles {
   grass = 'grass',
@@ -49,7 +50,7 @@ const loadAssets = async function(scene : Scene, playGroundType: PlayGroundType)
   const assetsManager = new AssetsManager(scene)
   assetsManager.useDefaultLoadingScreen = false
 
-  const tasks = await Promise.all([
+  const tasks = await PromiseResolveSerial([
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', SelectableTiles.tree, 'assets/meshes/' ,'tile_trees.min.gltf')), 
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', SelectableTiles.grass, 'assets/meshes/' ,'tile_grass.min.gltf')),
     onTaskCompleted<AbstractAssetTask>(assetsManager.addContainerTask('tile', SelectableTiles.trampolin, 'assets/meshes/' ,'tile_trampolin.min.gltf')),

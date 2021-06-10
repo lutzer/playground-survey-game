@@ -1,4 +1,4 @@
-import { Color3, CubeTexture, DynamicTexture, Mesh, MeshBuilder, Node, Scene, StandardMaterial, Vector3 } from '@babylonjs/core'
+import { Color3, DynamicTexture, Mesh, MeshBuilder, Node, Scene, StandardMaterial, Vector3 } from '@babylonjs/core'
 import { Texture } from '@babylonjs/core/Materials/Textures/texture'
 import { AdvancedDynamicTexture } from '@babylonjs/gui/2D/advancedDynamicTexture'
 import { Control } from '@babylonjs/gui/2D/controls/control'

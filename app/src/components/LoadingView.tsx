@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { HintView } from './HintView'
+import React from 'react'
 
 import './LoadingView.scss'
 

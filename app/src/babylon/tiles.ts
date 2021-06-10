@@ -1,13 +1,11 @@
-import { Animation, IAnimationKey } from '@babylonjs/core'
+import { Animation } from '@babylonjs/core'
 import { AnimationGroup } from '@babylonjs/core/Animations/animationGroup'
 import { Vector3 } from '@babylonjs/core/Maths/math'
 import { Mesh } from '@babylonjs/core/Meshes/mesh'
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode'
 import { Scene } from '@babylonjs/core/scene'
-import _ from 'lodash'
 import { FixedTiles, SelectableTiles, TextureArray, TileMeshArray, TileType } from './assets'
 import { Fountain, PlaygroundEffect, WaterLight } from './effects'
-import { easeInOut } from './utils'
 
 type TileState = {
   type: TileType,

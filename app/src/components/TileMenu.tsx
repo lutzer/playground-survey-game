@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { shuffle } from 'shuffle-seed'
 import { SelectableTiles, TileType } from '../babylon/assets'

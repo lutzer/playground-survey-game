@@ -8,11 +8,10 @@ import '@babylonjs/loaders'
 
 import { OrthographicCamera } from './camera'
 import { setupLights } from './light'
-import { createGrid, createPlanscheGrid, createRiverGrid } from './grid'
+import { createPlanscheGrid, createRiverGrid } from './grid'
 import { loadAssets } from './assets'
-import { createSkyBox, createSkyDome, optimizePerformance, setupFpsDisplay, showAxis, showGroundPlane } from './helpers'
+import { optimizePerformance, showGroundPlane } from './helpers'
 import { Actions, PlayGroundType, Statemachine } from '../state'
-import { applyPostProccessing } from './postprocessing'
 import { TileManager } from './tileManager'
 
 // import '@babylonjs/inspector'
@@ -181,7 +180,7 @@ class Playground {
     this.engine.resize()
   }
 
-  enableMouse(enable: boolean) {
+  enableMouse(enable: boolean) : void {
     this.enablePointerEvents = enable
     this.camera.enableControl = enable
   }
