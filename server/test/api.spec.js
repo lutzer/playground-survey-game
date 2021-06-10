@@ -61,4 +61,10 @@ describe('API Routes', () => {
     expect(_.last(result.body).data.seed).to.equal(seed)
   }).timeout(5000)
 
+  it('results should have a date field', async () => {
+    const connection = chai.request(app)
+    let result = await connection.get('/api/results')
+    expect(_.last(result.body).date).to.not.be.undefined
+  }).timeout(5000)
+
 })
