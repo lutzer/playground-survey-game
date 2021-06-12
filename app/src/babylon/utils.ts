@@ -36,6 +36,10 @@ const animateValue = function(from: number, to:number, time : number, steps = ti
   })
 }
 
+function sleep(ms : number) : Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 function snapTo(value : number, snapPositions : number[]) : number {
   return minBy(snapPositions, (p) => {
     return Math.abs(value - p)
@@ -65,4 +69,4 @@ async function PromiseResolveSerial(promises : Promise<unknown>[]) : Promise<unk
   return results
 }
 
-export { fromHammerEvent, animateValue, radDifference, constrainRad, snapTo, easeInOut, easeOut, PromiseResolveSerial }
+export { fromHammerEvent, animateValue, radDifference, constrainRad, snapTo, easeInOut, easeOut, PromiseResolveSerial, sleep }

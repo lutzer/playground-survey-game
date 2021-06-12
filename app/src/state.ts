@@ -54,6 +54,7 @@ class Statemachine extends Subject<State> {
           index: i
         }
       }),
+      missing: '',
       playgroundType: 'pool',
       version: this._settings.version,
       seed: Math.floor(Math.random() * 1000)
