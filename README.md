@@ -14,16 +14,12 @@ Gamified Survey for planing the playground at Tempelhofer Feld in Berlin.
 
 ## Deployment
 
-### With heroku
+### With Docker
 
-* Create heroku account
-* login with `heroku login`
-* create app with `heroku create playground-survey-server`
-* add remote to git `heroku git:remote -a playground-survey-server`
-* push server subdir to heroku `git subtree push --prefix server heroku master`
-* subsequent deploys by running `./deploy.sh`
+```
+# build docker image
+docker-compose build
+# run docker container in detached mode
+docker-compose up -d
+```
 
-#### Download database backup
-
-* Old lowdb version: Download database backup with `heroku ps:copy data/data.json`
-* new version: make postgres dump
